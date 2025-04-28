@@ -1,0 +1,59 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  align-items: center;
+  justify-content: center;
+
+  width: min(100dvh, 100dvw);
+  height: min(100dvh, 100dvw);
+  padding: 2rem;
+}
+
+.logo {
+  cursor: pointer;
+
+  width: 70%;
+  height: 70%;
+
+  transition: color 2s;
+  animation:
+    logo-spin infinite 20s linear,
+    color-change infinite 5s linear;
+
+  &:hover {
+    --logo-transition: 2s ease-in-out;
+
+    color: lightsalmon;
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes color-change {
+  0% {
+    color: lightsalmon;
+  }
+
+  50% {
+    color: #61dafb;
+  }
+
+  100% {
+    color: lightsalmon;
+  }
+}
+
+.count {
+  user-select: none;
+  color: darkslategray;
+}
