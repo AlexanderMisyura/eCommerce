@@ -80,6 +80,22 @@ export default tseslint.config(
         },
       ],
       'unicorn/filename-case': 'off',
+      'unicorn/no-array-for-each': 'off',
+      'unicorn/no-array-reduce': 'off',
+      'unicorn/no-null': 'off',
+      'unicorn/prevent-abbreviations': [
+        'error',
+        {
+          allowList: {
+            acc: true,
+            env: true,
+            i: true,
+            j: true,
+            props: true,
+            Props: true,
+          },
+        },
+      ],
       'no-debugger': 'warn',
       'no-console': 'warn',
     },
