@@ -10,7 +10,7 @@
     "format:check": "prettier . --check",
     "lint": "eslint --format friendly",
     "lint:fix": "eslint --fix --format friendly",
-    "stylelint": "stylelint \"**/*.scss\"",
+    "stylelint": "stylelint \"**/*.{scss,css}\"",
     "preview": "vite preview",
     "prepare": "husky",
     "test": "vitest"
