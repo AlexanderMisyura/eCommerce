@@ -79,7 +79,13 @@ export default tseslint.config(
           argsIgnorePattern: '^_',
         },
       ],
-      'unicorn/filename-case': 'off',
+      'unicorn/filename-case': [
+        'error',
+        {
+          case: 'kebabCase',
+          ignore: [String.raw`.*\.tsx$`, String.raw`.*\.test\..*$`],
+        },
+      ],
       'unicorn/no-array-for-each': 'off',
       'unicorn/no-array-reduce': 'off',
       'unicorn/no-null': 'off',
