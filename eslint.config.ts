@@ -114,12 +114,5 @@ export default tseslint.config(
     extends: [pluginImportX.flatConfigs.recommended, pluginImportX.flatConfigs.typescript],
   },
 
-  {
-    ignores: ['eslint.config.ts', 'vite.config.ts'],
-    rules: {
-      'max-lines-per-function': ['error', { max: 40 }],
-    },
-  },
-
   eslintPluginPrettierRecommended
 );
