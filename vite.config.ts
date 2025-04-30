@@ -1,7 +1,7 @@
 /// <reference types="vitest/config" />
 
 import tailwindcss from '@tailwindcss/vite';
-import react from '@vitejs/plugin-react';
+import react from '@vitejs/plugin-react-swc';
 import { defineConfig } from 'vite';
 import eslint from 'vite-plugin-eslint2';
 import { createHtmlPlugin } from 'vite-plugin-html';
