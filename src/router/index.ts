@@ -7,11 +7,11 @@ export const router = createBrowserRouter([
   {
     Component: App,
     children: [
-      { path: UrlPath.home, Component: MainPage },
-      { path: UrlPath.about, Component: AboutUsPage },
-      { path: UrlPath.signIn, Component: SignInPage },
-      { path: UrlPath.registration, Component: RegistrationPage },
-      { path: UrlPath.notFound, Component: NotFoundPage },
+      { path: UrlPath.HOME, Component: MainPage },
+      { path: UrlPath.ABOUT, Component: AboutUsPage },
+      { path: UrlPath.SIGN_IN, Component: SignInPage },
+      { path: UrlPath.REGISTRATION, Component: RegistrationPage },
+      { path: UrlPath.NOT_FOUND, Component: NotFoundPage },
     ],
   },
 ]);
