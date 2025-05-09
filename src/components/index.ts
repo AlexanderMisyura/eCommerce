@@ -1,1 +1,1 @@
-export { Navigation } from './navigation/navigation.component';
+export { Navigation } from './Navigation/Navigation';

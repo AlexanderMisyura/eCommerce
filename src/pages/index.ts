@@ -1,4 +1,5 @@
-export { AboutUsPage } from './about-us/about-us.page';
-export { MainPage } from './main/main.page';
-export { RegistrationPage } from './registration/registration.page';
-export { SignInPage } from './sign-in/sign-in.page';
+export { AboutUsPage } from './AboutUsPage/AboutUsPage';
+export { MainPage } from './MainPage/MainPage';
+export { NotFoundPage } from './NotFoundPage/NotFoundPage';
+export { RegistrationPage } from './RegistrationPage/RegistrationPage';
+export { SignInPage } from './SignInPage/SignInPage';

@@ -1,12 +1,11 @@
-import { Navigation } from '@components/index';
-import { AboutUsPage, MainPage, RegistrationPage, SignInPage } from '@pages/index';
-import { NotFoundPage } from '@pages/not-found/not-found.page';
-import { UrlPath } from 'enum/url-path';
+import { AboutUsPage, MainPage, NotFoundPage, RegistrationPage, SignInPage } from '@pages';
+import { UrlPath } from '@ts-enums';
+import App from 'App';
 import { createBrowserRouter } from 'react-router';
 
 export const router = createBrowserRouter([
   {
-    Component: Navigation,
+    Component: App,
     children: [
       { path: UrlPath.home, Component: MainPage },
       { path: UrlPath.about, Component: AboutUsPage },

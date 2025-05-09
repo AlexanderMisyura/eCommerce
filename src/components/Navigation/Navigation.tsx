@@ -1,5 +1,5 @@
-import { UrlPath } from 'enum/url-path';
-import { NavLink, Outlet } from 'react-router';
+import { UrlPath } from '@ts-enums';
+import { NavLink } from 'react-router';
 
 export const Navigation = () => {
   const links = [
@@ -18,7 +18,6 @@ export const Navigation = () => {
           </NavLink>
         );
       })}
-      <Outlet />
     </div>
   );
 };
