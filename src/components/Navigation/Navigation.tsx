@@ -3,10 +3,10 @@ import { NavLink } from 'react-router';
 
 export const Navigation = () => {
   const links = [
-    { id: 1, title: 'main', path: UrlPath.home },
-    { id: 2, title: 'about', path: UrlPath.about },
-    { id: 3, title: 'sign in', path: UrlPath.signIn },
-    { id: 4, title: 'registration', path: UrlPath.registration },
+    { id: 1, title: 'main', path: UrlPath.HOME },
+    { id: 2, title: 'about', path: UrlPath.ABOUT },
+    { id: 3, title: 'sign in', path: UrlPath.SIGN_IN },
+    { id: 4, title: 'registration', path: UrlPath.REGISTRATION },
   ];
 
   return (
