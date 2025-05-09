@@ -95,6 +95,7 @@ export default tseslint.config(
           allowList: {
             acc: true,
             env: true,
+            Env: true,
             i: true,
             j: true,
             props: true,

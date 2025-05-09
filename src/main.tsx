@@ -7,6 +7,7 @@ import { router } from 'router';
 
 const root = document.createElement('div');
 root.id = 'root';
+root.classList.add('flex', 'flex-col', 'min-h-dvh');
 document.body.append(root);
 
 createRoot(root).render(
