@@ -1,5 +1,7 @@
+// import { signInAction } from '@components';
 import { AboutUsPage, MainPage, NotFoundPage, RegistrationPage, SignInPage } from '@pages';
 import { UrlPath } from '@ts-enums';
+import { signInAction } from '@utils/sign-in-action';
 import App from 'App';
 import { createBrowserRouter } from 'react-router';
 
@@ -9,7 +11,7 @@ export const router = createBrowserRouter([
     children: [
       { path: UrlPath.HOME, Component: MainPage },
       { path: UrlPath.ABOUT, Component: AboutUsPage },
-      { path: UrlPath.SIGN_IN, Component: SignInPage },
+      { path: UrlPath.SIGN_IN, Component: SignInPage, action: signInAction },
       { path: UrlPath.REGISTRATION, Component: RegistrationPage },
       { path: UrlPath.NOT_FOUND, Component: NotFoundPage },
     ],
