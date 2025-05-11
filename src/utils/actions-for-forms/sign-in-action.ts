@@ -1,3 +1,5 @@
+import { apiRoot } from '@services/ctp-api-client.service';
+import { authUserApp } from '@services/handle-functions/registration-app';
 import { UrlPath } from '@ts-enums';
 import { type SignInType } from '@ts-types';
 import { convertFormDataToString } from '@utils/convert-form-data-to-string';
@@ -30,8 +32,16 @@ export const signInAction = async ({ request }: ActionFunctionArgs) => {
 
   if (errors.length > 0) return errors;
 
-  //TO-DO: do something with API request
-
-  //if user correctly authenticated
-  return redirect(UrlPath.HOME);
+  try {
+    await authUserApp(submission);
+    apiRoot.setUserData(submission);
+    return redirect(UrlPath.HOME);
+  } catch (error) {
+    if (error instanceof Error) {
+      errors.push(error.message);
+    } else {
+      errors.push('Unexpected error! Try one more time!');
+    }
+    return errors;
+  }
 };

@@ -38,7 +38,7 @@ export const RegistrationForm = () => {
           className="px-2 py-1 shadow-sm"
           id="passwordConfirm"
         />
-        <button type="submit">sign in</button>
+        <button type="submit">registration</button>
         <ToastContainer />
       </Form>
     </>
