@@ -1,17 +1,26 @@
+import { type Customer } from '@commercetools/platform-sdk';
 import { UrlPath } from '@ts-enums';
-import { useEffect } from 'react';
-import { Form, useActionData } from 'react-router';
+import { CustomerContext } from 'context/customer.context';
+import { useContext, useEffect } from 'react';
+import { Form, useActionData, useNavigate } from 'react-router';
 import { toast, ToastContainer } from 'react-toastify';
 
 export const SignInForm = () => {
-  const data = useActionData<string[] | undefined>();
+  const data = useActionData<string[] | undefined | Customer>();
+  console.log({ data });
+  const { setCurrentCustomer } = useContext(CustomerContext)!;
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if (data) {
+    if (Array.isArray(data)) {
       console.log({ data });
       data.map((message) => {
         toast.error(message);
       });
+    } else if (data) {
+      setCurrentCustomer(data);
+      toast.success('successful sign in');
+      void navigate(UrlPath.HOME);
     }
   }, [data]);
 

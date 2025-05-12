@@ -1,9 +1,8 @@
 import { apiRoot } from '@services/ctp-api-client.service';
 import { registrationApp } from '@services/index';
-import { UrlPath } from '@ts-enums';
 import type { RegistrationType } from '@ts-types';
 import { convertFormDataToString } from '@utils/convert-form-data-to-string';
-import { type ActionFunctionArgs, redirect } from 'react-router';
+import { type ActionFunctionArgs } from 'react-router';
 
 export const registrationAction = async ({ request }: ActionFunctionArgs) => {
   const data = await request.formData();
@@ -48,9 +47,9 @@ export const registrationAction = async ({ request }: ActionFunctionArgs) => {
   if (errors.length > 0) return errors;
 
   try {
-    await registrationApp(submission);
+    const data = await registrationApp(submission);
     apiRoot.setUserData(submission);
-    return redirect(UrlPath.HOME);
+    return data.body.customer;
   } catch (error) {
     if (error instanceof Error) {
       errors.push(error.message);
