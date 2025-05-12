@@ -15,7 +15,8 @@ export class InMemoryTokenCache implements TokenCache {
     const localStorageToken = localStorage.getItem('token');
     if (localStorageToken) {
       const parseToken: unknown = JSON.parse(localStorageToken);
-      if (isTokenStore(parseToken) && parseToken && parseToken.expirationTime < Date.now()) {
+      if (isTokenStore(parseToken) && parseToken && parseToken.expirationTime > Date.now()) {
+        console.log({ parseToken });
         this.myCache = parseToken;
       }
     }

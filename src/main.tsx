@@ -1,5 +1,6 @@
 import './styles/global.css';
 
+import { CustomerProvider } from 'context/customer.context';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { RouterProvider } from 'react-router';
@@ -11,6 +12,8 @@ document.body.append(root);
 
 createRoot(root).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <CustomerProvider>
+      <RouterProvider router={router} />
+    </CustomerProvider>
   </StrictMode>
 );
