@@ -1,14 +1,14 @@
 import { type Customer } from '@commercetools/platform-sdk';
 import { UrlPath } from '@ts-enums';
 import { CustomerContext } from 'context/customer.context';
-import { useContext, useEffect } from 'react';
+import { use, useEffect } from 'react';
 import { Form, useActionData, useNavigate } from 'react-router';
 import { toast, ToastContainer } from 'react-toastify';
 
 export const SignInForm = () => {
   const data = useActionData<string[] | undefined | Customer>();
   console.log({ data });
-  const { setCurrentCustomer } = useContext(CustomerContext)!;
+  const { setCurrentCustomer } = use(CustomerContext)!;
   const navigate = useNavigate();
 
   useEffect(() => {

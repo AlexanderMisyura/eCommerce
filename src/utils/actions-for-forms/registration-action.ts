@@ -1,5 +1,5 @@
 import { apiRoot } from '@services/ctp-api-client.service';
-import { registrationApp } from '@services/index';
+import { registrationApp, requestMeInfo } from '@services/index';
 import type { RegistrationType } from '@ts-types';
 import { convertFormDataToString } from '@utils/convert-form-data-to-string';
 import { type ActionFunctionArgs } from 'react-router';
@@ -49,6 +49,7 @@ export const registrationAction = async ({ request }: ActionFunctionArgs) => {
   try {
     const data = await registrationApp(submission);
     apiRoot.setUserData(submission);
+    await requestMeInfo();
     return data.body.customer;
   } catch (error) {
     if (error instanceof Error) {

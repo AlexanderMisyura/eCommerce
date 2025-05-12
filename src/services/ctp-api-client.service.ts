@@ -65,6 +65,11 @@ class ApiRoot {
     return this.tokenCache.isExist();
   }
 
+  public reset(): void {
+    this.tokenCache.reset();
+    this.userData = null;
+  }
+
   private withPasswordFlow(): ByProjectKeyRequestBuilder {
     const options: PasswordAuthMiddlewareOptions = {
       host: AUTH_URL,

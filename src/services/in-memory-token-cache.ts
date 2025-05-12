@@ -31,6 +31,11 @@ export class InMemoryTokenCache implements TokenCache {
     return false;
   }
 
+  public reset(): void {
+    this.myCache = defaultTokenStore;
+    localStorage.removeItem('token');
+  }
+
   public set(newCache: TokenStore): void {
     this.myCache = newCache;
     localStorage.setItem('token', JSON.stringify(this.myCache));

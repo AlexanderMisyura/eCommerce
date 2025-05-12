@@ -1,5 +1,5 @@
 import { apiRoot } from '@services/ctp-api-client.service';
-import { authUserApp } from '@services/handle-functions/registration-app';
+import { requestMeInfo, requestSignInApp } from '@services/index';
 import { type SignInType } from '@ts-types';
 import { convertFormDataToString } from '@utils/convert-form-data-to-string';
 import { type ActionFunctionArgs } from 'react-router';
@@ -32,10 +32,10 @@ export const signInAction = async ({ request }: ActionFunctionArgs) => {
   if (errors.length > 0) return errors;
 
   try {
-    const data = await authUserApp(submission);
+    const data = await requestSignInApp(submission);
     apiRoot.setUserData(submission);
+    await requestMeInfo();
     return data.body.customer;
-    // return redirect(UrlPath.HOME);
   } catch (error) {
     if (error instanceof Error) {
       errors.push(error.message);
