@@ -82,7 +82,7 @@ class ApiRoot {
           password: this.userData ? this.userData.password : '',
         },
       },
-      scopes: [`manage_project:${PROJECT_KEY}`],
+      scopes: [SCOPES],
       httpClient: fetch,
       tokenCache: this.tokenCache,
     };
