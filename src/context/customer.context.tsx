@@ -14,12 +14,20 @@ export const CustomerProvider = ({ children }: { children: ReactNode }) => {
   const [currentCustomer, setCurrentCustomer] = useState<Customer | null>(null);
   useEffect(() => {
     const getMeData = async () => {
-      if (apiRoot.isTokenExist()) {
-        const response = await apiRoot.root().me().get().execute();
-        setCurrentCustomer(response.body);
+      try {
+        if (apiRoot.isTokenExist()) {
+          const response = await apiRoot.root().me().get().execute();
+          setCurrentCustomer(response.body);
+        }
+      } catch (error) {
+        console.error('Error, while try to get customer:', error);
+        setCurrentCustomer(null);
       }
     };
-    getMeData().catch(console.log);
+    getMeData().catch((error) => {
+      console.error('Unexpected error:', error);
+      setCurrentCustomer(null);
+    });
   }, []);
   const value = { currentCustomer, setCurrentCustomer };
   return <CustomerContext value={value}>{children}</CustomerContext>;

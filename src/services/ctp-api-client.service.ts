@@ -94,8 +94,6 @@ class ApiRoot {
       .withLoggerMiddleware(this.loggerMiddlewareOptions)
       .build();
 
-    console.log('token:', this.tokenCache);
-
     const apiRoot = createApiBuilderFromCtpClient(client).withProjectKey({
       projectKey: PROJECT_KEY,
     });

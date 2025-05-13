@@ -7,13 +7,11 @@ import { toast, ToastContainer } from 'react-toastify';
 
 export const SignInForm = () => {
   const data = useActionData<string[] | undefined | Customer>();
-  console.log({ data });
   const { setCurrentCustomer } = use(CustomerContext)!;
   const navigate = useNavigate();
 
   useEffect(() => {
     if (Array.isArray(data)) {
-      console.log({ data });
       data.map((message) => {
         toast.error(message);
       });

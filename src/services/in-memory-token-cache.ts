@@ -16,7 +16,6 @@ export class InMemoryTokenCache implements TokenCache {
     if (localStorageToken) {
       const parseToken: unknown = JSON.parse(localStorageToken);
       if (isTokenStore(parseToken) && parseToken && parseToken.expirationTime > Date.now()) {
-        console.log({ parseToken });
         this.myCache = parseToken;
       }
     }
@@ -39,6 +38,5 @@ export class InMemoryTokenCache implements TokenCache {
   public set(newCache: TokenStore): void {
     this.myCache = newCache;
     localStorage.setItem('token', JSON.stringify(this.myCache));
-    console.log(this.myCache);
   }
 }

@@ -12,7 +12,6 @@ export const RegistrationForm = () => {
 
   useEffect(() => {
     if (Array.isArray(data)) {
-      console.log({ data });
       data.map((message) => {
         toast.error(message);
       });

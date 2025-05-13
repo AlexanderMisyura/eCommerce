@@ -10,8 +10,6 @@ export const signInAction = async ({ request }: ActionFunctionArgs) => {
     email: convertFormDataToString(data.get('email')),
     password: convertFormDataToString(data.get('password')),
   };
-  //
-  console.log({ submission });
   const errors: string[] = [];
   if (submission.password.length < 6) {
     errors.push('password length need more than 6 letters');
