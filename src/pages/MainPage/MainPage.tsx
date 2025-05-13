@@ -1,8 +1,8 @@
 import { CustomerContext } from 'context/customer.context';
-import { useContext } from 'react';
+import { use } from 'react';
 
 export const MainPage = () => {
-  const { currentCustomer } = useContext(CustomerContext)!;
+  const { currentCustomer } = use(CustomerContext)!;
   return (
     <div>
       <h1>Main page</h1>

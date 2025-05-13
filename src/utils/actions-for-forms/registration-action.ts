@@ -1,7 +1,6 @@
-import { apiRoot } from '@services/ctp-api-client.service';
-import { registrationApp, requestMeInfo } from '@services/index';
+import { apiRoot, registrationApp, requestMeInfo } from '@services';
 import type { RegistrationType } from '@ts-types';
-import { convertFormDataToString } from '@utils/convert-form-data-to-string';
+import { convertFormDataToString } from '@utils';
 import { type ActionFunctionArgs } from 'react-router';
 
 export const registrationAction = async ({ request }: ActionFunctionArgs) => {

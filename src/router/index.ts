@@ -1,8 +1,7 @@
 // import { signInAction } from '@components';
 import { AboutUsPage, MainPage, NotFoundPage, RegistrationPage, SignInPage } from '@pages';
 import { UrlPath } from '@ts-enums';
-import { signInAction } from '@utils/actions-for-forms/sign-in-action';
-import { registrationAction } from '@utils/index';
+import { registrationAction, signInAction } from '@utils';
 import App from 'App';
 import { createBrowserRouter } from 'react-router';
 

@@ -1,5 +1,5 @@
 import { type Customer } from '@commercetools/platform-sdk';
-import { apiRoot } from '@services/ctp-api-client.service';
+import { apiRoot } from '@services';
 import type { ReactNode } from 'react';
 import { createContext, useEffect, useState } from 'react';
 

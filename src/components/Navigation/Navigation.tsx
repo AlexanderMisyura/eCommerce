@@ -1,7 +1,7 @@
-import { requestLogOut } from '@services/handle-functions/request-logout';
+import { requestLogOut } from '@services';
 import { UrlPath } from '@ts-enums';
 import { CustomerContext } from 'context/customer.context';
-import { useContext } from 'react';
+import { use } from 'react';
 import { NavLink } from 'react-router';
 
 export const Navigation = () => {
@@ -12,7 +12,7 @@ export const Navigation = () => {
     { id: 4, title: 'registration', path: UrlPath.REGISTRATION, signInView: false },
   ];
 
-  const { currentCustomer, setCurrentCustomer } = useContext(CustomerContext)!;
+  const { currentCustomer, setCurrentCustomer } = use(CustomerContext)!;
   const handleLogout = () => {
     requestLogOut();
     setCurrentCustomer(null);

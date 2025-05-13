@@ -1,5 +1,5 @@
 import { type ClientResponse, type CustomerSignInResult } from '@commercetools/platform-sdk';
-import { apiRoot } from '@services/ctp-api-client.service';
+import { apiRoot } from '@services';
 import { type RegistrationType } from '@ts-types';
 
 export const registrationApp = async (

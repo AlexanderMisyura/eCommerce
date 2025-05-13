@@ -1,5 +1,5 @@
 import { type TokenCache, type TokenStore } from '@commercetools/ts-client';
-import { isTokenStore } from '@utils/is-token-store';
+import { isTokenStore } from '@utils';
 
 const defaultTokenStore = {
   expirationTime: 0,

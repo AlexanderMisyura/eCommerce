@@ -1,7 +1,6 @@
-import { apiRoot } from '@services/ctp-api-client.service';
-import { requestMeInfo, requestSignInApp } from '@services/index';
+import { apiRoot, requestMeInfo, requestSignInApp } from '@services';
 import { type SignInType } from '@ts-types';
-import { convertFormDataToString } from '@utils/convert-form-data-to-string';
+import { convertFormDataToString } from '@utils';
 import { type ActionFunctionArgs } from 'react-router';
 
 export const signInAction = async ({ request }: ActionFunctionArgs) => {

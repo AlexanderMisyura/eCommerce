@@ -1,4 +1,4 @@
-import { apiRoot } from '@services/ctp-api-client.service';
+import { apiRoot } from '@services';
 import type { SignInType } from '@ts-types';
 
 export const requestSignInApp = async (value: SignInType) => {

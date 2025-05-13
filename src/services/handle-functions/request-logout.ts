@@ -1,4 +1,4 @@
-import { apiRoot } from '@services/ctp-api-client.service';
+import { apiRoot } from '@services';
 
 export const requestLogOut = () => {
   apiRoot.reset();
