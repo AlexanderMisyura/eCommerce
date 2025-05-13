@@ -1,3 +1,20 @@
+import { RegistrationForm } from '@components';
+import { UrlPath } from '@ts-enums';
+import { CustomerContext } from 'context/customer.context';
+import { use, useEffect } from 'react';
+import { useNavigate } from 'react-router';
+
 export const RegistrationPage = () => {
-  return <div>Registration page</div>;
+  const { currentCustomer } = use(CustomerContext)!;
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (currentCustomer) void navigate(UrlPath.HOME);
+  }, [currentCustomer, navigate]);
+
+  return (
+    <div>
+      Registration page
+      <RegistrationForm />
+    </div>
+  );
 };
