@@ -1,3 +1,4 @@
+import { PASSWORD_MIN_LENGTH } from '@constants';
 import type { SignInValidationErrors } from '@ts-interfaces';
 import type { SignInType } from '@ts-types';
 
@@ -12,16 +13,18 @@ export function validateEmail(email: string) {
     errors.push('Email must not contain leading or trailing whitespace');
   }
 
-  if (email.split('@').length > 2) {
-    errors.push('Email address must contain only one "@" symbol');
-  }
-
-  if (email.split('.').length < 2) {
-    errors.push('Email address must contain a domain name');
-  }
-
   if (email.split('@').length !== 2) {
-    errors.push("Email address must contain an '@' symbol separating local part and domain name");
+    errors.push("Email address must contain one '@' symbol separating local part and domain name");
+  }
+
+  const domainPart = email.split('@').at(-1);
+  const labels = domainPart?.split('.');
+  if (
+    !domainPart ||
+    domainPart.split('.').length < 2 ||
+    labels?.some((label) => label.length === 0)
+  ) {
+    errors.push('Email address must contain a domain name');
   }
 
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -39,23 +42,23 @@ export function validatePassword(password: string) {
     errors.push('Please fill your password');
   }
 
-  if (password.trim().length !== password.length) {
-    errors.push('Password must not contain leading or trailing whitespace');
+  if (!/^(?!.*\s).+$/.test(password)) {
+    errors.push('Password must not contain any spaces.');
   }
 
-  if (password.length < 8) {
+  if (password.length < PASSWORD_MIN_LENGTH) {
     errors.push('Password must be at least 8 characters long');
   }
 
-  if (!/^$|(?=.*[a-z]).+$/.test(password)) {
+  if (!/(?=.*[a-z]).+$/.test(password)) {
     errors.push('Password must contain at least one lowercase letter (a-z)');
   }
 
-  if (!/^$|(?=.*[A-Z]).+$/.test(password)) {
+  if (!/(?=.*[A-Z]).+$/.test(password)) {
     errors.push('Password must contain at least one uppercase letter (A-Z)');
   }
 
-  if (!/^$|(?=.*\d).+$/.test(password)) {
+  if (!/(?=.*\d).+$/.test(password)) {
     errors.push('Password must contain at least one digit (0-9)');
   }
 
@@ -63,7 +66,7 @@ export function validatePassword(password: string) {
 }
 
 export function validateSignIn(submission: SignInType): SignInValidationErrors {
-  const validationErrors: { emailErrors: string[]; passwordErrors: string[] } = {
+  const validationErrors: SignInValidationErrors = {
     emailErrors: validateEmail(submission.email),
     passwordErrors: validatePassword(submission.password),
   };

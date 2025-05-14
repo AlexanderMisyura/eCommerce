@@ -52,14 +52,16 @@ export function SignInForm() {
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const emailValue = event.target.value;
-    setEmailError(validateEmail(emailValue).length > 0);
-    setEmailErrorMessage(validateEmail(emailValue)[0]);
+    const errors = validateEmail(emailValue);
+    setEmailError(errors.length > 0);
+    setEmailErrorMessage(errors[0]);
   };
 
   const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const passwordValue = event.target.value;
-    setPasswordError(validatePassword(passwordValue).length > 0);
-    setPasswordErrorMessage(validatePassword(passwordValue)[0]);
+    const errors = validatePassword(passwordValue);
+    setPasswordError(errors.length > 0);
+    setPasswordErrorMessage(errors[0]);
   };
 
   const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
@@ -131,7 +133,6 @@ export function SignInForm() {
                 name="email"
                 placeholder="your@email.com"
                 autoComplete="email"
-                required
                 fullWidth
                 variant="outlined"
                 color={emailError ? 'error' : 'primary'}
@@ -149,7 +150,6 @@ export function SignInForm() {
                 type={isPasswordRevealed ? 'text' : 'password'}
                 id="password"
                 autoComplete="current-password"
-                required
                 fullWidth
                 variant="outlined"
                 color={passwordError ? 'error' : 'primary'}
@@ -179,7 +179,7 @@ export function SignInForm() {
               Don&apos;t have an account?{' '}
               <MuiLink
                 component={Link}
-                to="/registration"
+                to={`/${UrlPath.REGISTRATION}`}
                 variant="inherit"
                 sx={{ alignSelf: 'center' }}
               >
