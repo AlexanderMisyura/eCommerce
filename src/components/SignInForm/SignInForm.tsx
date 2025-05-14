@@ -1,7 +1,7 @@
 import { DEBOUNCE_TIMEOUT } from '@constants';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { IconButton, InputAdornment } from '@mui/material';
+import { IconButton, InputAdornment, Link as MuiLink } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import MuiCard from '@mui/material/Card';
@@ -17,7 +17,7 @@ import { eventDebounceWrapper, validateEmail, validatePassword } from '@utils';
 import { CustomerContext } from 'context/customer.context';
 import * as React from 'react';
 import { use, useEffect, useState } from 'react';
-import { Form, useActionData, useNavigate } from 'react-router';
+import { Form, Link, useActionData, useNavigate } from 'react-router';
 import { toast, ToastContainer } from 'react-toastify';
 
 const Card = styled(MuiCard)(({ theme }) => ({
@@ -175,6 +175,17 @@ export function SignInForm() {
             <Button type="submit" fullWidth variant="contained">
               Sign in
             </Button>
+            <Typography sx={{ textAlign: 'center' }}>
+              Don&apos;t have an account?{' '}
+              <MuiLink
+                component={Link}
+                to="/registration"
+                variant="inherit"
+                sx={{ alignSelf: 'center' }}
+              >
+                Sign up
+              </MuiLink>
+            </Typography>
           </Box>
         </Card>
       </Stack>
