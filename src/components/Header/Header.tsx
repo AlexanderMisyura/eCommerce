@@ -1,13 +1,16 @@
-import { Navigation } from '@components';
-import { Container } from '@mui/material';
+import LogoIcon from '@assets/icons/logo.png';
+import { AuthPanel, BasketButton, LogoLink, Navigation } from '@components';
+import Container from '@mui/material/Container';
+import { UrlPath } from '@ts-enums';
 
 export const Header = () => {
   return (
-    <header className="bg-blue-200">
-      <Container className="flex p-4">
-        <div>TheTeamLogo</div>
+    <header>
+      <Container className="flex items-center justify-center gap-4 p-4">
+        <LogoLink className="mr-4" srcImg={LogoIcon} path={UrlPath.HOME} />
         <Navigation />
-        <div>Auth</div>
+        <AuthPanel />
+        <BasketButton />
       </Container>
     </header>
   );
