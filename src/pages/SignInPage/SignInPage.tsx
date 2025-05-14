@@ -12,8 +12,7 @@ export const SignInPage = () => {
   }, [currentCustomer, navigate]);
 
   return (
-    <div>
-      Sign-in page
+    <div className="flex grow flex-col justify-center">
       <SignInForm />
     </div>
   );

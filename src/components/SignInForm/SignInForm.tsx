@@ -1,47 +1,195 @@
-import { type Customer } from '@commercetools/platform-sdk';
+import { DEBOUNCE_TIMEOUT } from '@constants';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { IconButton, InputAdornment, Link as MuiLink } from '@mui/material';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import MuiCard from '@mui/material/Card';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+import Stack from '@mui/material/Stack';
+import { styled } from '@mui/material/styles';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 import { UrlPath } from '@ts-enums';
+import type { SignInData } from '@ts-interfaces';
+import { eventDebounceWrapper, validateEmail, validatePassword } from '@utils';
 import { CustomerContext } from 'context/customer.context';
-import { use, useEffect } from 'react';
-import { Form, useActionData, useNavigate } from 'react-router';
+import * as React from 'react';
+import { use, useEffect, useState } from 'react';
+import { Form, Link, useActionData, useNavigate } from 'react-router';
 import { toast, ToastContainer } from 'react-toastify';
 
-export const SignInForm = () => {
-  const data = useActionData<string[] | undefined | Customer>();
-  const { setCurrentCustomer } = use(CustomerContext)!;
+const Card = styled(MuiCard)(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  alignSelf: 'center',
+  width: '100%',
+  padding: theme.spacing(4),
+  gap: theme.spacing(2),
+  margin: 'auto',
+  [theme.breakpoints.up('sm')]: {
+    maxWidth: '450px',
+  },
+  boxShadow:
+    'hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px',
+  ...theme.applyStyles('dark', {
+    boxShadow:
+      'hsla(220, 30%, 5%, 0.5) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.08) 0px 15px 35px -5px',
+  }),
+}));
+
+export function SignInForm() {
+  const [emailError, setEmailError] = useState(false);
+  const [emailErrorMessage, setEmailErrorMessage] = useState('');
+  const [passwordError, setPasswordError] = useState(false);
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
+  const [isPasswordRevealed, setIsPasswordRevealed] = useState(false);
   const navigate = useNavigate();
 
+  const data = useActionData<SignInData>();
+  const { setCurrentCustomer } = use(CustomerContext)!;
+
+  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const emailValue = event.target.value;
+    const errors = validateEmail(emailValue);
+    setEmailError(errors.length > 0);
+    setEmailErrorMessage(errors[0]);
+  };
+
+  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const passwordValue = event.target.value;
+    const errors = validatePassword(passwordValue);
+    setPasswordError(errors.length > 0);
+    setPasswordErrorMessage(errors[0]);
+  };
+
+  const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+
+    if (value.length === 0) {
+      setEmailError(false);
+      setEmailErrorMessage('');
+      setPasswordError(false);
+      setPasswordErrorMessage('');
+    }
+  };
+
+  const togglePasswordReveal = () => {
+    setIsPasswordRevealed((show) => !show);
+  };
+
   useEffect(() => {
-    if (Array.isArray(data)) {
-      data.map((message) => {
+    if (data?.validationErrors) {
+      if (data.validationErrors.emailErrors.length > 0) {
+        setEmailError(true);
+        setEmailErrorMessage(data.validationErrors.emailErrors[0]);
+      }
+      if (data.validationErrors.passwordErrors.length > 0) {
+        setPasswordError(true);
+        setPasswordErrorMessage(data.validationErrors.passwordErrors[0]);
+      }
+    }
+
+    if (data?.serverErrors) {
+      data.serverErrors.map((message) => {
         toast.error(message);
       });
-    } else if (data) {
-      setCurrentCustomer(data);
+    }
+
+    if (data?.customer) {
+      setCurrentCustomer(data.customer);
       toast.success('successful sign in');
       void navigate(UrlPath.HOME);
     }
-  }, [data]);
+  }, [data, navigate, setCurrentCustomer]);
 
   return (
-    <>
-      <Form action={`/${UrlPath.SIGN_IN}`} method="post" className="flex flex-col items-center">
-        <label htmlFor="email"> email </label>
-        <input
-          name="email"
-          type="email"
-          className="px-2 py-1 shadow-sm inset-shadow-sm"
-          id="email"
-        />
-        <label htmlFor="password">password</label>
-        <input
-          name="password"
-          type="password"
-          className="px-2 py-1 shadow-sm inset-shadow-sm"
-          id="password"
-        />
-        <button type="submit">sign in</button>
-        <ToastContainer />
-      </Form>
-    </>
+    <Form action={`/${UrlPath.SIGN_IN}`} method="post">
+      <Stack direction="column" justifyContent="space-between">
+        <Card variant="outlined">
+          <Typography
+            component="h1"
+            variant="h4"
+            sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
+          >
+            Sign in
+          </Typography>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              width: '100%',
+              gap: 2,
+            }}
+          >
+            <FormControl>
+              <FormLabel htmlFor="email">Email</FormLabel>
+              <TextField
+                error={emailError}
+                helperText={emailErrorMessage}
+                id="email"
+                type="email"
+                name="email"
+                placeholder="your@email.com"
+                autoComplete="email"
+                fullWidth
+                variant="outlined"
+                color={emailError ? 'error' : 'primary'}
+                onInput={eventDebounceWrapper(handleEmailChange, DEBOUNCE_TIMEOUT)}
+                onBlur={handleBlur}
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel htmlFor="password">Password</FormLabel>
+              <TextField
+                error={passwordError}
+                helperText={passwordErrorMessage}
+                name="password"
+                placeholder="••••••••"
+                type={isPasswordRevealed ? 'text' : 'password'}
+                id="password"
+                autoComplete="current-password"
+                fullWidth
+                variant="outlined"
+                color={passwordError ? 'error' : 'primary'}
+                onInput={eventDebounceWrapper(handlePasswordChange, DEBOUNCE_TIMEOUT)}
+                onBlur={handleBlur}
+                slotProps={{
+                  input: {
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label={isPasswordRevealed ? 'Hide password' : 'Show password'}
+                          onClick={togglePasswordReveal}
+                          edge="end"
+                        >
+                          {isPasswordRevealed ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  },
+                }}
+              />
+            </FormControl>
+            <Button type="submit" fullWidth variant="contained">
+              Sign in
+            </Button>
+            <Typography sx={{ textAlign: 'center' }}>
+              Don&apos;t have an account?{' '}
+              <MuiLink
+                component={Link}
+                to={`/${UrlPath.REGISTRATION}`}
+                variant="inherit"
+                sx={{ alignSelf: 'center' }}
+              >
+                Sign up
+              </MuiLink>
+            </Typography>
+          </Box>
+        </Card>
+      </Stack>
+      <ToastContainer />
+    </Form>
   );
-};
+}
