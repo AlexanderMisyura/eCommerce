@@ -1,5 +1,14 @@
 // import { signInAction } from '@components';
-import { AboutUsPage, MainPage, NotFoundPage, RegistrationPage, SignInPage } from '@pages';
+import {
+  AboutUsPage,
+  BasketPage,
+  CatalogPage,
+  MainPage,
+  NotFoundPage,
+  RegistrationPage,
+  SignInPage,
+  UserProfilePage,
+} from '@pages';
 import { UrlPath } from '@ts-enums';
 import { registrationAction, signInAction } from '@utils';
 import App from 'App';
@@ -14,6 +23,9 @@ export const router = createBrowserRouter([
       { path: UrlPath.SIGN_IN, Component: SignInPage, action: signInAction },
       { path: UrlPath.REGISTRATION, Component: RegistrationPage, action: registrationAction },
       { path: UrlPath.NOT_FOUND, Component: NotFoundPage },
+      { path: UrlPath.USER_PROFILE, Component: UserProfilePage },
+      { path: UrlPath.CATALOG, Component: CatalogPage },
+      { path: UrlPath.BASKET, Component: BasketPage },
     ],
   },
 ]);
