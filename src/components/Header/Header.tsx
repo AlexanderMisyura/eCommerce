@@ -3,7 +3,7 @@ import { AuthPanel, LogoLink, Navigation, ProfilePanel } from '@components';
 import CloseIcon from '@mui/icons-material/Close';
 import MenuIcon from '@mui/icons-material/Menu';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import { AppBar, Container, Divider, Drawer, IconButton, Toolbar } from '@mui/material';
+import { AppBar, Badge, Container, Divider, Drawer, IconButton, Toolbar } from '@mui/material';
 import { UrlPath } from '@ts-enums';
 import { CustomerContext } from 'context/customer.context';
 import { use, useState } from 'react';
@@ -45,9 +45,24 @@ export const Header = () => {
             {renderUserPanel({ isOpenBurgerMenu: false })}
           </div>
 
-          <IconButton component={Link} to={UrlPath.BASKET} color="primary" title="Shopping Cart">
+          <Badge
+            badgeContent={0}
+            showZero
+            max={10}
+            component={Link}
+            to={UrlPath.BASKET}
+            color="warning"
+            title="Shopping Cart"
+            sx={{
+              marginRight: 4,
+              '& .MuiBadge-badge': {
+                fontSize: '12px',
+                padding: '4px',
+              },
+            }}
+          >
             <ShoppingCartIcon />
-          </IconButton>
+          </Badge>
 
           <IconButton
             edge="start"
