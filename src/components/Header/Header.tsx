@@ -36,7 +36,7 @@ export const Header = () => {
   };
 
   return (
-    <AppBar color="transparent" position="sticky">
+    <AppBar color="inherit" position="sticky">
       <Container>
         <Toolbar disableGutters sx={{ columnGap: theme.spacing(4) }}>
           <LogoLink className="mr-auto md:mr-6" srcImg={LogoIcon} path={UrlPath.HOME} />
