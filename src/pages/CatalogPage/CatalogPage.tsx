@@ -1,3 +1,9 @@
+import Typography from '@mui/material/Typography';
+
 export const CatalogPage = () => {
-  return <div>Catalog Page</div>;
+  return (
+    <div>
+      <Typography variant="h2">Catalog Page</Typography>
+    </div>
+  );
 };

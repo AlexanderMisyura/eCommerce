@@ -1,3 +1,9 @@
+import Typography from '@mui/material/Typography';
+
 export const BasketPage = () => {
-  return <div>Basket Page</div>;
+  return (
+    <div>
+      <Typography variant="h2">Basket Page</Typography>
+    </div>
+  );
 };
