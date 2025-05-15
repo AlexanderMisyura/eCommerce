@@ -1,5 +1,4 @@
 export { AuthPanel } from './AuthPanel/AuthPanel';
-export { BasketButton } from './BasketButton/BasketButton';
 export { Footer } from './Footer/Footer';
 export { Header } from './Header/Header';
 export { LogoLink } from './LogoLink/LogoLink';
