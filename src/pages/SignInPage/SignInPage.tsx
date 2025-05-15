@@ -1,4 +1,5 @@
 import { SignInForm } from '@components';
+import { Container } from '@mui/material';
 import { UrlPath } from '@ts-enums';
 import { CustomerContext } from 'context/customer.context';
 import { use, useEffect } from 'react';
@@ -12,8 +13,10 @@ export const SignInPage = () => {
   }, [currentCustomer, navigate]);
 
   return (
-    <div className="flex grow flex-col justify-center">
+    <Container
+      sx={{ display: 'flex', flexGrow: 1, flexDirection: 'column', justifyContent: 'center' }}
+    >
       <SignInForm />
-    </div>
+    </Container>
   );
 };

@@ -1,9 +1,10 @@
+import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 
 export const CatalogPage = () => {
   return (
-    <div>
+    <Container>
       <Typography variant="h2">Catalog Page</Typography>
-    </div>
+    </Container>
   );
 };
