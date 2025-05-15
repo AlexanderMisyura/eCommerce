@@ -3,6 +3,7 @@ export { Footer } from './Footer/Footer';
 export { Header } from './Header/Header';
 export { LogoLink } from './LogoLink/LogoLink';
 export { Navigation } from './Navigation/Navigation';
+export { PagePlaceholder } from './PagePlaceholder/PagePlaceholder';
 export { ProfileButton } from './ProfileButton/ProfileButton';
 export { ProfilePanel } from './ProfilePanel/ProfilePanel';
 export { RegistrationForm } from './RegistrationForm/RegistrationForm';

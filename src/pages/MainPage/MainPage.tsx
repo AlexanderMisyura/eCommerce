@@ -7,7 +7,14 @@ import { theme } from 'theme';
 export const MainPage = () => {
   const { currentCustomer } = use(CustomerContext)!;
   return (
-    <Container>
+    <Container
+      sx={{
+        display: 'flex',
+        flexGrow: 1,
+        flexDirection: 'column',
+        rowGap: theme.spacing(4),
+      }}
+    >
       <Typography variant="h2">Main Page</Typography>
       <Typography>
         Hello{' '}
