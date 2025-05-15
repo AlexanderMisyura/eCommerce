@@ -1,11 +1,10 @@
-// import { signInAction } from '@components';
 import {
   AboutUsPage,
-  BasketPage,
   CatalogPage,
   MainPage,
   NotFoundPage,
   RegistrationPage,
+  ShoppingCartPage,
   SignInPage,
   UserProfilePage,
 } from '@pages';
@@ -25,7 +24,7 @@ export const router = createBrowserRouter([
       { path: UrlPath.NOT_FOUND, Component: NotFoundPage },
       { path: UrlPath.USER_PROFILE, Component: UserProfilePage },
       { path: UrlPath.CATALOG, Component: CatalogPage },
-      { path: UrlPath.BASKET, Component: BasketPage },
+      { path: UrlPath.SHOPPING_CART, Component: ShoppingCartPage },
     ],
   },
 ]);

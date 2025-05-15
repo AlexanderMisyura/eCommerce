@@ -50,7 +50,7 @@ export const Header = () => {
             showZero
             max={10}
             component={Link}
-            to={UrlPath.BASKET}
+            to={UrlPath.SHOPPING_CART}
             color="warning"
             title="Shopping Cart"
             sx={{

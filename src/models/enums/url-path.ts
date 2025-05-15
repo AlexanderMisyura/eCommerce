@@ -5,6 +5,6 @@ export enum UrlPath {
   CATALOG = 'catalog',
   ABOUT = 'about',
   USER_PROFILE = 'user-profile',
-  BASKET = 'basket',
+  SHOPPING_CART = 'shopping-cart',
   NOT_FOUND = '*',
 }
