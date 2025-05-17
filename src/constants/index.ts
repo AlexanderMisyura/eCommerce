@@ -16,5 +16,6 @@ export {
   PLACEHOLDER,
   SHIPPING_ADDRESS_INDEX,
 } from './customer-form-data';
+export { DEVELOPMENT_TEAM } from './development-team';
 export { PASSWORD_MIN_LENGTH } from './password-min-length';
 export { CONTEXT_RESET_TIMEOUT, DEBOUNCE_TIMEOUT } from './timeouts';
