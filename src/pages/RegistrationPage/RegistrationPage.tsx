@@ -12,8 +12,7 @@ export const RegistrationPage = () => {
   }, [currentCustomer, navigate]);
 
   return (
-    <div>
-      Registration page
+    <div className="flex grow flex-col justify-center">
       <RegistrationForm />
     </div>
   );
