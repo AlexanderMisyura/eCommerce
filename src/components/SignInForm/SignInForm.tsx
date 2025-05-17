@@ -177,9 +177,11 @@ export function SignInForm() {
                 }}
               />
             </FormControl>
-            <Button type="submit" fullWidth variant="contained">
-              Sign in
-            </Button>
+            <Box sx={{ pt: 1 }}>
+              <Button type="submit" fullWidth variant="contained">
+                Sign in
+              </Button>
+            </Box>
             <Typography sx={{ textAlign: 'center' }}>
               Don&apos;t have an account?{' '}
               <MuiLink
@@ -187,6 +189,7 @@ export function SignInForm() {
                 to={`/${UrlPath.REGISTRATION}`}
                 variant="inherit"
                 sx={{ alignSelf: 'center' }}
+                viewTransition
               >
                 Sign up
               </MuiLink>
