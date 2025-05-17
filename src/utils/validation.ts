@@ -1,6 +1,13 @@
-import { PASSWORD_MIN_LENGTH } from '@constants';
-import type { SignInValidationErrors } from '@ts-interfaces';
+import { CITY, COUNTRY, FIRST_NAME, LAST_NAME, PASSWORD_MIN_LENGTH } from '@constants';
+import type {
+  Addresses,
+  AddressesValidationErrors,
+  Credentials,
+  CredentialsValidationErrors,
+  SignInValidationErrors,
+} from '@ts-interfaces';
 import type { SignInType } from '@ts-types';
+import dayjs from 'dayjs';
 
 export function validateEmail(email: string) {
   const errors: string[] = [];
@@ -69,6 +76,103 @@ export function validateSignIn(submission: SignInType): SignInValidationErrors {
   const validationErrors: SignInValidationErrors = {
     emailErrors: validateEmail(submission.email),
     passwordErrors: validatePassword(submission.password),
+  };
+
+  return validationErrors;
+}
+
+export function validateProperName(name: string, fieldName?: string) {
+  const errors: string[] = [];
+
+  if (name.length === 0) {
+    errors.push(`Please fill your ${fieldName}`);
+  }
+
+  if (/\d/.test(name)) {
+    errors.push(`Your ${fieldName} must not contain numbers`);
+  }
+
+  if (/[`!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/.test(name)) {
+    errors.push(`Your ${fieldName} must not contain special characters`);
+  }
+
+  return errors;
+}
+
+export function validateDateOfBirth(dateOfBirth: string) {
+  const errors: string[] = [];
+
+  if (!dateOfBirth) {
+    errors.push('Please select your date of birth');
+  }
+
+  if (dayjs().diff(dateOfBirth, 'year') < 13) {
+    errors.push('You must be at least 13 years old to register');
+  }
+
+  return errors;
+}
+
+export function validateStreetName(city: string) {
+  const errors: string[] = [];
+
+  if (city.length === 0) {
+    errors.push('Please fill your city');
+  }
+
+  return errors;
+}
+
+export function validatePostalCode(postalCode: string) {
+  const errors: string[] = [];
+
+  if (postalCode.length === 0) {
+    errors.push('Please fill your postal code');
+  }
+
+  if (!/^\d{5}$/.test(postalCode)) {
+    errors.push('Postal code must be a 5-digit number');
+  }
+
+  return errors;
+}
+
+export function validateCountry(country: string) {
+  const errors: string[] = [];
+
+  if (country.length === 0) {
+    errors.push('Please select your country');
+  }
+
+  if (!Object.values(COUNTRY).includes(country as (typeof COUNTRY)[keyof typeof COUNTRY])) {
+    errors.push('Please select a valid country');
+  }
+
+  return errors;
+}
+
+export function validateCredentials(credentials: Credentials): CredentialsValidationErrors {
+  const validationErrors: CredentialsValidationErrors = {
+    emailErrors: validateEmail(credentials.email),
+    passwordErrors: validatePassword(credentials.password),
+    firstNameErrors: validateProperName(credentials.firstName, FIRST_NAME),
+    lastNameErrors: validateProperName(credentials.lastName, LAST_NAME),
+    dateOfBirthErrors: validateDateOfBirth(credentials.dateOfBirth),
+  };
+
+  return validationErrors;
+}
+
+export function validateAddresses(address: Addresses) {
+  const validationErrors: AddressesValidationErrors = {
+    shippingStreetNameErrors: validateStreetName(address.shippingStreetName),
+    shippingCityErrors: validateProperName(address.shippingCity, CITY),
+    shippingPostalCodeErrors: validatePostalCode(address.shippingPostalCode.toString()),
+    shippingCountryErrors: validateCountry(address.shippingCountry),
+    billingStreetNameErrors: validateStreetName(address.billingStreetName),
+    billingCityErrors: validateProperName(address.billingCity, CITY),
+    billingPostalCodeErrors: validatePostalCode(address.billingPostalCode.toString()),
+    billingCountryErrors: validateCountry(address.billingCountry),
   };
 
   return validationErrors;
