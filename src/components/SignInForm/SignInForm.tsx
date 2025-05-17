@@ -68,10 +68,15 @@ export function SignInForm() {
     const { value } = event.target;
 
     if (value.length === 0) {
-      setEmailError(false);
-      setEmailErrorMessage('');
-      setPasswordError(false);
-      setPasswordErrorMessage('');
+      if (event.target.name === 'email') {
+        setEmailError(false);
+        setEmailErrorMessage('');
+      }
+
+      if (event.target.name === 'password') {
+        setPasswordError(false);
+        setPasswordErrorMessage('');
+      }
     }
   };
 
