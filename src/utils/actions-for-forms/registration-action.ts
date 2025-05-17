@@ -12,7 +12,7 @@ export const registrationAction = async ({ request }: ActionFunctionArgs) => {
     firstName: convertFormDataToString(data.get('firstName')),
     lastName: convertFormDataToString(data.get('lastName')),
   };
-  //
+
   const { email, password, passwordConfirm, firstName, lastName } = submission;
   const errors: string[] = [];
   if (password !== passwordConfirm) {

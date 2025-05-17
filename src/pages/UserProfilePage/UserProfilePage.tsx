@@ -3,7 +3,7 @@ import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import { theme } from 'theme';
 
-export const AboutUsPage = () => {
+export const UserProfilePage = () => {
   return (
     <Container
       sx={{
@@ -13,7 +13,7 @@ export const AboutUsPage = () => {
         rowGap: theme.spacing(8),
       }}
     >
-      <Typography variant="h2">About Us Page</Typography>
+      <Typography variant="h2">User Profile Page</Typography>
       <PagePlaceholder /> {/* TODO: Remove */}
     </Container>
   );
