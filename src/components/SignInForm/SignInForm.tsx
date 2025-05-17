@@ -177,23 +177,25 @@ export function SignInForm() {
                 }}
               />
             </FormControl>
-            <Box sx={{ pt: 1 }}>
+            <Box sx={{ pt: 3 }}>
               <Button type="submit" fullWidth variant="contained">
                 Sign in
               </Button>
             </Box>
-            <Typography sx={{ textAlign: 'center' }}>
-              Don&apos;t have an account?{' '}
-              <MuiLink
-                component={Link}
-                to={`/${UrlPath.REGISTRATION}`}
-                variant="inherit"
-                sx={{ alignSelf: 'center' }}
-                viewTransition
-              >
-                Sign up
-              </MuiLink>
-            </Typography>
+            <Box sx={{ display: 'flex', justifyContent: 'center', pt: 2 }}>
+              <Typography sx={{ textAlign: 'center' }}>
+                Don&apos;t have an account?{' '}
+                <MuiLink
+                  component={Link}
+                  to={`/${UrlPath.REGISTRATION}`}
+                  variant="inherit"
+                  sx={{ alignSelf: 'center' }}
+                  viewTransition
+                >
+                  Sign up
+                </MuiLink>
+              </Typography>
+            </Box>
           </Box>
         </Card>
       </Stack>
