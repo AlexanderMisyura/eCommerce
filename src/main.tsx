@@ -5,7 +5,10 @@ import '@fontsource/roboto/700.css';
 import './styles/global.css';
 
 import { CssBaseline, ThemeProvider } from '@mui/material';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { CustomerProvider } from 'context/customer.context';
+import { RegistrationDataProvider } from 'context/registration.provider';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { RouterProvider } from 'react-router';
@@ -18,11 +21,15 @@ document.body.append(root);
 
 createRoot(root).render(
   <StrictMode>
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <CustomerProvider>
-        <RouterProvider router={router} />
-      </CustomerProvider>
-    </ThemeProvider>
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <CustomerProvider>
+          <RegistrationDataProvider>
+            <RouterProvider router={router} />
+          </RegistrationDataProvider>
+        </CustomerProvider>
+      </ThemeProvider>
+    </LocalizationProvider>
   </StrictMode>
 );

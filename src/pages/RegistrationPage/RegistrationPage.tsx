@@ -1,6 +1,5 @@
 import { RegistrationForm } from '@components';
 import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
 import { UrlPath } from '@ts-enums';
 import { CustomerContext } from 'context/customer.context';
 import { use, useEffect } from 'react';
@@ -17,9 +16,6 @@ export const RegistrationPage = () => {
     <Container
       sx={{ display: 'flex', flexGrow: 1, flexDirection: 'column', justifyContent: 'center' }}
     >
-      <Typography variant="h2" sx={{ textAlign: 'center' }}>
-        Registration Form
-      </Typography>
       <RegistrationForm />
     </Container>
   );

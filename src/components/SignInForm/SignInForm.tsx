@@ -68,10 +68,15 @@ export function SignInForm() {
     const { value } = event.target;
 
     if (value.length === 0) {
-      setEmailError(false);
-      setEmailErrorMessage('');
-      setPasswordError(false);
-      setPasswordErrorMessage('');
+      if (event.target.name === 'email') {
+        setEmailError(false);
+        setEmailErrorMessage('');
+      }
+
+      if (event.target.name === 'password') {
+        setPasswordError(false);
+        setPasswordErrorMessage('');
+      }
     }
   };
 
@@ -172,20 +177,25 @@ export function SignInForm() {
                 }}
               />
             </FormControl>
-            <Button type="submit" fullWidth variant="contained">
-              Sign in
-            </Button>
-            <Typography sx={{ textAlign: 'center' }}>
-              Don&apos;t have an account?{' '}
-              <MuiLink
-                component={Link}
-                to={`/${UrlPath.REGISTRATION}`}
-                variant="inherit"
-                sx={{ alignSelf: 'center' }}
-              >
-                Sign up
-              </MuiLink>
-            </Typography>
+            <Box sx={{ pt: 3 }}>
+              <Button type="submit" fullWidth variant="contained">
+                Sign in
+              </Button>
+            </Box>
+            <Box sx={{ display: 'flex', justifyContent: 'center', pt: 2 }}>
+              <Typography sx={{ textAlign: 'center' }}>
+                Don&apos;t have an account?{' '}
+                <MuiLink
+                  component={Link}
+                  to={`/${UrlPath.REGISTRATION}`}
+                  variant="inherit"
+                  sx={{ alignSelf: 'center' }}
+                  viewTransition
+                >
+                  Sign up
+                </MuiLink>
+              </Typography>
+            </Box>
           </Box>
         </Card>
       </Stack>
