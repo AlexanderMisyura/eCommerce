@@ -1,4 +1,5 @@
 import { BILLING_ADDRESS_INDEX, SHIPPING_ADDRESS_INDEX } from '@constants';
+import { Divider } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
@@ -7,11 +8,19 @@ import Typography from '@mui/material/Typography';
 import { UrlPath } from '@ts-enums';
 import type { StepperProps } from '@ts-interfaces';
 import { RegistrationContext } from 'context/registration.context';
-import { use } from 'react';
+import { use, useState } from 'react';
 import { useSubmit } from 'react-router';
+
+const formatData = (data = '') => (
+  <Typography component="span" color="warning">
+    {' '}
+    {data.length < 25 ? data : `${data.slice(0, 25)}...`}
+  </Typography>
+);
 
 export function Confirm({ handleBack, handleReset, stepIndex }: StepperProps) {
   const { registrationContext, setRegistrationContext } = use(RegistrationContext)!;
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const submit = useSubmit();
 
@@ -25,11 +34,13 @@ export function Confirm({ handleBack, handleReset, stepIndex }: StepperProps) {
   };
 
   const register = (): void => {
+    setIsSubmitting(true);
+
     void submit(JSON.stringify(registrationContext.customerDraft), {
       action: `/${UrlPath.REGISTRATION}`,
       method: 'post',
       encType: 'application/json',
-    });
+    }).then(() => setIsSubmitting(false));
   };
 
   return (
@@ -38,26 +49,32 @@ export function Confirm({ handleBack, handleReset, stepIndex }: StepperProps) {
         Confirm Your Data
       </Typography>
       <Paper elevation={3} sx={{ padding: 2, marginBottom: 3 }}>
-        <Typography variant="h6" gutterBottom>
+        <Typography variant="h6" gutterBottom color="info" fontWeight="bold">
           Credentials
         </Typography>
         <Grid container spacing={2}>
           <Grid size={{ xs: 12, sm: 6 }}>
-            <Typography>Email: {registrationContext.customerDraft.email}</Typography>
+            <Typography>Email: {formatData(registrationContext.customerDraft.email)}</Typography>
           </Grid>
           <Grid size={{ xs: 12, sm: 6 }}>
-            <Typography>First Name: {registrationContext.customerDraft.firstName}</Typography>
+            <Typography>
+              First Name: {formatData(registrationContext.customerDraft.firstName)}
+            </Typography>
           </Grid>
           <Grid size={{ xs: 12, sm: 6 }}>
-            <Typography>Last Name: {registrationContext.customerDraft.lastName}</Typography>
+            <Typography>
+              Last Name: {formatData(registrationContext.customerDraft.lastName)}
+            </Typography>
           </Grid>
           <Grid size={{ xs: 12, sm: 6 }}>
-            <Typography>Date of Birth: {registrationContext.customerDraft.dateOfBirth}</Typography>
+            <Typography>
+              Date of Birth: {formatData(registrationContext.customerDraft.dateOfBirth)}
+            </Typography>
           </Grid>
         </Grid>
       </Paper>
       <Paper elevation={3} sx={{ padding: 2, marginBottom: 3 }}>
-        <Typography variant="h6" gutterBottom>
+        <Typography variant="h6" gutterBottom color="info" fontWeight="bold">
           Addresses
         </Typography>
         <Typography variant="subtitle2" gutterBottom>
@@ -66,20 +83,31 @@ export function Confirm({ handleBack, handleReset, stepIndex }: StepperProps) {
             ? ''
             : ' (Set as Default)'}
         </Typography>
+
+        <Divider variant="middle" />
+
         <Box sx={{ marginBottom: 2 }}>
           <Typography>
             Street:{' '}
-            {registrationContext.customerDraft.addresses![SHIPPING_ADDRESS_INDEX].streetName}
+            {formatData(
+              registrationContext.customerDraft.addresses![SHIPPING_ADDRESS_INDEX].streetName
+            )}
           </Typography>
           <Typography>
-            City: {registrationContext.customerDraft.addresses![SHIPPING_ADDRESS_INDEX].city}
+            City:{' '}
+            {formatData(registrationContext.customerDraft.addresses![SHIPPING_ADDRESS_INDEX].city)}
           </Typography>
           <Typography>
             Postal Code:{' '}
-            {registrationContext.customerDraft.addresses![SHIPPING_ADDRESS_INDEX].postalCode}
+            {formatData(
+              registrationContext.customerDraft.addresses![SHIPPING_ADDRESS_INDEX].postalCode
+            )}
           </Typography>
           <Typography>
-            Country: {registrationContext.customerDraft.addresses![SHIPPING_ADDRESS_INDEX].country}
+            Country:{' '}
+            {formatData(
+              registrationContext.customerDraft.addresses![SHIPPING_ADDRESS_INDEX].country
+            )}
           </Typography>
         </Box>
         <Typography variant="subtitle2" gutterBottom>
@@ -88,51 +116,84 @@ export function Confirm({ handleBack, handleReset, stepIndex }: StepperProps) {
             ? ''
             : ' (Set as Default)'}
         </Typography>
+
+        <Divider variant="middle" />
+
+        <Divider variant="inset" />
         {registrationContext.customerDraft.billingAddresses![0] === SHIPPING_ADDRESS_INDEX ? (
           <Box sx={{ marginBottom: 2 }}>
             <Typography>
               Street:{' '}
-              {registrationContext.customerDraft.addresses![SHIPPING_ADDRESS_INDEX].streetName}
+              {formatData(
+                registrationContext.customerDraft.addresses![SHIPPING_ADDRESS_INDEX].streetName
+              )}
             </Typography>
             <Typography>
-              City: {registrationContext.customerDraft.addresses![SHIPPING_ADDRESS_INDEX].city}
+              City:{' '}
+              {formatData(
+                registrationContext.customerDraft.addresses![SHIPPING_ADDRESS_INDEX].city
+              )}
             </Typography>
             <Typography>
               Postal Code:{' '}
-              {registrationContext.customerDraft.addresses![SHIPPING_ADDRESS_INDEX].postalCode}
+              {formatData(
+                registrationContext.customerDraft.addresses![SHIPPING_ADDRESS_INDEX].postalCode
+              )}
             </Typography>
             <Typography>
               Country:{' '}
-              {registrationContext.customerDraft.addresses![SHIPPING_ADDRESS_INDEX].country}
+              {formatData(
+                registrationContext.customerDraft.addresses![SHIPPING_ADDRESS_INDEX].postalCode
+              )}
             </Typography>
           </Box>
         ) : (
           <Box sx={{ marginBottom: 2 }}>
             <Typography>
               Street:{' '}
-              {registrationContext.customerDraft.addresses![BILLING_ADDRESS_INDEX].streetName}
+              {formatData(
+                registrationContext.customerDraft.addresses![BILLING_ADDRESS_INDEX].streetName
+              )}
             </Typography>
             <Typography>
-              City: {registrationContext.customerDraft.addresses![BILLING_ADDRESS_INDEX].city}
+              City:{' '}
+              {formatData(registrationContext.customerDraft.addresses![BILLING_ADDRESS_INDEX].city)}
             </Typography>
             <Typography>
               Postal Code:{' '}
-              {registrationContext.customerDraft.addresses![BILLING_ADDRESS_INDEX].postalCode}
+              {formatData(
+                registrationContext.customerDraft.addresses![BILLING_ADDRESS_INDEX].postalCode
+              )}
             </Typography>
             <Typography>
-              Country: {registrationContext.customerDraft.addresses![BILLING_ADDRESS_INDEX].country}
+              Country:{' '}
+              {formatData(
+                registrationContext.customerDraft.addresses![BILLING_ADDRESS_INDEX].country
+              )}
             </Typography>
           </Box>
         )}
       </Paper>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'row', pt: 2 }}>
-        <Button type="button" onClick={handleBackStep} variant="text">
+        <Button type="button" onClick={handleBackStep} variant="text" disabled={isSubmitting}>
           Back
         </Button>
-        <Button type="button" onClick={handleReset} variant="outlined" color="error">
+        <Button
+          type="button"
+          onClick={handleReset}
+          variant="outlined"
+          color="error"
+          disabled={isSubmitting}
+        >
           Reset and Return
         </Button>
-        <Button type="button" onClick={register} variant="contained">
+        <Button
+          type="button"
+          onClick={register}
+          variant="contained"
+          loading={isSubmitting}
+          loadingPosition="start"
+        >
           Confirm
         </Button>
       </Box>
