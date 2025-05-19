@@ -10,7 +10,11 @@ import { useMemo, useState } from 'react';
 
 import { RegistrationContext } from './registration.context';
 
-export const RegistrationDataProvider = ({ children }: { children: ReactNode }) => {
+interface RegistrationDataProviderProps {
+  children: ReactNode;
+}
+
+export const RegistrationDataProvider: React.FC<RegistrationDataProviderProps> = ({ children }) => {
   const [registrationContext, setRegistrationContext] = useState<RegistrationContextData>({
     customerDraft: CUSTOMER_DRAFT_DEFAULT,
     addressesState: CUSTOMER_ADDRESSES_STATE_DEFAULT,

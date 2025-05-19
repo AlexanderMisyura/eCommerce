@@ -1,13 +1,15 @@
 import { DEBOUNCE_TIMEOUT } from '@constants';
-import { useCustomerContext } from '@hooks/use-customer-context';
+import { useCustomerContext, useToast } from '@hooks';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { IconButton, InputAdornment, Link as MuiLink } from '@mui/material';
+import { Link as MuiLink } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import MuiCard from '@mui/material/Card';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
+import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
 import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
@@ -18,7 +20,6 @@ import { eventDebounceWrapper, validateEmail, validatePassword } from '@utils';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { Form, Link, useActionData, useNavigate } from 'react-router';
-import { toast, ToastContainer } from 'react-toastify';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -51,6 +52,8 @@ export function SignInForm() {
 
   const data = useActionData<SignInData>();
   const { setCurrentCustomer } = useCustomerContext();
+
+  const { showToast } = useToast();
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const emailValue = event.target.value;
@@ -104,20 +107,19 @@ export function SignInForm() {
 
     if (data?.serverErrors) {
       data.serverErrors.map((message) => {
-        toast.error(message);
+        showToast(message, 'error');
       });
     }
 
     if (data?.customer) {
       setCurrentCustomer(data.customer);
-      toast.success('successful sign in');
       void navigate(UrlPath.HOME);
     }
 
     if (data?.customer || data?.serverErrors || data?.validationErrors) {
       setIsSubmitting(false);
     }
-  }, [data, navigate, setCurrentCustomer]);
+  }, [data, navigate, setCurrentCustomer, showToast]);
 
   return (
     <Form action={`/${UrlPath.SIGN_IN}`} method="post" onSubmit={handleSubmit}>
@@ -218,7 +220,6 @@ export function SignInForm() {
           </Box>
         </Card>
       </Stack>
-      <ToastContainer />
     </Form>
   );
 }

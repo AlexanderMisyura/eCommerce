@@ -1,5 +1,5 @@
 import { RegistrationForm } from '@components';
-import { useCustomerContext } from '@hooks/use-customer-context';
+import { useCustomerContext } from '@hooks';
 import Container from '@mui/material/Container';
 import { UrlPath } from '@ts-enums';
 import { useEffect } from 'react';

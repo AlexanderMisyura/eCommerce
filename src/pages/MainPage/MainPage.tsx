@@ -1,4 +1,4 @@
-import { useCustomerContext } from '@hooks/use-customer-context';
+import { useCustomerContext } from '@hooks';
 import Container from '@mui/material/Container';
 import Skeleton from '@mui/material/Skeleton';
 import Typography from '@mui/material/Typography';

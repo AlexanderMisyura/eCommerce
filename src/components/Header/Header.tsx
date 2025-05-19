@@ -1,6 +1,6 @@
 import LogoIcon from '@assets/icons/logo.png';
 import { AuthPanel, HeaderSkeleton, LogoLink, Navigation, ProfilePanel } from '@components';
-import { useCustomerContext } from '@hooks/use-customer-context';
+import { useCustomerContext } from '@hooks';
 import CloseIcon from '@mui/icons-material/Close';
 import MenuIcon from '@mui/icons-material/Menu';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';

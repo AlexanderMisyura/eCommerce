@@ -1,5 +1,5 @@
+import { CustomerContext } from '@context';
 import type { CustomerContextType } from '@ts-interfaces';
-import { CustomerContext } from 'context/customer';
 import { use } from 'react';
 
 export const useCustomerContext = (): CustomerContextType => {

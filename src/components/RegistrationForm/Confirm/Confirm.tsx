@@ -1,4 +1,5 @@
 import { BILLING_ADDRESS_INDEX, SHIPPING_ADDRESS_INDEX } from '@constants';
+import { useRegistrationData } from '@hooks';
 import { Divider } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -7,8 +8,7 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import { UrlPath } from '@ts-enums';
 import type { StepperProps } from '@ts-interfaces';
-import { RegistrationContext } from 'context/registration.context';
-import { use, useState } from 'react';
+import { useState } from 'react';
 import { useSubmit } from 'react-router';
 
 const formatData = (data = '') => (
@@ -19,7 +19,7 @@ const formatData = (data = '') => (
 );
 
 export function Confirm({ handleBack, handleReset, stepIndex }: StepperProps) {
-  const { registrationContext, setRegistrationContext } = use(RegistrationContext)!;
+  const { registrationContext, setRegistrationContext } = useRegistrationData();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const submit = useSubmit();
@@ -119,7 +119,6 @@ export function Confirm({ handleBack, handleReset, stepIndex }: StepperProps) {
 
         <Divider variant="middle" />
 
-        <Divider variant="inset" />
         {registrationContext.customerDraft.billingAddresses![0] === SHIPPING_ADDRESS_INDEX ? (
           <Box sx={{ marginBottom: 2 }}>
             <Typography>

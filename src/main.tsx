@@ -4,11 +4,10 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import './styles/global.css';
 
+import { CustomerProvider, RegistrationDataProvider, ToastProvider } from '@context';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { CustomerProvider } from 'context/customer';
-import { RegistrationDataProvider } from 'context/registration.provider';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { RouterProvider } from 'react-router';
@@ -26,7 +25,9 @@ createRoot(root).render(
         <CssBaseline />
         <CustomerProvider>
           <RegistrationDataProvider>
-            <RouterProvider router={router} />
+            <ToastProvider>
+              <RouterProvider router={router} />
+            </ToastProvider>
           </RegistrationDataProvider>
         </CustomerProvider>
       </ThemeProvider>

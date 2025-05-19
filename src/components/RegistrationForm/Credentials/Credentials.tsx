@@ -7,6 +7,7 @@ import {
   LAST_NAME,
   PLACEHOLDER,
 } from '@constants';
+import { useRegistrationData } from '@hooks';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Box from '@mui/material/Box';
@@ -27,9 +28,8 @@ import {
   validatePassword,
   validateProperName,
 } from '@utils';
-import { RegistrationContext } from 'context/registration.context';
 import dayjs from 'dayjs';
-import { use, useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 export function Credentials({ handleNext, handleReset, setStepErrors, stepIndex }: StepperProps) {
   const [credentialsState, setCredentialsState] = useState<CredentialsState>(
@@ -37,7 +37,7 @@ export function Credentials({ handleNext, handleReset, setStepErrors, stepIndex 
   );
   const [isPasswordRevealed, setIsPasswordRevealed] = useState(false);
   const [datePickerValue, setDatePickerValue] = useState<PickerValue>(null);
-  const { registrationContext, setRegistrationContext } = use(RegistrationContext)!;
+  const { registrationContext, setRegistrationContext } = useRegistrationData();
 
   useEffect(() => {
     if (registrationContext.credentialsState) {
