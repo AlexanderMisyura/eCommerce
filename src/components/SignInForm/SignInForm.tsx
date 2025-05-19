@@ -1,4 +1,5 @@
 import { DEBOUNCE_TIMEOUT } from '@constants';
+import { useToast } from '@hooks/use-toast';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { IconButton, InputAdornment, Link as MuiLink } from '@mui/material';
@@ -18,7 +19,6 @@ import { CustomerContext } from 'context/customer.context';
 import * as React from 'react';
 import { use, useEffect, useState } from 'react';
 import { Form, Link, useActionData, useNavigate } from 'react-router';
-import { toast, ToastContainer } from 'react-toastify';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -49,6 +49,8 @@ export function SignInForm() {
 
   const data = useActionData<SignInData>();
   const { setCurrentCustomer } = use(CustomerContext)!;
+
+  const { showToast } = useToast();
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const emailValue = event.target.value;
@@ -98,16 +100,15 @@ export function SignInForm() {
 
     if (data?.serverErrors) {
       data.serverErrors.map((message) => {
-        toast.error(message);
+        showToast(message, 'error');
       });
     }
 
     if (data?.customer) {
       setCurrentCustomer(data.customer);
-      toast.success('successful sign in');
       void navigate(UrlPath.HOME);
     }
-  }, [data, navigate, setCurrentCustomer]);
+  }, [data, navigate, setCurrentCustomer, showToast]);
 
   return (
     <Form action={`/${UrlPath.SIGN_IN}`} method="post">
@@ -199,7 +200,6 @@ export function SignInForm() {
           </Box>
         </Card>
       </Stack>
-      <ToastContainer />
     </Form>
   );
 }

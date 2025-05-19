@@ -9,6 +9,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { CustomerProvider } from 'context/customer.context';
 import { RegistrationDataProvider } from 'context/registration.provider';
+import { ToastProvider } from 'context/toast/toast.provider';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { RouterProvider } from 'react-router';
@@ -26,7 +27,9 @@ createRoot(root).render(
         <CssBaseline />
         <CustomerProvider>
           <RegistrationDataProvider>
-            <RouterProvider router={router} />
+            <ToastProvider>
+              <RouterProvider router={router} />
+            </ToastProvider>
           </RegistrationDataProvider>
         </CustomerProvider>
       </ThemeProvider>

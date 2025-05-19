@@ -1,5 +1,6 @@
 import { Addresses, Confirm, Credentials } from '@components';
 import { CONTEXT_RESET_TIMEOUT } from '@constants';
+import { useToast } from '@hooks/use-toast';
 import { Link as MuiLink } from '@mui/material';
 import Box from '@mui/material/Box';
 import MuiCard from '@mui/material/Card';
@@ -15,7 +16,6 @@ import { CustomerContext } from 'context/customer.context';
 import { RegistrationContext } from 'context/registration.context';
 import { use, useEffect, useRef, useState } from 'react';
 import { Form, Link, useActionData, useNavigate } from 'react-router';
-import { toast, ToastContainer } from 'react-toastify';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -57,23 +57,32 @@ export function RegistrationForm() {
   const data = useActionData<RegistrationData>();
   const { setCurrentCustomer } = use(CustomerContext)!;
 
+  const { showToast } = useToast();
+
   const previousDataReference = useRef(data);
 
   useEffect(() => {
     if (data?.serverErrors && data !== previousDataReference.current) {
       previousDataReference.current = data;
       data.serverErrors.forEach((message) => {
-        toast.error(message);
+        showToast(message, 'error');
       });
     }
 
     if (data?.customer) {
       setCurrentCustomer(data.customer);
-      toast.success('Registration successful!');
+      showToast('Registration successful!', 'success');
       setTimeout(resetRegistrationContext, CONTEXT_RESET_TIMEOUT);
       void navigate(UrlPath.HOME);
     }
-  }, [data, navigate, setCurrentCustomer, setRegistrationContext, resetRegistrationContext]);
+  }, [
+    data,
+    navigate,
+    setCurrentCustomer,
+    setRegistrationContext,
+    resetRegistrationContext,
+    showToast,
+  ]);
 
   useEffect(() => {
     setActiveStep(registrationContext.step);
@@ -147,7 +156,6 @@ export function RegistrationForm() {
           </Box>
         </Card>
       </Stack>
-      <ToastContainer />
     </Form>
   );
 }
