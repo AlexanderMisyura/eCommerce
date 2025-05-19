@@ -1,18 +1,18 @@
 import LogoIcon from '@assets/icons/logo.png';
-import { AuthPanel, LogoLink, Navigation, ProfilePanel } from '@components';
+import { AuthPanel, HeaderSkeleton, LogoLink, Navigation, ProfilePanel } from '@components';
+import { useCustomerContext } from '@hooks/use-customer-context';
 import CloseIcon from '@mui/icons-material/Close';
 import MenuIcon from '@mui/icons-material/Menu';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { AppBar, Badge, Container, Divider, Drawer, IconButton, Toolbar } from '@mui/material';
 import { UrlPath } from '@ts-enums';
-import { CustomerContext } from 'context/customer.context';
-import { use, useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router';
 import { theme } from 'theme';
 
 export const Header = () => {
   const [open, setOpen] = useState(false);
-  const { currentCustomer, setCurrentCustomer } = use(CustomerContext)!;
+  const { currentCustomer, setCurrentCustomer, loading } = useCustomerContext();
 
   const handleBurgerMenuToggle = () => {
     setOpen((previous) => !previous);
@@ -35,7 +35,9 @@ export const Header = () => {
     );
   };
 
-  return (
+  return loading ? (
+    <HeaderSkeleton />
+  ) : (
     <AppBar color="inherit" position="sticky">
       <Container>
         <Toolbar disableGutters sx={{ columnGap: theme.spacing(4) }}>
