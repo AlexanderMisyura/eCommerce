@@ -45,6 +45,8 @@ export function SignInForm() {
   const [passwordError, setPasswordError] = useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
   const [isPasswordRevealed, setIsPasswordRevealed] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const navigate = useNavigate();
 
   const data = useActionData<SignInData>();
@@ -84,6 +86,10 @@ export function SignInForm() {
     setIsPasswordRevealed((show) => !show);
   };
 
+  const handleSubmit = () => {
+    setIsSubmitting(true);
+  };
+
   useEffect(() => {
     if (data?.validationErrors) {
       if (data.validationErrors.emailErrors.length > 0) {
@@ -107,10 +113,14 @@ export function SignInForm() {
       toast.success('successful sign in');
       void navigate(UrlPath.HOME);
     }
+
+    if (data?.customer || data?.serverErrors || data?.validationErrors) {
+      setIsSubmitting(false);
+    }
   }, [data, navigate, setCurrentCustomer]);
 
   return (
-    <Form action={`/${UrlPath.SIGN_IN}`} method="post">
+    <Form action={`/${UrlPath.SIGN_IN}`} method="post" onSubmit={handleSubmit}>
       <Stack direction="column" justifyContent="space-between">
         <Card variant="outlined">
           <Typography
@@ -143,6 +153,7 @@ export function SignInForm() {
                 color={emailError ? 'error' : 'primary'}
                 onInput={eventDebounceWrapper(handleEmailChange, DEBOUNCE_TIMEOUT)}
                 onBlur={handleBlur}
+                disabled={isSubmitting}
               />
             </FormControl>
             <FormControl>
@@ -160,6 +171,7 @@ export function SignInForm() {
                 color={passwordError ? 'error' : 'primary'}
                 onInput={eventDebounceWrapper(handlePasswordChange, DEBOUNCE_TIMEOUT)}
                 onBlur={handleBlur}
+                disabled={isSubmitting}
                 slotProps={{
                   input: {
                     endAdornment: (
@@ -167,6 +179,7 @@ export function SignInForm() {
                         <IconButton
                           aria-label={isPasswordRevealed ? 'Hide password' : 'Show password'}
                           onClick={togglePasswordReveal}
+                          disabled={isSubmitting}
                           edge="end"
                         >
                           {isPasswordRevealed ? <VisibilityOff /> : <Visibility />}
@@ -178,7 +191,13 @@ export function SignInForm() {
               />
             </FormControl>
             <Box sx={{ pt: 3 }}>
-              <Button type="submit" fullWidth variant="contained">
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                loading={isSubmitting}
+                loadingPosition="start"
+              >
                 Sign in
               </Button>
             </Box>
