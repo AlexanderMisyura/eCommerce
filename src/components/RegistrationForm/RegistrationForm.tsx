@@ -1,5 +1,6 @@
 import { Addresses, Confirm, Credentials } from '@components';
 import { CONTEXT_RESET_TIMEOUT } from '@constants';
+import { useCustomerContext } from '@hooks/use-customer-context';
 import { Link as MuiLink } from '@mui/material';
 import Box from '@mui/material/Box';
 import MuiCard from '@mui/material/Card';
@@ -11,7 +12,6 @@ import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import { UrlPath } from '@ts-enums';
 import type { RegistrationData, StepperProps } from '@ts-interfaces';
-import { CustomerContext } from 'context/customer.context';
 import { RegistrationContext } from 'context/registration.context';
 import { use, useEffect, useRef, useState } from 'react';
 import { Form, Link, useActionData, useNavigate } from 'react-router';
@@ -55,7 +55,7 @@ export function RegistrationForm() {
   const navigate = useNavigate();
 
   const data = useActionData<RegistrationData>();
-  const { setCurrentCustomer } = use(CustomerContext)!;
+  const { setCurrentCustomer } = useCustomerContext();
 
   const previousDataReference = useRef(data);
 

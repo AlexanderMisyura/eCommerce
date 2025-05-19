@@ -1,12 +1,12 @@
 import { RegistrationForm } from '@components';
+import { useCustomerContext } from '@hooks/use-customer-context';
 import Container from '@mui/material/Container';
 import { UrlPath } from '@ts-enums';
-import { CustomerContext } from 'context/customer.context';
-import { use, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
 
 export const RegistrationPage = () => {
-  const { currentCustomer } = use(CustomerContext)!;
+  const { currentCustomer } = useCustomerContext();
   const navigate = useNavigate();
   useEffect(() => {
     if (currentCustomer) void navigate(UrlPath.HOME);

@@ -1,11 +1,10 @@
+import { useCustomerContext } from '@hooks/use-customer-context';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
-import { CustomerContext } from 'context/customer.context';
-import { use } from 'react';
 import { theme } from 'theme';
 
 export const MainPage = () => {
-  const { currentCustomer } = use(CustomerContext)!;
+  const { currentCustomer } = useCustomerContext();
   return (
     <Container
       sx={{

@@ -1,4 +1,5 @@
 import { DEBOUNCE_TIMEOUT } from '@constants';
+import { useCustomerContext } from '@hooks/use-customer-context';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { IconButton, InputAdornment, Link as MuiLink } from '@mui/material';
@@ -14,9 +15,8 @@ import Typography from '@mui/material/Typography';
 import { UrlPath } from '@ts-enums';
 import type { SignInData } from '@ts-interfaces';
 import { eventDebounceWrapper, validateEmail, validatePassword } from '@utils';
-import { CustomerContext } from 'context/customer.context';
 import * as React from 'react';
-import { use, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Form, Link, useActionData, useNavigate } from 'react-router';
 import { toast, ToastContainer } from 'react-toastify';
 
@@ -48,7 +48,7 @@ export function SignInForm() {
   const navigate = useNavigate();
 
   const data = useActionData<SignInData>();
-  const { setCurrentCustomer } = use(CustomerContext)!;
+  const { setCurrentCustomer } = useCustomerContext();
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const emailValue = event.target.value;

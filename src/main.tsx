@@ -7,7 +7,7 @@ import './styles/global.css';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { CustomerProvider } from 'context/customer.context';
+import { CustomerProvider } from 'context/customer';
 import { RegistrationDataProvider } from 'context/registration.provider';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';

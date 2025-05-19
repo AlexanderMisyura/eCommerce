@@ -1,3 +1,4 @@
+export type { CustomerContextType } from './context/customer-context';
 export type { Address } from './registration/address';
 export type { Addresses } from './registration/addresses';
 export type { AddressesOptions } from './registration/addresses-options';
