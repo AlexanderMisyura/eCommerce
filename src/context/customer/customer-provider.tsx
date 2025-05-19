@@ -1,17 +1,18 @@
-import { type Customer } from '@commercetools/platform-sdk';
+import type { Customer } from '@commercetools/platform-sdk';
 import { apiRoot } from '@services';
 import type { ReactNode } from 'react';
-import { createContext, useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
-interface CustomerContextType {
-  currentCustomer: Customer | null;
-  setCurrentCustomer: (user: Customer | null) => void;
+import { CustomerContext } from './customer.context';
+
+interface CustomerProviderProps {
+  children: ReactNode;
 }
 
-export const CustomerContext = createContext<CustomerContextType | null>(null);
-
-export const CustomerProvider = ({ children }: { children: ReactNode }) => {
+export const CustomerProvider: React.FC<CustomerProviderProps> = ({ children }) => {
   const [currentCustomer, setCurrentCustomer] = useState<Customer | null>(null);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const getMeData = async () => {
       try {
@@ -22,6 +23,8 @@ export const CustomerProvider = ({ children }: { children: ReactNode }) => {
       } catch (error) {
         console.error('Error, while try to get customer:', error);
         setCurrentCustomer(null);
+      } finally {
+        setLoading(false);
       }
     };
     getMeData().catch((error) => {
@@ -29,6 +32,11 @@ export const CustomerProvider = ({ children }: { children: ReactNode }) => {
       setCurrentCustomer(null);
     });
   }, []);
-  const value = { currentCustomer, setCurrentCustomer };
+
+  const value = useMemo(
+    () => ({ currentCustomer, setCurrentCustomer, loading }),
+    [currentCustomer, loading]
+  );
+
   return <CustomerContext value={value}>{children}</CustomerContext>;
 };

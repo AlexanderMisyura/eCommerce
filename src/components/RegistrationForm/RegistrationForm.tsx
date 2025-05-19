@@ -1,6 +1,6 @@
 import { Addresses, Confirm, Credentials } from '@components';
 import { CONTEXT_RESET_TIMEOUT } from '@constants';
-import { useToast } from '@hooks/use-toast';
+import { useCustomerContext, useRegistrationData, useToast } from '@hooks';
 import { Link as MuiLink } from '@mui/material';
 import Box from '@mui/material/Box';
 import MuiCard from '@mui/material/Card';
@@ -12,9 +12,7 @@ import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import { UrlPath } from '@ts-enums';
 import type { RegistrationData, StepperProps } from '@ts-interfaces';
-import { CustomerContext } from 'context/customer.context';
-import { RegistrationContext } from 'context/registration.context';
-import { use, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Form, Link, useActionData, useNavigate } from 'react-router';
 
 const Card = styled(MuiCard)(({ theme }) => ({
@@ -51,11 +49,11 @@ export function RegistrationForm() {
   const [activeStep, setActiveStep] = useState(0);
   const [stepErrors, setStepErrors] = useState<boolean[]>(steps.map(() => false));
   const { registrationContext, setRegistrationContext, resetRegistrationContext } =
-    use(RegistrationContext)!;
+    useRegistrationData();
   const navigate = useNavigate();
 
   const data = useActionData<RegistrationData>();
-  const { setCurrentCustomer } = use(CustomerContext)!;
+  const { setCurrentCustomer } = useCustomerContext();
 
   const { showToast } = useToast();
 

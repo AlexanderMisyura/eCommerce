@@ -1,6 +1,7 @@
 export { AuthPanel } from './AuthPanel/AuthPanel';
 export { Footer } from './Footer/Footer';
 export { Header } from './Header/Header';
+export { HeaderSkeleton } from './Header/HeaderSkeleton';
 export { LogoLink } from './LogoLink/LogoLink';
 export { Navigation } from './Navigation/Navigation';
 export { PagePlaceholder } from './PagePlaceholder/PagePlaceholder';

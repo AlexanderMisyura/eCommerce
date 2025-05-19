@@ -8,6 +8,7 @@ import {
   FIELD_NAME,
   SHIPPING_ADDRESS_INDEX,
 } from '@constants';
+import { useRegistrationData } from '@hooks';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
@@ -27,8 +28,7 @@ import {
   validateProperName,
   validateStreetName,
 } from '@utils';
-import { RegistrationContext } from 'context/registration.context';
-import { use, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 export function Addresses({
   handleBack,
@@ -41,7 +41,7 @@ export function Addresses({
     CUSTOMER_ADDRESSES_STATE_DEFAULT
   );
   const [addressesOptions, setAddressesOptions] = useState(ADDRESSES_OPTIONS_DEFAULT);
-  const { registrationContext, setRegistrationContext } = use(RegistrationContext)!;
+  const { registrationContext, setRegistrationContext } = useRegistrationData();
 
   useEffect(() => {
     if (registrationContext.addressesState) {

@@ -1,13 +1,15 @@
 import { DEBOUNCE_TIMEOUT } from '@constants';
-import { useToast } from '@hooks/use-toast';
+import { useCustomerContext, useToast } from '@hooks';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { IconButton, InputAdornment, Link as MuiLink } from '@mui/material';
+import { Link as MuiLink } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import MuiCard from '@mui/material/Card';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
+import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
 import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
@@ -15,9 +17,8 @@ import Typography from '@mui/material/Typography';
 import { UrlPath } from '@ts-enums';
 import type { SignInData } from '@ts-interfaces';
 import { eventDebounceWrapper, validateEmail, validatePassword } from '@utils';
-import { CustomerContext } from 'context/customer.context';
 import * as React from 'react';
-import { use, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Form, Link, useActionData, useNavigate } from 'react-router';
 
 const Card = styled(MuiCard)(({ theme }) => ({
@@ -45,10 +46,12 @@ export function SignInForm() {
   const [passwordError, setPasswordError] = useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
   const [isPasswordRevealed, setIsPasswordRevealed] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const navigate = useNavigate();
 
   const data = useActionData<SignInData>();
-  const { setCurrentCustomer } = use(CustomerContext)!;
+  const { setCurrentCustomer } = useCustomerContext();
 
   const { showToast } = useToast();
 
@@ -86,6 +89,10 @@ export function SignInForm() {
     setIsPasswordRevealed((show) => !show);
   };
 
+  const handleSubmit = () => {
+    setIsSubmitting(true);
+  };
+
   useEffect(() => {
     if (data?.validationErrors) {
       if (data.validationErrors.emailErrors.length > 0) {
@@ -108,10 +115,14 @@ export function SignInForm() {
       setCurrentCustomer(data.customer);
       void navigate(UrlPath.HOME);
     }
+
+    if (data?.customer || data?.serverErrors || data?.validationErrors) {
+      setIsSubmitting(false);
+    }
   }, [data, navigate, setCurrentCustomer, showToast]);
 
   return (
-    <Form action={`/${UrlPath.SIGN_IN}`} method="post">
+    <Form action={`/${UrlPath.SIGN_IN}`} method="post" onSubmit={handleSubmit}>
       <Stack direction="column" justifyContent="space-between">
         <Card variant="outlined">
           <Typography
@@ -144,6 +155,7 @@ export function SignInForm() {
                 color={emailError ? 'error' : 'primary'}
                 onInput={eventDebounceWrapper(handleEmailChange, DEBOUNCE_TIMEOUT)}
                 onBlur={handleBlur}
+                disabled={isSubmitting}
               />
             </FormControl>
             <FormControl>
@@ -161,6 +173,7 @@ export function SignInForm() {
                 color={passwordError ? 'error' : 'primary'}
                 onInput={eventDebounceWrapper(handlePasswordChange, DEBOUNCE_TIMEOUT)}
                 onBlur={handleBlur}
+                disabled={isSubmitting}
                 slotProps={{
                   input: {
                     endAdornment: (
@@ -168,6 +181,7 @@ export function SignInForm() {
                         <IconButton
                           aria-label={isPasswordRevealed ? 'Hide password' : 'Show password'}
                           onClick={togglePasswordReveal}
+                          disabled={isSubmitting}
                           edge="end"
                         >
                           {isPasswordRevealed ? <VisibilityOff /> : <Visibility />}
@@ -179,7 +193,13 @@ export function SignInForm() {
               />
             </FormControl>
             <Box sx={{ pt: 3 }}>
-              <Button type="submit" fullWidth variant="contained">
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                loading={isSubmitting}
+                loadingPosition="start"
+              >
                 Sign in
               </Button>
             </Box>
