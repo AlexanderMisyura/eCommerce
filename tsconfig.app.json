@@ -26,6 +26,7 @@
       "@config/*": ["config/*"],
       "@constants": ["constants/index.ts"],
       "@context": ["context/index.ts"],
+      "@controllers": ["controllers/index.ts"],
       "@hooks": ["hooks/index.ts"],
       "@pages": ["pages/index.ts"],
       "@services": ["services/index.ts"],
