@@ -1,11 +1,14 @@
-import { apiRoot, requestMeInfo, requestSignInApp } from '@services';
+import { ApiController } from '@controllers';
 import type { SignInData } from '@ts-interfaces';
 import type { SignInType } from '@ts-types';
 import { convertFormDataToString, validateSignIn } from '@utils';
 import type { ActionFunctionArgs } from 'react-router';
 
+const controller = ApiController.getInstance();
+
 export const signInAction = async ({ request }: ActionFunctionArgs): Promise<SignInData> => {
   const data = await request.formData();
+
   const submission: SignInType = {
     email: convertFormDataToString(data.get('email')),
     password: convertFormDataToString(data.get('password')),
@@ -20,10 +23,9 @@ export const signInAction = async ({ request }: ActionFunctionArgs): Promise<Sig
   const serverErrors: string[] = [];
 
   try {
-    const data = await requestSignInApp(submission);
-    apiRoot.setUserData(submission);
-    await requestMeInfo();
-    return { customer: data.body.customer };
+    const response = await controller.signInCustomer(submission);
+
+    return { customer: response.body.customer };
   } catch (error) {
     if (error instanceof Error) {
       serverErrors.push(

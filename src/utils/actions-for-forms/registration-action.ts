@@ -1,7 +1,9 @@
-import { apiRoot, registrationApp, requestMeInfo } from '@services';
+import { ApiController } from '@controllers';
 import type { RegistrationData } from '@ts-interfaces';
 import { RegistrationSchema } from '@utils';
 import type { ActionFunctionArgs } from 'react-router';
+
+const controller = ApiController.getInstance();
 
 export const registrationAction = async ({
   request,
@@ -11,16 +13,16 @@ export const registrationAction = async ({
   const serverErrors: string[] = [];
 
   try {
-    const data = await registrationApp(submission);
-    apiRoot.setUserData(submission);
-    await requestMeInfo();
-    return { customer: data.body.customer };
+    const response = await controller.registerCustomer(submission);
+
+    return { customer: response.body.customer };
   } catch (error) {
     if (error instanceof Error) {
       serverErrors.push(`${error.message} Please review and change your registration information.`);
     } else {
       serverErrors.push('Unexpected error! Try one more time!');
     }
+
     return { serverErrors };
   }
 };
