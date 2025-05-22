@@ -17,7 +17,7 @@ export const registrationAction = async ({
     return { customer: data.body.customer };
   } catch (error) {
     if (error instanceof Error) {
-      serverErrors.push(error.message);
+      serverErrors.push(`${error.message} Please review and change your registration information.`);
     } else {
       serverErrors.push('Unexpected error! Try one more time!');
     }
