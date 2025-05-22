@@ -26,7 +26,9 @@ export const signInAction = async ({ request }: ActionFunctionArgs): Promise<Sig
     return { customer: data.body.customer };
   } catch (error) {
     if (error instanceof Error) {
-      serverErrors.push(error.message);
+      serverErrors.push(
+        `${error.message} Register a new account if you don't have one or make sure your email and password are correct.`
+      );
     } else {
       serverErrors.push('Unexpected error! Try one more time!');
     }
