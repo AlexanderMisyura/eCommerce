@@ -1,4 +1,5 @@
 export { AuthPanel } from './AuthPanel/AuthPanel';
+export { BreadcrumbsNav } from './BreadcrumbsNav/BreadcrumbsNav';
 export { Footer } from './Footer/Footer';
 export { Header } from './Header/Header';
 export { HeaderSkeleton } from './Header/HeaderSkeleton';
