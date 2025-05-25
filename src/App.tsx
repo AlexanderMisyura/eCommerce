@@ -5,7 +5,7 @@ function App() {
   return (
     <div className="page flex min-h-screen flex-col">
       <Header />
-      <main className="flex grow py-4">
+      <main className="flex grow flex-col py-4">
         <Outlet />
       </main>
       <Footer />
