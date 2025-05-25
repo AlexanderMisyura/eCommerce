@@ -12,3 +12,4 @@ export { Confirm } from './RegistrationForm/Confirm/Confirm';
 export { Credentials } from './RegistrationForm/Credentials/Credentials';
 export { RegistrationForm } from './RegistrationForm/RegistrationForm';
 export { SignInForm } from './SignInForm/SignInForm';
+export { Spinner } from './Spinner/Spinner';
