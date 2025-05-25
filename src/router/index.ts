@@ -1,4 +1,10 @@
 import {
+  UserProfileAddresses,
+  UserProfileChangePass,
+  UserProfileDetails,
+  UserProfileOverview,
+} from '@components';
+import {
   AboutUsPage,
   CatalogPage,
   MainPage,
@@ -22,7 +28,28 @@ export const router = createBrowserRouter([
       { path: UrlPath.SIGN_IN, Component: SignInPage, action: signInAction },
       { path: UrlPath.REGISTRATION, Component: RegistrationPage, action: registrationAction },
       { path: UrlPath.NOT_FOUND, Component: NotFoundPage },
-      { path: UrlPath.USER_PROFILE, Component: UserProfilePage },
+      {
+        path: UrlPath.USER_PROFILE,
+        Component: UserProfilePage,
+        children: [
+          {
+            index: true,
+            Component: UserProfileOverview,
+          },
+          {
+            path: UrlPath.USER_PROFILE_DETAILS,
+            Component: UserProfileDetails,
+          },
+          {
+            path: UrlPath.USER_PROFILE_ADDRESSES,
+            Component: UserProfileAddresses,
+          },
+          {
+            path: UrlPath.USER_PROFILE_CHANGE_PASSWORD,
+            Component: UserProfileChangePass,
+          },
+        ],
+      },
       { path: UrlPath.CATALOG, Component: CatalogPage },
       { path: UrlPath.SHOPPING_CART, Component: ShoppingCartPage },
     ],

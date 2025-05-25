@@ -1,9 +1,15 @@
 import { createTheme } from '@mui/material';
 
+declare module '@mui/material/styles' {
+  interface BreakpointOverrides {
+    xxl: true;
+  }
+}
+
 export const theme = createTheme({
   spacing: 4,
   palette: {
-    primary: { main: '#1976d2' },
+    primary: { main: '#1976d2', light: '#f8fafd' },
     secondary: { main: '#ff9800' },
     background: { default: '#f5f5f5', paper: '#ffffff' },
   },
@@ -26,8 +32,9 @@ export const theme = createTheme({
       xs: 0,
       sm: 640,
       md: 768,
-      lg: 1280,
-      xl: 1440,
+      lg: 991,
+      xl: 1280,
+      xxl: 1440,
     },
   },
   components: {
