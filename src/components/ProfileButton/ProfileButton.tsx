@@ -1,16 +1,14 @@
 import type { Customer } from '@commercetools/platform-sdk';
-import Avatar from '@mui/material/Avatar';
 import { UrlPath } from '@ts-enums';
 import { clsx } from 'clsx';
 import { NavLink } from 'react-router';
-import { theme } from 'theme';
 
-export interface ProfileButtonProps {
+import { ProfileAvatar } from './ProfileAvatar';
+
+interface ProfileButtonProps {
   customer: Customer;
   onClick: () => void;
 }
-
-const AVATAR_SIZE = 30;
 
 export const ProfileButton: React.FC<ProfileButtonProps> = (props) => {
   const { customer, onClick } = props;
@@ -31,12 +29,7 @@ export const ProfileButton: React.FC<ProfileButtonProps> = (props) => {
       title="User Profile"
       onClick={onClick}
     >
-      <Avatar
-        sx={{ width: AVATAR_SIZE, height: AVATAR_SIZE, fontSize: theme.spacing(4) }}
-        alt="profile avatar"
-      >
-        {avatarLetters}
-      </Avatar>
+      <ProfileAvatar>{avatarLetters}</ProfileAvatar>
     </NavLink>
   );
 };
