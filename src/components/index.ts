@@ -5,6 +5,7 @@ export { HeaderSkeleton } from './Header/HeaderSkeleton';
 export { LogoLink } from './LogoLink/LogoLink';
 export { Navigation } from './Navigation/Navigation';
 export { PagePlaceholder } from './PagePlaceholder/PagePlaceholder';
+export { Pagination } from './Pagination/Pagination';
 export { ProfileButton } from './ProfileButton/ProfileButton';
 export { ProfilePanel } from './ProfilePanel/ProfilePanel';
 export { Addresses } from './RegistrationForm/Addresses/Addresses';
