@@ -1,4 +1,9 @@
-import type { ClientResponse, Customer, CustomerSignInResult } from '@commercetools/platform-sdk';
+import type {
+  ClientResponse,
+  Customer,
+  CustomerChangePassword,
+  CustomerSignInResult,
+} from '@commercetools/platform-sdk';
 import { apiRoot } from '@services';
 import type { RegistrationType, SignInType } from '@ts-types';
 
@@ -30,6 +35,21 @@ export class ApiController {
     apiRoot.setUserData(customer);
     await this.requestMeInfo();
 
+    return response;
+  }
+
+  public async changePasswordCustomer({
+    id,
+    version,
+    currentPassword,
+    newPassword,
+  }: CustomerChangePassword): Promise<ClientResponse<Customer>> {
+    const response = await apiRoot
+      .root()
+      .customers()
+      .password()
+      .post({ body: { id, version, currentPassword, newPassword } })
+      .execute();
     return response;
   }
 
