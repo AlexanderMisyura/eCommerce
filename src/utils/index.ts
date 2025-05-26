@@ -7,6 +7,7 @@ export {
   stateCredentialsDebounceWrapper,
 } from './debounce-wrapper';
 export { isTokenStore } from './is-token-store';
+export { productsLoader } from './loaders/products-loader';
 export {
   validateAddresses,
   validateCountry,
@@ -19,4 +20,3 @@ export {
   validateSignIn,
   validateStreetName,
 } from './validation';
-export { RegistrationSchema } from './validation-schema/registration-schema';
