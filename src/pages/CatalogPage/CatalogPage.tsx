@@ -18,7 +18,9 @@ export const CatalogPage: React.FC = () => {
       <Typography variant="h2">Catalog</Typography>
       <Box display="flex" gap={{ xs: 8, sm: 3, lg: 8 }} flexDirection={{ xs: 'column', sm: 'row' }}>
         <ProductFilter />
-        <Outlet />
+        <Box sx={{ flexGrow: 1 }}>
+          <Outlet />
+        </Box>
       </Box>
     </Container>
   );
