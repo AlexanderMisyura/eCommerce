@@ -1,13 +1,28 @@
-import BackgroundImg404 from '@assets/images/background-404.webp';
+import Lego404 from '@assets/images/lego-404.webp';
+import LegoError from '@assets/images/lego-error.webp';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import { UrlPath } from '@ts-enums';
-import { Link, useNavigate } from 'react-router';
+import { isRouteErrorResponse, Link, useNavigate, useRouteError } from 'react-router';
 import { theme } from 'theme';
 
 export const NotFoundPage = () => {
   const navigate = useNavigate();
+  const error = useRouteError();
+
+  let status = '404';
+  let message = 'Page Not Found';
+  console.log(status);
+  if (isRouteErrorResponse(error)) {
+    if (error.status !== 404) {
+      status = error.status.toString();
+      message = error.statusText;
+    }
+  } else if (error instanceof Error) {
+    status = 'Error';
+    message = error.message;
+  }
 
   return (
     <Container
@@ -22,11 +37,11 @@ export const NotFoundPage = () => {
     >
       <img
         className="h-auto w-full max-w-[500px] rounded-4xl"
-        src={BackgroundImg404}
+        src={status === '404' ? Lego404 : LegoError}
         alt="page not found 404"
       />
       <Typography variant="h3" textAlign="center">
-        Oops! Something went wrong...
+        {message}
       </Typography>
       <div className="flex items-center justify-center gap-x-4">
         <Button variant="outlined" onClick={() => void navigate(-1)}>
