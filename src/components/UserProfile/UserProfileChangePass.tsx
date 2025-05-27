@@ -8,6 +8,8 @@ import Typography from '@mui/material/Typography';
 import { validatePassword } from '@utils';
 import { useState } from 'react';
 
+import { UserProfileSkeleton } from './UserProfileSkeleton';
+
 const PASSWORD_FIELDS: Record<string, string> = {
   currentPassword: 'Current Password',
   newPassword: 'New Password',
@@ -50,7 +52,7 @@ export const UserProfileChangePass = () => {
   const [showPasswords, setShowPasswords] = useState(initPasswordState.visibility);
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
 
-  if (!currentCustomer) return <div>Loading...</div>;
+  if (!currentCustomer) return <UserProfileSkeleton />;
 
   const handleClickShowPassword = (field: PasswordField) => {
     setShowPasswords((previous) => ({

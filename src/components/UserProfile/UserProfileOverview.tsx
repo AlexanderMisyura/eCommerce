@@ -12,6 +12,8 @@ import Typography from '@mui/material/Typography';
 import { ProfileAvatar } from 'components/ProfileButton/ProfileAvatar';
 import type { JSX } from 'react';
 
+import { UserProfileSkeleton } from './UserProfileSkeleton';
+
 interface UserAddressListProps {
   type: 'billing' | 'shipping';
   addresses: Address[];
@@ -22,7 +24,7 @@ export const UserProfileOverview = () => {
   const { currentCustomer } = useCustomerContext();
   const { palette } = useTheme();
 
-  if (!currentCustomer) return <div>Loading...</div>;
+  if (!currentCustomer) return <UserProfileSkeleton />;
 
   const userInfo = [
     {
@@ -136,7 +138,12 @@ export const UserProfileOverview = () => {
       {/* User Card */}
       <Stack
         flexGrow={1}
-        sx={{ border: `1px solid ${palette.grey[400]}`, padding: 4, borderRadius: '10px' }}
+        sx={{
+          border: `1px solid ${palette.grey[400]}`,
+          padding: 4,
+          borderRadius: '10px',
+          backgroundColor: palette.common.white,
+        }}
       >
         <Stack direction={'row'} justifyContent={'center'}>
           <ProfileAvatar avatarSize={100} imgSource={avatarImg} />
