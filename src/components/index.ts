@@ -6,6 +6,8 @@ export { LogoLink } from './LogoLink/LogoLink';
 export { Navigation } from './Navigation/Navigation';
 export { PagePlaceholder } from './PagePlaceholder/PagePlaceholder';
 export { Pagination } from './Pagination/Pagination';
+export { ProductCards } from './ProductCards/ProductCards';
+export { ProductFilter } from './ProductFilter/ProductFilter';
 export { ProfileButton } from './ProfileButton/ProfileButton';
 export { ProfilePanel } from './ProfilePanel/ProfilePanel';
 export { Addresses } from './RegistrationForm/Addresses/Addresses';
