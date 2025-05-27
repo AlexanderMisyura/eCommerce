@@ -1,3 +1,6 @@
+export type { Filters } from './catalog/filters';
+export type { ProductQuery } from './catalog/product-query';
+export type { QueryOptions } from './catalog/query-options';
 export type { CustomerContextType } from './context/customer-context';
 export type {
   RegistrationContextData,
