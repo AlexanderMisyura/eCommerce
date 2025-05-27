@@ -1,6 +1,15 @@
-import type { ClientResponse, Customer, CustomerSignInResult } from '@commercetools/platform-sdk';
+import type {
+  Category,
+  ClientResponse,
+  Customer,
+  CustomerSignInResult,
+  ProductProjectionPagedSearchResponse,
+} from '@commercetools/platform-sdk';
+import { CATEGORY } from '@constants';
 import { apiRoot } from '@services';
+import type { QueryOptions } from '@ts-interfaces';
 import type { RegistrationType, SignInType } from '@ts-types';
+import { createProductQuery } from 'utils/create-product-query';
 
 export class ApiController {
   private static instance: ApiController;
@@ -35,6 +44,28 @@ export class ApiController {
 
   public logoutCustomer(): void {
     apiRoot.reset();
+  }
+
+  public async getCategories(): Promise<Category[]> {
+    const response = await apiRoot
+      .root()
+      .categories()
+      .get({
+        queryArgs: {
+          where: `name(en-US in ("${CATEGORY.BATMAN}", "${CATEGORY.LOTR}", "${CATEGORY.STAR_WARS}", "${CATEGORY.TECHNIC}"))`,
+        },
+      })
+      .execute();
+
+    return response.body.results;
+  }
+
+  public async getProducts(
+    options: QueryOptions
+  ): Promise<ClientResponse<ProductProjectionPagedSearchResponse>> {
+    const query = createProductQuery(options);
+
+    return apiRoot.root().productProjections().search().get({ queryArgs: query }).execute();
   }
 
   private async requestMeInfo(): Promise<ClientResponse<Customer>> {
