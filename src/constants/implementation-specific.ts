@@ -13,6 +13,13 @@ export const CATEGORY = {
   BATMAN: 'Lego Batman',
 } as const;
 
+export const CATEGORY_SLUG_PRETTY_NAME_MAP: Record<string, string> = {
+  lotr: 'Lord of the Rings',
+  'star-wars': 'Star Wars',
+  technic: 'Technic',
+  batman: 'Batman',
+};
+
 export const PRICE = {
   MIN: 0,
   MAX: 700,

@@ -1,4 +1,11 @@
-import { CATEGORY, PIECES, PRICE, RECOMMENDED_AGE, SORT_OPTIONS } from '@constants';
+import {
+  CATEGORY,
+  CATEGORY_SLUG_PRETTY_NAME_MAP,
+  PIECES,
+  PRICE,
+  RECOMMENDED_AGE,
+  SORT_OPTIONS,
+} from '@constants';
 import { ApiController } from '@controllers';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useMediaQuery, useTheme } from '@mui/material';
@@ -109,7 +116,7 @@ export const ProductFilter: React.FC = () => {
                 <MenuItem value={CATEGORY.ALL}>All Lego Sets</MenuItem>
                 {categories.map((category) => (
                   <MenuItem key={category.id} value={category.slug['en-US']}>
-                    {category.name['en-US']}
+                    {CATEGORY_SLUG_PRETTY_NAME_MAP[category.slug['en-US']]}
                   </MenuItem>
                 ))}
               </TextField>
