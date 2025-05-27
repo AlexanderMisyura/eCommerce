@@ -7,13 +7,13 @@ import { UrlPath } from '@ts-enums';
 import { isRouteErrorResponse, Link, useNavigate, useRouteError } from 'react-router';
 import { theme } from 'theme';
 
-export const NotFoundPage = () => {
+export const ErrorPage = () => {
   const navigate = useNavigate();
   const error = useRouteError();
 
   let status = '404';
   let message = 'Page Not Found';
-  console.log(status);
+
   if (isRouteErrorResponse(error)) {
     if (error.status !== 404) {
       status = error.status.toString();
