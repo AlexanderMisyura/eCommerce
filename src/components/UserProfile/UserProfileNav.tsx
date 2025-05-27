@@ -5,8 +5,8 @@ import { NavLink, useLocation, useNavigate } from 'react-router';
 
 const options = [
   { label: 'Overview', path: UrlPath.USER_PROFILE },
-  { label: 'My Details', path: UrlPath.USER_PROFILE_DETAILS },
-  { label: 'My Addresses', path: UrlPath.USER_PROFILE_ADDRESSES },
+  { label: 'Credentials', path: UrlPath.USER_PROFILE_CREDENTIALS },
+  { label: 'Addresses', path: UrlPath.USER_PROFILE_ADDRESSES },
   { label: 'Change Password', path: UrlPath.USER_PROFILE_CHANGE_PASSWORD },
 ];
 

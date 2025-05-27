@@ -2,7 +2,7 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { styled, type SxProps, type Theme, useTheme } from '@mui/material';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Typography from '@mui/material/Typography';
-import { breadcrumbsNameMap } from 'constants/breadcrumbs-name-map';
+import { BREADCRUMBS_NAME_MAP } from 'constants/breadcrumbs-name-map';
 import { Link, useLocation } from 'react-router';
 
 interface BreadcrumbsNavProps {
@@ -27,7 +27,7 @@ export const BreadcrumbsNav: React.FC<BreadcrumbsNavProps> = ({ separator, nameM
   const { palette } = useTheme();
   const location = useLocation();
   const pathNames = location.pathname.split('/').filter(Boolean);
-  const mergedNameMap = { ...breadcrumbsNameMap, ...nameMap };
+  const mergedNameMap = { ...BREADCRUMBS_NAME_MAP, ...nameMap };
 
   return (
     pathNames.length > 0 && (
