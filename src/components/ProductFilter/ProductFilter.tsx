@@ -1,4 +1,4 @@
-import { CATEGORY, PIECES, PRICE, RECOMMENDED_AGE } from '@constants';
+import { CATEGORY, PIECES, PRICE, RECOMMENDED_AGE, SORT_OPTIONS } from '@constants';
 import { ApiController } from '@controllers';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useMediaQuery, useTheme } from '@mui/material';
@@ -67,7 +67,9 @@ export const ProductFilter: React.FC = () => {
 
   const handleChangeCategory = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newCategory = event.target.value;
-    void navigate(`/${UrlPath.CATALOG}/${newCategory}?${searchParams.toString()}`);
+    const newSearchParams = new URLSearchParams(searchParams);
+    newSearchParams.delete('page');
+    void navigate(`/${UrlPath.CATALOG}/${newCategory}?${newSearchParams.toString()}`);
   };
 
   const handleAgeChange = (age: string) => {
@@ -90,6 +92,7 @@ export const ProductFilter: React.FC = () => {
       <Form
         action={categorySlug ? `/${UrlPath.CATALOG}/${categorySlug}` : `/${UrlPath.CATALOG_ALL}`}
       >
+        <input type="hidden" name="sort" value={searchParams.get('sort') ?? SORT_OPTIONS.DEFAULT} />
         <Grid container justifyContent="space-between">
           <Grid size={{ xs: 5.8, sm: 12 }}>
             <Typography variant="h4" fontSize={{ xs: '1rem', sm: '1.25rem' }} gutterBottom>
@@ -99,7 +102,6 @@ export const ProductFilter: React.FC = () => {
               <TextField
                 select
                 id="category"
-                name="category"
                 value={categorySlug ?? CATEGORY.ALL}
                 onChange={handleChangeCategory}
                 disabled={isLoading}
