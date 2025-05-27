@@ -131,66 +131,51 @@ export const UserProfileOverview = () => {
 
   return (
     <>
-      <Typography variant="h3" sx={{ marginBottom: 4 }}>
-        Overview
+      <Stack direction={'row'} justifyContent={'center'}>
+        <ProfileAvatar avatarSize={150} imgSource={avatarImg} />
+      </Stack>
+
+      {/* User Name */}
+      <Typography variant="h3" sx={{ paddingBlock: 4, textAlign: 'center' }}>
+        {`${currentCustomer.firstName} ${currentCustomer.lastName}`.toUpperCase()}
       </Typography>
 
-      {/* User Card */}
-      <Stack
-        flexGrow={1}
-        sx={{
-          border: `1px solid ${palette.grey[400]}`,
-          padding: 4,
-          borderRadius: '10px',
-          backgroundColor: palette.common.white,
-        }}
-      >
-        <Stack direction={'row'} justifyContent={'center'}>
-          <ProfileAvatar avatarSize={100} imgSource={avatarImg} />
+      <Stack sx={{ rowGap: 4, width: { xs: '100%', lg: '75%' }, marginInline: 'auto' }}>
+        {/* Email & Bday */}
+        <Stack
+          sx={{
+            flexDirection: 'row',
+            gap: 4,
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+          }}
+        >
+          {userInfoList}
         </Stack>
 
-        {/* User Name */}
-        <Typography variant="h3" sx={{ paddingBlock: 4, textAlign: 'center' }}>
-          {`${currentCustomer.firstName} ${currentCustomer.lastName}`.toUpperCase()}
-        </Typography>
+        {/* Billing addresses */}
+        <Box>
+          <Typography variant="h5">Billing addresses: </Typography>
+          <ul>
+            {createUserAddressListJSX({
+              type: 'billing',
+              addresses: billingAddresses,
+              defaultAddress: defaultBillingAddressId,
+            })}
+          </ul>
+        </Box>
 
-        <Stack sx={{ rowGap: 4, width: { xs: '100%', lg: '75%' }, marginInline: 'auto' }}>
-          {/* Email & Bday */}
-          <Stack
-            sx={{
-              flexDirection: 'row',
-              gap: 4,
-              justifyContent: 'space-between',
-              flexWrap: 'wrap',
-            }}
-          >
-            {userInfoList}
-          </Stack>
-
-          {/* Billing addresses */}
-          <Box>
-            <Typography variant="h5">Billing addresses: </Typography>
-            <ul>
-              {createUserAddressListJSX({
-                type: 'billing',
-                addresses: billingAddresses,
-                defaultAddress: defaultBillingAddressId,
-              })}
-            </ul>
-          </Box>
-
-          {/* Shipping addresses */}
-          <Box>
-            <Typography variant="h5">Shipping addresses: </Typography>
-            <ul>
-              {createUserAddressListJSX({
-                type: 'shipping',
-                addresses: shippingAddresses,
-                defaultAddress: defaultShippingAddressId,
-              })}
-            </ul>
-          </Box>
-        </Stack>
+        {/* Shipping addresses */}
+        <Box>
+          <Typography variant="h5">Shipping addresses: </Typography>
+          <ul>
+            {createUserAddressListJSX({
+              type: 'shipping',
+              addresses: shippingAddresses,
+              defaultAddress: defaultShippingAddressId,
+            })}
+          </ul>
+        </Box>
       </Stack>
     </>
   );

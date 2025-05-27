@@ -1,10 +1,10 @@
 import Typography from '@mui/material/Typography';
 
-export const UserProfileAddresses = () => {
+export const UserProfileCredentials = () => {
   return (
     <>
       <Typography variant="h3" sx={{ marginBottom: 4 }}>
-        Addresses
+        Credentials
       </Typography>
     </>
   );

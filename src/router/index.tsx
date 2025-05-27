@@ -2,8 +2,8 @@ import {
   ProductCards,
   Spinner,
   UserProfileAddresses,
-  UserProfileChangePass,
-  UserProfileDetails,
+  UserProfileChangePassword,
+  UserProfileCredentials,
   UserProfileOverview,
 } from '@components';
 import {
@@ -42,8 +42,8 @@ export const router = createBrowserRouter([
                 Component: UserProfileOverview,
               },
               {
-                path: UrlPath.USER_PROFILE_DETAILS,
-                Component: UserProfileDetails,
+                path: UrlPath.USER_PROFILE_CREDENTIALS,
+                Component: UserProfileCredentials,
               },
               {
                 path: UrlPath.USER_PROFILE_ADDRESSES,
@@ -51,7 +51,7 @@ export const router = createBrowserRouter([
               },
               {
                 path: UrlPath.USER_PROFILE_CHANGE_PASSWORD,
-                Component: UserProfileChangePass,
+                Component: UserProfileChangePassword,
               },
             ],
           },

@@ -1,4 +1,4 @@
-import { BreadcrumbsNav, UserProfileNav } from '@components';
+import { BreadcrumbsNav, UserProfileInfoPanel, UserProfileNav } from '@components';
 import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
 import { Outlet } from 'react-router';
@@ -17,9 +17,9 @@ export const UserProfilePage = () => {
           }}
         >
           <UserProfileNav />
-          <Stack sx={{ flexGrow: 1, minHeight: '500px' }}>
+          <UserProfileInfoPanel>
             <Outlet />
-          </Stack>
+          </UserProfileInfoPanel>
         </Stack>
       </Stack>
     </Container>
