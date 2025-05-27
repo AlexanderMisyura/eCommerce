@@ -2,7 +2,7 @@ import type {
   ClientResponse,
   ProductProjectionPagedSearchResponse,
 } from '@commercetools/platform-sdk';
-import { CARDS_PER_PAGE_LIMIT } from '@constants';
+import { CARDS_PER_PAGE_LIMIT, CATEGORY } from '@constants';
 import { ApiController } from '@controllers';
 import type { QueryOptions } from '@ts-interfaces';
 import type { LoaderFunctionArgs } from 'react-router';
@@ -18,7 +18,7 @@ export async function productsLoader({
   const searchParams = url.searchParams;
 
   const queryOptions: QueryOptions = {
-    categorySlug: categorySlug ?? 'all',
+    categorySlug: categorySlug ?? CATEGORY.ALL,
     filters: {
       age: searchParams.getAll('age'),
       maxPrice: searchParams.get('maxPrice'),

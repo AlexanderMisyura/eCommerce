@@ -1,4 +1,4 @@
-import { CATEGORY_SLUG_ID_MAP, LOCALIZED_TEXT_STRING, SORT_MAP } from '@constants';
+import { CATEGORY, CATEGORY_SLUG_ID_MAP, LOCALIZED_TEXT_STRING, SORT_MAP } from '@constants';
 import type { ProductQuery, QueryOptions } from '@ts-interfaces';
 import { PAGE_OFFSET } from 'constants/implementation-specific';
 
@@ -30,7 +30,7 @@ export function createProductQuery(options: QueryOptions): ProductQuery {
   }
 
   if (categorySlug) {
-    if (categorySlug === 'all') {
+    if (categorySlug === CATEGORY.ALL) {
       const allCategories = Object.values(CATEGORY_SLUG_ID_MAP)
         .map((id) => `"${id}"`)
         .join(',');
