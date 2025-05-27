@@ -3,6 +3,7 @@ export enum UrlPath {
   SIGN_IN = 'sign-in',
   REGISTRATION = 'registration',
   CATALOG = 'catalog',
+  CATALOG_ALL = 'catalog/all',
   ABOUT = 'about',
   USER_PROFILE = 'user-profile',
   SHOPPING_CART = 'shopping-cart',
