@@ -11,9 +11,6 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { ProfileAvatar } from 'components/ProfileButton/ProfileAvatar';
 import type { JSX } from 'react';
-
-import { UserProfileSkeleton } from './UserProfileSkeleton';
-
 interface UserAddressListProps {
   type: 'billing' | 'shipping';
   addresses: Address[];
@@ -24,7 +21,7 @@ export const UserProfileOverview = () => {
   const { currentCustomer } = useCustomerContext();
   const { palette } = useTheme();
 
-  if (!currentCustomer) return <UserProfileSkeleton />;
+  if (!currentCustomer) return null;
 
   const userInfo = [
     {

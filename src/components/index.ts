@@ -28,4 +28,3 @@ export { UserProfileCredentials } from './UserProfile/UserProfileCredentials';
 export { UserProfileInfoPanel } from './UserProfile/UserProfileInfoPanel';
 export { UserProfileNav } from './UserProfile/UserProfileNav';
 export { UserProfileOverview } from './UserProfile/UserProfileOverview';
-export { UserProfileSkeleton } from './UserProfile/UserProfileSkeleton';
