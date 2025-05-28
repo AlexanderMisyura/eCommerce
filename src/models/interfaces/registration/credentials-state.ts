@@ -9,3 +9,5 @@ export interface CredentialsState {
   lastName: RegistrationFieldState;
   dateOfBirth: { value: PickerValue | null; error: boolean; errorMessage: string };
 }
+
+export type UserProfileCredentialState = Omit<CredentialsState, 'password'>;

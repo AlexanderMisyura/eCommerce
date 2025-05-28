@@ -3,6 +3,8 @@ import type {
   Customer,
   CustomerChangePassword,
   CustomerSignInResult,
+  CustomerUpdate,
+  CustomerUpdateAction,
 } from '@commercetools/platform-sdk';
 import { apiRoot } from '@services';
 import type { RegistrationType, SignInType } from '@ts-types';
@@ -50,6 +52,26 @@ export class ApiController {
       .password()
       .post({ body: { id, version, currentPassword, newPassword } })
       .execute();
+    return response;
+  }
+
+  public async updateCustomer(payload: {
+    id: string;
+    version: number;
+    actions: CustomerUpdateAction[];
+  }): Promise<ClientResponse<Customer>> {
+    const body: CustomerUpdate = {
+      version: payload.version,
+      actions: payload.actions,
+    };
+
+    const response = await apiRoot
+      .root()
+      .customers()
+      .withId({ ID: payload.id })
+      .post({ body })
+      .execute();
+
     return response;
   }
 
