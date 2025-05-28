@@ -8,6 +8,7 @@ export {
 } from './debounce-wrapper';
 export { isTokenStore } from './is-token-store';
 export { productsLoader } from './loaders/products-loader';
+export { transformToLegoProduct } from './transform-to-lego-product';
 export {
   validateAddresses,
   validateCountry,
