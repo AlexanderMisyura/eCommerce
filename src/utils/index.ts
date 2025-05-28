@@ -7,6 +7,7 @@ export {
   stateCredentialsDebounceWrapper,
 } from './debounce-wrapper';
 export { isTokenStore } from './is-token-store';
+export { productDetailsLoader } from './loaders/product-details-loader';
 export { productsLoader } from './loaders/products-loader';
 export { transformToLegoProduct } from './transform-to-lego-product';
 export {

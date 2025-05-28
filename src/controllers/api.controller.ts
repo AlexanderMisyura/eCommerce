@@ -3,6 +3,7 @@ import type {
   ClientResponse,
   Customer,
   CustomerSignInResult,
+  ProductProjectionPagedQueryResponse,
   ProductProjectionPagedSearchResponse,
 } from '@commercetools/platform-sdk';
 import { CATEGORY } from '@constants';
@@ -65,7 +66,17 @@ export class ApiController {
   ): Promise<ClientResponse<ProductProjectionPagedSearchResponse>> {
     const query = createProductQuery(options);
 
-    return apiRoot.root().productProjections().search().get({ queryArgs: query }).execute();
+    return await apiRoot.root().productProjections().search().get({ queryArgs: query }).execute();
+  }
+
+  public async getProductBySlug(
+    slug: string
+  ): Promise<ClientResponse<ProductProjectionPagedQueryResponse>> {
+    return await apiRoot
+      .root()
+      .productProjections()
+      .get({ queryArgs: { where: `slug(en-US = "${slug}")` } })
+      .execute();
   }
 
   private async requestMeInfo(): Promise<ClientResponse<Customer>> {

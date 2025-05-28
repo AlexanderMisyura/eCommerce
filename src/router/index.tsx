@@ -4,13 +4,14 @@ import {
   CatalogPage,
   ErrorPage,
   MainPage,
+  ProductPage,
   RegistrationPage,
   ShoppingCartPage,
   SignInPage,
   UserProfilePage,
 } from '@pages';
 import { UrlPath } from '@ts-enums';
-import { productsLoader, registrationAction, signInAction } from '@utils';
+import { productDetailsLoader, productsLoader, registrationAction, signInAction } from '@utils';
 import App from 'App';
 import { createBrowserRouter, redirect } from 'react-router';
 
@@ -40,6 +41,18 @@ export const router = createBrowserRouter([
             ],
           },
           { path: UrlPath.SHOPPING_CART, Component: ShoppingCartPage },
+          {
+            path: UrlPath.PRODUCT,
+            children: [
+              { index: true, loader: () => redirect(`/${UrlPath.CATALOG_ALL}`) },
+              {
+                path: ':productSlug',
+                loader: productDetailsLoader,
+                Component: ProductPage,
+                HydrateFallback: Spinner,
+              },
+            ],
+          },
           { path: UrlPath.NOT_FOUND, Component: ErrorPage },
         ],
       },
