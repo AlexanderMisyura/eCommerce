@@ -1,12 +1,12 @@
 import noProductsImage from '@assets/images/lego-no-products.webp';
-import { Pagination, Sorting } from '@components';
+import { Pagination, ProductCard, Sorting } from '@components';
 import { Container } from '@mui/material';
 import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import CardActionArea from '@mui/material/CardActionArea';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { ProductResponseSchema } from '@schemas';
+import type { LegoProduct } from '@ts-interfaces';
+import { transformToLegoProduct } from '@utils';
 import { Suspense } from 'react';
 import { Await, useLoaderData } from 'react-router';
 
@@ -46,56 +46,13 @@ export const ProductCards: React.FC = () => {
               </Typography>
               <Sorting />
             </Box>
-            <Grid container spacing={2} marginBottom={4}>
+            <Grid container spacing={3} marginBottom={4}>
               {resolvedProducts.map((product) => {
-                const name = product.name['en-US'];
-                const description = product.description['en-US'];
-                const price = product.masterVariant.prices?.[0]?.value.centAmount;
-                const discount = product.masterVariant.prices?.[0]?.discounted?.value.centAmount;
-                const image = product.masterVariant.images?.[0]?.url;
+                const legoProduct: LegoProduct = transformToLegoProduct(product);
 
                 return (
-                  <Grid size={{ xs: 12, md: 6, lg: 4 }} key={product.id}>
-                    <Card
-                      style={{ border: '1px solid #ccc' /* padding: '1rem', */, aspectRatio: '1' }}
-                    >
-                      <CardActionArea
-                        sx={{
-                          height: '100%',
-                          display: 'flex',
-                          flexDirection: 'column',
-                          justifyContent: 'space-between',
-                          '&[data-active]': {
-                            backgroundColor: 'action.selected',
-                            '&:hover': {
-                              backgroundColor: 'action.selectedHover',
-                            },
-                          },
-                        }}
-                      >
-                        <Box sx={{ flexGrow: 1 }}>
-                          <img
-                            src={image}
-                            alt={name}
-                            style={{ width: '100%', height: '150px', objectFit: 'contain' }}
-                          />
-                        </Box>
-                        <Box padding={'1rem'}>
-                          <Typography variant="h6">{name}</Typography>
-                          <Typography fontSize={'0.8rem'}>Description: {description}</Typography>
-                          <Typography className={discount ? 'line-through' : ''}>
-                            ${price / 100}
-                          </Typography>
-                          {discount && (
-                            <Typography color="warning">
-                              With discount: ${discount / 100}
-                            </Typography>
-                          )}
-                        </Box>
-                        {/* <CardContent>
-                        </CardContent> */}
-                      </CardActionArea>
-                    </Card>
+                  <Grid size={{ xs: 12, md: 6, lg: 4 }} key={legoProduct.id}>
+                    <ProductCard key={legoProduct.id} product={legoProduct} />
                   </Grid>
                 );
               })}
