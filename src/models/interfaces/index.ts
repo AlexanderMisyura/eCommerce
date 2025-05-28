@@ -1,4 +1,5 @@
 export type { Filters } from './catalog/filters';
+export type { LegoProduct } from './catalog/lego-product';
 export type { ProductQuery } from './catalog/product-query';
 export type { QueryOptions } from './catalog/query-options';
 export type { CustomerContextType } from './context/customer-context';

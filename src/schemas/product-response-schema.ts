@@ -30,7 +30,7 @@ const Price = z.object({
   value: PriceValue,
 });
 
-const ProductProjectionSchema = z.object({
+export const ProductProjectionSchema = z.object({
   categories: z.array(Category),
   description: z.object({
     'en-US': z.string(),
