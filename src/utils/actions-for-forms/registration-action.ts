@@ -1,6 +1,6 @@
 import { ApiController } from '@controllers';
+import { RegistrationSchema } from '@schemas';
 import type { RegistrationData } from '@ts-interfaces';
-import { RegistrationSchema } from '@utils';
 import type { ActionFunctionArgs } from 'react-router';
 
 const controller = ApiController.getInstance();

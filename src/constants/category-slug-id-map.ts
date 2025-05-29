@@ -1,0 +1,8 @@
+import IMPLEMENTATION_CONFIG from '@config/ctp-implementation-config';
+
+export const CATEGORY_SLUG_ID_MAP: Record<string, string> = {
+  'star-wars': IMPLEMENTATION_CONFIG.CATEGORY_STAR_WARS_ID,
+  lotr: IMPLEMENTATION_CONFIG.CATEGORY_LOTR_ID,
+  technic: IMPLEMENTATION_CONFIG.CATEGORY_TECHNIC_ID,
+  batman: IMPLEMENTATION_CONFIG.CATEGORY_BATMAN_ID,
+};

@@ -7,6 +7,9 @@ export {
   stateCredentialsDebounceWrapper,
 } from './debounce-wrapper';
 export { isTokenStore } from './is-token-store';
+export { productDetailsLoader } from './loaders/product-details-loader';
+export { productsLoader } from './loaders/products-loader';
+export { transformToLegoProduct } from './transform-to-lego-product';
 export {
   validateAddresses,
   validateCountry,
@@ -19,4 +22,3 @@ export {
   validateSignIn,
   validateStreetName,
 } from './validation';
-export { RegistrationSchema } from './validation-schema/registration-schema';

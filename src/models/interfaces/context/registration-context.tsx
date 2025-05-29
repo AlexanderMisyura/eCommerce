@@ -1,8 +1,5 @@
 import type { CUSTOMER_DRAFT_DEFAULT } from '@constants';
-
-import type { AddressesOptions } from './addresses-options';
-import type { AddressesState } from './addresses-state';
-import type { CredentialsState } from './credentials-state';
+import type { AddressesOptions, AddressesState, CredentialsState } from '@ts-interfaces';
 
 export interface RegistrationContextData {
   customerDraft: typeof CUSTOMER_DRAFT_DEFAULT;

@@ -29,6 +29,7 @@
       "@controllers": ["controllers/index.ts"],
       "@hooks": ["hooks/index.ts"],
       "@pages": ["pages/index.ts"],
+      "@schemas": ["schemas/index.ts"],
       "@services": ["services/index.ts"],
       "@styles/*": ["styles/*"],
       "@ts-enums": ["models/enums/index.ts"],

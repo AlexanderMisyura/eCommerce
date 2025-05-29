@@ -9,6 +9,7 @@ interface BreadcrumbsNavProps {
   nameMap?: Record<string, string>;
   separator?: React.ReactNode;
   sx?: SxProps<Theme>;
+  filterPredicate?: (pathname: string, index: number, pathnamesArray: string[]) => boolean;
 }
 
 const CustomLink = styled(Link)(({ theme }) => ({
@@ -23,10 +24,22 @@ const CustomLink = styled(Link)(({ theme }) => ({
 
 const DEFAULT_FONT_SIZE = 13;
 
-export const BreadcrumbsNav: React.FC<BreadcrumbsNavProps> = ({ separator, nameMap, sx }) => {
+export const BreadcrumbsNav: React.FC<BreadcrumbsNavProps> = ({
+  separator,
+  nameMap,
+  filterPredicate,
+  sx,
+}) => {
   const { palette } = useTheme();
   const location = useLocation();
-  const pathNames = location.pathname.split('/').filter(Boolean);
+  let pathNames = location.pathname.split('/').filter(Boolean);
+
+  if (filterPredicate) {
+    pathNames = pathNames.filter((pathname, index, array) =>
+      filterPredicate(pathname, index, array)
+    );
+  }
+
   const mergedNameMap = { ...breadcrumbsNameMap, ...nameMap };
 
   return (
