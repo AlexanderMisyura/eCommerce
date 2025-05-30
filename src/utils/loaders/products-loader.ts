@@ -20,7 +20,7 @@ export async function productsLoader({
 
   if (categorySlug && categorySlug !== CATEGORY.ALL && !projectSlugs.includes(categorySlug)) {
     // eslint-disable-next-line @typescript-eslint/only-throw-error
-    throw data("Category doesn't exist", 404);
+    throw data('Category Not Found', 404);
   }
 
   const url = new URL(request.url);

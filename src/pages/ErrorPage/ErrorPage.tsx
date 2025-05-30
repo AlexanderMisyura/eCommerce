@@ -15,13 +15,11 @@ export const ErrorPage = () => {
   let message = 'Page Not Found';
 
   if (isRouteErrorResponse(error)) {
-    if (error.status !== 404) {
-      status = error.status.toString();
-      message = error.statusText;
-    }
+    status = error.status.toString();
+    message = String(error.data);
   } else if (error instanceof Error) {
     status = 'Error';
-    message = error.message;
+    message = `Something went wrong: ${error.message}`;
   }
 
   return (
