@@ -16,7 +16,7 @@ export const ProductPage = () => {
     <Container sx={{ py: 4 }}>
       <Paper elevation={3} sx={{ p: 4 }}>
         <Grid container spacing={4}>
-          <ProductImage images={images} name={name} />
+          <ProductImage images={images} name={name} className="h-[300px]" />
           <Grid size={{ xs: 12, md: 6 }}>
             <Typography variant="h3" component="h1" gutterBottom>
               {name}
