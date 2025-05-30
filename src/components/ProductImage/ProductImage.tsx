@@ -1,17 +1,13 @@
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
-import './ProductImage.styles.css';
-
-import { Box, Grid, Modal } from '@mui/material';
+import { Grid, Modal } from '@mui/material';
+import { ProductSlider } from 'components/ProductSlider/ProductSlider';
 import { useEffect, useRef, useState } from 'react';
-import Slider from 'react-slick';
+import type Slider from 'react-slick';
 
 const styleModal = {
   position: 'absolute',
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 400,
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
@@ -29,14 +25,6 @@ export const ProductImage = ({
   name: string;
   className?: string;
 }) => {
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-  };
-
   const [open, setOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const sliderReference = useRef<Slider | null>(null);
@@ -63,46 +51,19 @@ export const ProductImage = ({
 
   return (
     <Grid container size={{ xs: 12, md: 6 }} columns={1} rowGap={2} className={className}>
-      <Slider {...settings} className="relative h-full w-full overflow-hidden">
-        {images.map((img, index) => (
-          <Box
-            key={img}
-            component="img"
-            src={img}
-            alt={name}
-            onClick={() => handleOpen(index)}
-            sx={{
-              height: '100%',
-              objectFit: 'contain',
-            }}
-          />
-        ))}
-      </Slider>
+      <ProductSlider images={images} onClick={handleOpen} name={name} />
       <Modal
         open={open}
         onClose={handleClose}
         aria-labelledby="parent-modal-title"
         aria-describedby="parent-modal-description"
       >
-        <Grid container columns={1} sx={{ ...styleModal, width: '90%', height: '90%' }}>
-          <Slider
-            ref={sliderReference}
-            {...settings}
-            className="relative h-full w-full overflow-hidden"
-          >
-            {images.map((img) => (
-              <Box
-                key={img}
-                component="img"
-                src={img}
-                alt={name}
-                sx={{
-                  height: '100%',
-                  objectFit: 'contain',
-                }}
-              />
-            ))}
-          </Slider>
+        <Grid
+          container
+          columns={1}
+          sx={{ ...styleModal, width: '90%', height: '90%', maxWidth: 1200, maxHeight: 1200 }}
+        >
+          <ProductSlider images={images} sliderRef={sliderReference} name={name} />
         </Grid>
       </Modal>
     </Grid>

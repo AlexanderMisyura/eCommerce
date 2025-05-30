@@ -11,6 +11,7 @@ export { ProductCard } from './ProductCard/ProductCard';
 export { ProductCards } from './ProductCards/ProductCards';
 export { ProductFilter } from './ProductFilter/ProductFilter';
 export { ProductImage } from './ProductImage/ProductImage';
+export { ProductSlider } from './ProductSlider/ProductSlider';
 export { ProfileButton } from './ProfileButton/ProfileButton';
 export { ProfilePanel } from './ProfilePanel/ProfilePanel';
 export { Addresses } from './RegistrationForm/Addresses/Addresses';
