@@ -10,11 +10,13 @@ export const ProductSlider = ({
   sliderRef,
   onClick,
   name,
+  hover,
 }: {
   images: string[];
   sliderRef?: React.RefObject<Slider | null>;
   onClick?: (index: number) => void;
   name: string;
+  hover?: boolean;
 }) => {
   const settings = {
     dots: true,
@@ -36,6 +38,7 @@ export const ProductSlider = ({
             height: '100%',
             objectFit: 'contain',
           }}
+          className={`${hover ? 'hover:cursor-pointer' : ''}`}
           onClick={() => {
             if (onClick) onClick(index);
           }}

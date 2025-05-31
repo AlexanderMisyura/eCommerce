@@ -1,5 +1,5 @@
+import { ProductSlider } from '@components';
 import { Grid, Modal } from '@mui/material';
-import { ProductSlider } from 'components/ProductSlider/ProductSlider';
 import { useEffect, useRef, useState } from 'react';
 import type Slider from 'react-slick';
 
@@ -51,7 +51,7 @@ export const ProductImage = ({
 
   return (
     <Grid container size={{ xs: 12, md: 6 }} columns={1} rowGap={2} className={className}>
-      <ProductSlider images={images} onClick={handleOpen} name={name} />
+      <ProductSlider images={images} onClick={handleOpen} name={name} hover />
       <Modal
         open={open}
         onClose={handleClose}
