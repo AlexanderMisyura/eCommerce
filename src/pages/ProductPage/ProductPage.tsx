@@ -1,3 +1,4 @@
+import { ProductImage } from '@components';
 import { Box, Button, Chip, Grid, Paper } from '@mui/material';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
@@ -9,28 +10,26 @@ export const ProductPage = () => {
   const response = ProductResponseSchema.parse(useLoaderData());
   const product = transformToLegoProduct(response.body.results[0]);
 
-  const { images, name, description, price } = product;
+  const { images, name, description, price, recommendedAge, numberOfPieces } = product;
 
   return (
     <Container sx={{ py: 4 }}>
       <Paper elevation={3} sx={{ p: 4 }}>
         <Grid container spacing={4}>
-          <Grid size={{ xs: 12, md: 6 }}>
-            <Box
-              component="img"
-              src={images[0]}
-              alt={name}
-              sx={{ width: '100%', borderRadius: 2 }}
-            />
-          </Grid>
+          <ProductImage images={images} name={name} className="h-[300px]" />
           <Grid size={{ xs: 12, md: 6 }}>
             <Typography variant="h3" component="h1" gutterBottom>
               {name}
             </Typography>
-            <Typography variant="body1" color="text.secondary" paragraph>
+            <Typography variant="body1" color="text.secondary" gutterBottom>
               {description}
             </Typography>
-
+            <Typography variant="body1" color="text.primary" gutterBottom>
+              {`Recommended age: ${recommendedAge}`}
+            </Typography>
+            <Typography variant="body1" color="text.primary" gutterBottom>
+              {`Pieces: ${numberOfPieces}`}
+            </Typography>
             <Box display="flex" alignItems="center" my={2}>
               {price.withDiscountValue ? (
                 <>

@@ -53,7 +53,17 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             <Typography gutterBottom variant="h5" component="div" noWrap>
               {name}
             </Typography>
-            <Typography overflow="hidden" maxHeight={21} variant="body2" color="text.secondary">
+            <Typography
+              maxHeight={21}
+              variant="body2"
+              color="text.secondary"
+              sx={{
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                width: '200px',
+                whiteSpace: 'nowrap',
+              }}
+            >
               {description}
             </Typography>
             <Box display="flex" alignItems="center">
