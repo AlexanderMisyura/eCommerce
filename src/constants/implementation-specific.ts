@@ -22,7 +22,7 @@ export const CATEGORY_SLUG_PRETTY_NAME_MAP: Record<string, string> = {
 
 export const PRICE = {
   MIN: 0,
-  MAX: 700,
+  MAX: 800,
   STEP: 10,
 } as const;
 
