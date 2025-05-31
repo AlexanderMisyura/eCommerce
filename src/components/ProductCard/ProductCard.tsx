@@ -69,7 +69,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             <Box display="flex" alignItems="center">
               {price.withDiscountValue ? (
                 <>
-                  <Typography variant="h6" color="warning" fontWeight="bold">
+                  <Typography variant="h6" color="error" fontWeight="bold">
                     ${price.withDiscountValue / 100}
                   </Typography>
                   <Typography
