@@ -10,7 +10,7 @@ export const ProductPage = () => {
   const response = ProductResponseSchema.parse(useLoaderData());
   const product = transformToLegoProduct(response.body.results[0]);
 
-  const { images, name, description, price, recommendedAge } = product;
+  const { images, name, description, price, recommendedAge, numberOfPieces } = product;
 
   return (
     <Container sx={{ py: 4 }}>
@@ -21,13 +21,15 @@ export const ProductPage = () => {
             <Typography variant="h3" component="h1" gutterBottom>
               {name}
             </Typography>
-            <Typography variant="body1" color="text.secondary">
+            <Typography variant="body1" color="text.secondary" gutterBottom>
               {description}
             </Typography>
-            <Typography variant="body1" color="text.primary">
+            <Typography variant="body1" color="text.primary" gutterBottom>
               {`Recommended age: ${recommendedAge}`}
             </Typography>
-
+            <Typography variant="body1" color="text.primary" gutterBottom>
+              {`Pieces: ${numberOfPieces}`}
+            </Typography>
             <Box display="flex" alignItems="center" my={2}>
               {price.withDiscountValue ? (
                 <>
