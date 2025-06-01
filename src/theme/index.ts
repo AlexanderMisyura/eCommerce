@@ -40,7 +40,20 @@ export const theme = createTheme({
   components: {
     MuiContainer: {
       defaultProps: {
-        maxWidth: 'lg',
+        maxWidth: 'xl',
+      },
+    },
+    MuiTableCell: {
+      styleOverrides: {
+        head: {
+          fontSize: '12px',
+          fontWeight: 'bold',
+          padding: '4px',
+        },
+        body: {
+          fontSize: '12px',
+          padding: '4px',
+        },
       },
     },
   },
