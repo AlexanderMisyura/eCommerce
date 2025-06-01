@@ -1,12 +1,13 @@
-import type {
-  ClientResponse,
-  Customer,
-  CustomerChangePassword,
-  CustomerSignInResult,
-  CustomerUpdate,
-  CustomerUpdateAction,
+import {
+  type ClientResponse,
+  type Customer,
+  type CustomerChangePassword,
+  type CustomerSignInResult,
+  type MyCustomerUpdate,
+  type MyCustomerUpdateAction,
 } from '@commercetools/platform-sdk';
 import { apiRoot } from '@services';
+import type { UserAddress, UserAddressType } from '@ts-interfaces';
 import type { RegistrationType, SignInType } from '@ts-types';
 
 export class ApiController {
@@ -41,42 +42,209 @@ export class ApiController {
   }
 
   public async changePasswordCustomer({
-    id,
     version,
     currentPassword,
     newPassword,
   }: CustomerChangePassword): Promise<ClientResponse<Customer>> {
     const response = await apiRoot
       .root()
-      .customers()
+      .me()
       .password()
-      .post({ body: { id, version, currentPassword, newPassword } })
+      .post({ body: { version, currentPassword, newPassword } })
       .execute();
     return response;
   }
 
   public async updateCustomer(payload: {
-    id: string;
     version: number;
-    actions: CustomerUpdateAction[];
+    actions: MyCustomerUpdateAction[];
   }): Promise<ClientResponse<Customer>> {
-    const body: CustomerUpdate = {
+    const body: MyCustomerUpdate = {
       version: payload.version,
       actions: payload.actions,
     };
 
-    const response = await apiRoot
-      .root()
-      .customers()
-      .withId({ ID: payload.id })
-      .post({ body })
-      .execute();
+    const response = await apiRoot.root().me().post({ body }).execute();
 
     return response;
   }
 
   public logoutCustomer(): void {
     apiRoot.reset();
+  }
+
+  /* ADDRESSES */
+  public async addCustomerAddress({
+    version,
+    address,
+    addressType,
+  }: {
+    version: number;
+    address: UserAddress;
+    addressType: UserAddressType;
+  }): Promise<ClientResponse<Customer>> {
+    const response = await apiRoot
+      .root()
+      .me()
+      .post({
+        body: {
+          version: version,
+          actions: [{ action: 'addAddress', address: address }],
+        },
+      })
+      .execute();
+
+    const updateCustomer = response.body;
+    const newAddress = updateCustomer.addresses.at(-1);
+
+    if (!newAddress?.id) {
+      throw new Error('Failed to add address. Customer version: ${version}.');
+    }
+
+    const actions: MyCustomerUpdateAction[] = [];
+
+    if (addressType.useAsShipping) {
+      actions.push({
+        action: 'addShippingAddressId',
+        addressId: newAddress.id,
+      });
+    }
+
+    if (addressType.useAsBilling) {
+      actions.push({
+        action: 'addBillingAddressId',
+        addressId: newAddress.id,
+      });
+    }
+
+    if (addressType.setAsDefaultShipping) {
+      actions.push({
+        action: 'setDefaultShippingAddress',
+        addressId: newAddress.id,
+      });
+    }
+
+    if (addressType.setAsDefaultBilling) {
+      actions.push({
+        action: 'setDefaultBillingAddress',
+        addressId: newAddress.id,
+      });
+    }
+
+    if (actions.length === 0) return response;
+
+    const finalResponse = await apiRoot
+      .root()
+      .me()
+      .post({ body: { version: updateCustomer.version, actions } })
+      .execute();
+
+    return finalResponse;
+  }
+
+  public async removeCustomerAddress({
+    version,
+    addressId,
+  }: {
+    version: number;
+    addressId: string;
+  }): Promise<ClientResponse<Customer>> {
+    const response = await apiRoot
+      .root()
+      .me()
+      .post({ body: { version, actions: [{ action: 'removeAddress', addressId }] } })
+      .execute();
+
+    return response;
+  }
+
+  public async changeCustomerAddress({
+    version,
+    addressId,
+    address,
+    addressType,
+  }: {
+    version: number;
+    addressId: string;
+    address: UserAddress;
+    addressType: UserAddressType;
+  }): Promise<ClientResponse<Customer>> {
+    const initialResponse = await apiRoot
+      .root()
+      .me()
+      .post({
+        body: { version, actions: [{ action: 'changeAddress', addressId, address }] },
+      })
+      .execute();
+
+    const updateCustomer = initialResponse.body;
+    const changedAddress = updateCustomer.addresses.find((addr) => addr.id === addressId);
+
+    if (!changedAddress?.id) {
+      throw new Error('Ooops...Something went wrong while editing a new address');
+    }
+
+    const actions: MyCustomerUpdateAction[] = [];
+
+    const shouldRemoveShipping =
+      !addressType.useAsShipping && updateCustomer.shippingAddressIds?.includes(addressId);
+
+    if (addressType.useAsShipping || shouldRemoveShipping) {
+      actions.push({
+        action: addressType.useAsShipping ? 'addShippingAddressId' : 'removeShippingAddressId',
+        addressId: changedAddress.id,
+      });
+    }
+
+    const shouldRemoveBilling =
+      !addressType.useAsShipping && updateCustomer.billingAddressIds?.includes(addressId);
+
+    if (addressType.useAsBilling || shouldRemoveBilling) {
+      actions.push({
+        action: addressType.useAsBilling ? 'addBillingAddressId' : 'removeBillingAddressId',
+        addressId: changedAddress.id,
+      });
+    }
+
+    if (addressType.setAsDefaultShipping && updateCustomer.defaultShippingAddressId !== addressId) {
+      actions.push({
+        action: 'setDefaultShippingAddress',
+        addressId: changedAddress.id,
+      });
+    } else if (
+      !addressType.setAsDefaultShipping &&
+      addressType.useAsShipping &&
+      updateCustomer.defaultShippingAddressId === addressId
+    ) {
+      throw new Error(
+        'To remove the default Shipping address, you must set a different default address'
+      );
+    }
+
+    if (addressType.setAsDefaultBilling && updateCustomer.defaultBillingAddressId !== addressId) {
+      actions.push({
+        action: 'setDefaultBillingAddress',
+        addressId: changedAddress.id,
+      });
+    } else if (
+      !addressType.setAsDefaultBilling &&
+      addressType.useAsBilling &&
+      updateCustomer.defaultBillingAddressId === addressId
+    ) {
+      throw new Error(
+        'To remove the default Billing address, you must set a different default address'
+      );
+    }
+
+    if (actions.length === 0) return initialResponse;
+
+    const finalResponse = await apiRoot
+      .root()
+      .me()
+      .post({ body: { version: updateCustomer.version, actions } })
+      .execute();
+
+    return finalResponse;
   }
 
   private async requestMeInfo(): Promise<ClientResponse<Customer>> {
