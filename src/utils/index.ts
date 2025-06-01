@@ -4,6 +4,7 @@ export { convertFormDataToString } from './convert-form-data-to-string';
 export {
   eventDebounceWrapper,
   stateAddressesDebounceWrapper,
+  stateAddressesFormDebounceWrapper,
   stateCredentialsDebounceWrapper,
 } from './debounce-wrapper';
 export { isTokenStore } from './is-token-store';
