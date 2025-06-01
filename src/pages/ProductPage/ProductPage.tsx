@@ -13,11 +13,11 @@ export const ProductPage = () => {
   const { images, name, description, price, recommendedAge, numberOfPieces } = product;
 
   return (
-    <Container sx={{ py: 4 }}>
+    <Container sx={{ py: 4, flexGrow: 1, alignContent: 'center' }}>
       <Paper elevation={3} sx={{ p: 4 }}>
         <Grid container spacing={4}>
           <ProductImage images={images} name={name} className="h-[300px]" />
-          <Grid size={{ xs: 12, md: 6 }}>
+          <Grid size={{ xs: 12, md: 6 }} alignSelf="center">
             <Typography variant="h3" component="h1" gutterBottom>
               {name}
             </Typography>
@@ -30,7 +30,7 @@ export const ProductPage = () => {
             <Typography variant="body1" color="text.primary" gutterBottom>
               {`Pieces: ${numberOfPieces}`}
             </Typography>
-            <Box display="flex" alignItems="center" my={2}>
+            <Box display="flex" my={2} justifyContent={{ xs: 'right', md: 'left' }}>
               {price.withDiscountValue ? (
                 <>
                   <Chip
@@ -53,15 +53,16 @@ export const ProductPage = () => {
                   </Typography>
                 </>
               ) : (
-                <Typography variant="h4" color="primary" fontWeight="bold">
+                <Typography variant="h4" color="warning" fontWeight="bold">
                   ${price.value / 100}
                 </Typography>
               )}
             </Box>
-
-            <Button variant="contained" color="success" size="large" sx={{ mt: 2 }}>
-              Add to cart
-            </Button>
+            <Box marginTop={4} display="flex" justifyContent={{ xs: 'right', md: 'left' }}>
+              <Button variant="contained" color="success" size="large">
+                Add to cart
+              </Button>
+            </Box>
           </Grid>
         </Grid>
       </Paper>
