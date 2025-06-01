@@ -12,5 +12,12 @@ export async function productDetailsLoader({ params }: LoaderFunctionArgs) {
     throw data('Product Not Found', 404);
   }
 
-  return controller.getProductBySlug(productSlug);
+  const response = await controller.getProductBySlug(productSlug);
+
+  if (!response || response.body.results.length === 0) {
+    // eslint-disable-next-line @typescript-eslint/only-throw-error
+    throw data('Product Not Found', 404);
+  }
+
+  return response;
 }

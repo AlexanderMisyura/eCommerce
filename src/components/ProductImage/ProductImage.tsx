@@ -35,7 +35,6 @@ export const ProductImage = ({
   };
 
   useEffect(() => {
-    console.log({ sliderReference: sliderReference.current, open });
     if (open) {
       setTimeout(() => {
         if (sliderReference.current) {

@@ -27,7 +27,7 @@ export const ProductCards: React.FC = () => {
         <img
           className="h-auto w-full max-w-[500px] rounded-4xl"
           src={noProductsImage}
-          alt="page not found 404"
+          alt="no products found"
         />
       </Container>
     );
