@@ -12,6 +12,12 @@ interface ImportMetaEnv {
   readonly VITE_CTP_AUTH_URL: string;
   readonly VITE_CTP_API_URL: string;
   readonly VITE_CTP_SCOPES: string;
+  readonly VITE_CTP_CATEGORY_STAR_WARS_ID: string;
+  readonly VITE_CTP_CATEGORY_LOTR_ID: string;
+  readonly VITE_CTP_CATEGORY_TECHNIC_ID: string;
+  readonly VITE_CTP_CATEGORY_BATMAN_ID: string;
+  readonly VITE_CTP_CATEGORY_SPACESHIPS_ID: string;
+  readonly VITE_CTP_CATEGORY_CARS_ID: string;
 }
 
 interface ImportMeta {

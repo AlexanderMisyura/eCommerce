@@ -98,6 +98,8 @@ export default tseslint.config(
             Env: true,
             i: true,
             j: true,
+            params: true,
+            Params: true,
             props: true,
             Props: true,
           },

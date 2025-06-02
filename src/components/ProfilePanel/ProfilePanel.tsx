@@ -1,7 +1,9 @@
 import type { Customer } from '@commercetools/platform-sdk';
 import { ProfileButton } from '@components';
+import { ApiController } from '@controllers';
 import Button from '@mui/material/Button';
-import { requestLogOut } from '@services';
+
+const controller = ApiController.getInstance();
 
 interface ProfilePanelProps {
   currentCustomer: Customer;
@@ -25,7 +27,7 @@ export const ProfilePanel: React.FC<ProfilePanelProps> = (props) => {
       onBurgerMenuClose?.();
     }
 
-    requestLogOut();
+    controller.logoutCustomer();
     setCurrentCustomer(null);
   };
 
