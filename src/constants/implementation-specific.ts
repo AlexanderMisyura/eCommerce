@@ -11,6 +11,8 @@ export const CATEGORY = {
   LOTR: 'Lego LotR',
   TECHNIC: 'Lego Technic',
   BATMAN: 'Lego Batman',
+  SPACESHIPS: 'Spaceships',
+  CARS: 'Cars',
 } as const;
 
 export const CATEGORY_SLUG_PRETTY_NAME_MAP: Record<string, string> = {
@@ -18,6 +20,8 @@ export const CATEGORY_SLUG_PRETTY_NAME_MAP: Record<string, string> = {
   'star-wars': 'Star Wars',
   technic: 'Technic',
   batman: 'Batman',
+  spaceships: 'Spaceships',
+  cars: 'Cars',
 };
 
 export const PRICE = {
