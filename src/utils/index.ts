@@ -6,6 +6,7 @@ export {
   stateAddressesDebounceWrapper,
   stateAddressesFormDebounceWrapper,
   stateCredentialsDebounceWrapper,
+  stateUserCredentialsFormDebounceWrapper,
 } from './debounce-wrapper';
 export { isTokenStore } from './is-token-store';
 export { productDetailsLoader } from './loaders/product-details-loader';

@@ -2,6 +2,7 @@ import { LegoLoader } from '@components';
 import {
   CUSTOMER_CREDENTIALS_STATE_DEFAULT,
   DATE_OF_BIRTH_FORMAT,
+  DEBOUNCE_TIMEOUT,
   FIELD_NAME,
   FIRST_NAME,
   LAST_NAME,
@@ -14,10 +15,15 @@ import { Backdrop, Button, IconButton, Stack, TextField, useTheme } from '@mui/m
 import Box from '@mui/material/Box';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import type { PickerValue } from '@mui/x-date-pickers/internals';
-import type { UserCredentialsFormState } from '@ts-interfaces';
-import { validateDateOfBirth, validateEmail, validateProperName } from '@utils';
+import type { FormFieldState, UserCredentialsFormState } from '@ts-interfaces';
+import {
+  stateUserCredentialsFormDebounceWrapper,
+  validateDateOfBirth,
+  validateEmail,
+  validateProperName,
+} from '@utils';
 import dayjs from 'dayjs';
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 export const UserProfileCredentials = () => {
   const { palette, spacing } = useTheme();
@@ -27,6 +33,7 @@ export const UserProfileCredentials = () => {
 
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isValidForm, setIsValidForm] = useState(false);
   const [formValues, setFormValues] = useState<UserCredentialsFormState>({
     firstName: {
       ...CUSTOMER_CREDENTIALS_STATE_DEFAULT.firstName,
@@ -47,49 +54,68 @@ export const UserProfileCredentials = () => {
   });
   const [initialValues, setInitialValues] = useState(formValues);
 
+  useEffect(() => {
+    const hasErrors = Object.values(formValues).some((field: FormFieldState) => field.error);
+    const allFilled = Object.values(formValues).every(
+      (field: FormFieldState) => field.value !== ''
+    );
+
+    const isDifferent = Object.keys(formValues).some(
+      (key) =>
+        initialValues[key as keyof UserCredentialsFormState].value !==
+        formValues[key as keyof UserCredentialsFormState].value
+    );
+
+    setIsValidForm(!hasErrors && allFilled && isDifferent);
+  }, [formValues, initialValues]);
+
+  const debouncedValidateField = useMemo(
+    () =>
+      stateUserCredentialsFormDebounceWrapper(
+        (fieldName: keyof UserCredentialsFormState, value: string): void => {
+          let error = false;
+          let errorMessage = '';
+
+          switch (fieldName) {
+            case FIELD_NAME.EMAIL: {
+              const emailErrors = validateEmail(value);
+              error = emailErrors.length > 0;
+              errorMessage = emailErrors[0];
+              break;
+            }
+            case FIELD_NAME.FIRST_NAME: {
+              const firstNameErrors = validateProperName(value, FIRST_NAME);
+              error = firstNameErrors.length > 0;
+              errorMessage = firstNameErrors[0];
+              break;
+            }
+            case FIELD_NAME.LAST_NAME: {
+              const lastNameErrors = validateProperName(value, LAST_NAME);
+              error = lastNameErrors.length > 0;
+              errorMessage = lastNameErrors[0];
+              break;
+            }
+          }
+
+          setFormValues((previous) => {
+            const previousField = previous[fieldName];
+
+            if (previousField.error === error && previousField.errorMessage === errorMessage) {
+              return previous;
+            }
+
+            return {
+              ...previous,
+              [fieldName]: { ...previousField, error, errorMessage },
+            };
+          });
+        },
+        DEBOUNCE_TIMEOUT
+      ),
+    []
+  );
+
   if (!currentCustomer) return null;
-
-  const debouncedValidateField = (
-    fieldName: keyof UserCredentialsFormState,
-    value: string
-  ): void => {
-    let error = false;
-    let errorMessage = '';
-
-    switch (fieldName) {
-      case FIELD_NAME.EMAIL: {
-        const emailErrors = validateEmail(value);
-        error = emailErrors.length > 0;
-        errorMessage = emailErrors[0];
-        break;
-      }
-      case FIELD_NAME.FIRST_NAME: {
-        const firstNameErrors = validateProperName(value, FIRST_NAME);
-        error = firstNameErrors.length > 0;
-        errorMessage = firstNameErrors[0];
-        break;
-      }
-      case FIELD_NAME.LAST_NAME: {
-        const lastNameErrors = validateProperName(value, LAST_NAME);
-        error = lastNameErrors.length > 0;
-        errorMessage = lastNameErrors[0];
-        break;
-      }
-    }
-
-    setFormValues((previous) => {
-      const previousField = previous[fieldName];
-
-      if (previousField.error === error && previousField.errorMessage === errorMessage) {
-        return previous;
-      }
-
-      return {
-        ...previous,
-        [fieldName]: { ...previousField, error, errorMessage },
-      };
-    });
-  };
 
   /* Handlers */
   const handleInputChange =
@@ -262,7 +288,7 @@ export const UserProfileCredentials = () => {
             <Button variant="outlined" onClick={handleReset}>
               Reset
             </Button>
-            <Button type="submit" variant="contained" color="primary">
+            <Button type="submit" variant="contained" color="primary" disabled={!isValidForm}>
               Save
             </Button>
           </Stack>
