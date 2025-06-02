@@ -14,12 +14,13 @@ import {
 import Stack from '@mui/material/Stack';
 import { validatePassword } from '@utils';
 import { LegoLoader } from 'components/Loaders/LegoLoader';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface PasswordsState {
   values: Record<string, string>;
   errors: Record<string, string>;
   visibility: Record<string, boolean>;
+  touched: Record<string, boolean>;
 }
 
 type PasswordField = 'currentPassword' | 'newPassword' | 'confirmNewPassword';
@@ -47,6 +48,30 @@ const initPasswordState: PasswordsState = {
     newPassword: false,
     confirmNewPassword: false,
   },
+  touched: {
+    currentPassword: false,
+    newPassword: false,
+    confirmNewPassword: false,
+  },
+};
+
+const getPasswordErrors = (values: Record<string, string>): Record<string, string> => {
+  const { currentPassword, newPassword, confirmNewPassword } = values;
+  const errors: Record<string, string> = {
+    currentPassword: validatePassword(currentPassword)[0] ?? '',
+    newPassword: validatePassword(newPassword)[0] ?? '',
+    confirmNewPassword: '',
+  };
+
+  if (newPassword === currentPassword && newPassword) {
+    errors.newPassword = 'New password must not be the same as the current password.';
+  }
+
+  if (newPassword !== confirmNewPassword && confirmNewPassword) {
+    errors.confirmNewPassword = 'New password and confirmation password must match.';
+  }
+
+  return errors;
 };
 
 export const UserProfileChangePassword = () => {
@@ -59,6 +84,15 @@ export const UserProfileChangePassword = () => {
   const [showPasswords, setShowPasswords] = useState(initPasswordState.visibility);
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [touched, setTouched] = useState(initPasswordState.touched);
+
+  useEffect(() => {
+    const errors = getPasswordErrors(passwords);
+    setPasswordErrors(errors);
+    const hasErrors = Object.values(errors).some(Boolean);
+    const allFilled = Object.values(passwords).every((v) => v.trim() !== '');
+    setIsSubmitDisabled(hasErrors || !allFilled);
+  }, [passwords]);
 
   if (!currentCustomer) return null;
 
@@ -75,38 +109,8 @@ export const UserProfileChangePassword = () => {
   ) => {
     const { value } = event.target;
 
-    setPasswords((previousPasswords) => {
-      const updatedPasswords = { ...previousPasswords, [field]: value };
-      const { currentPassword, newPassword, confirmNewPassword } = updatedPasswords;
-
-      const updatedErrors = {
-        ...passwordErrors,
-        [field]: validatePassword(value)[0] ?? '',
-      };
-
-      if (newPassword === currentPassword && newPassword.length > 0 && currentPassword.length > 0) {
-        updatedErrors.newPassword = 'New password must not be the same as the current password.';
-      }
-
-      if (
-        newPassword !== confirmNewPassword &&
-        newPassword.length > 0 &&
-        confirmNewPassword.length > 0
-      ) {
-        updatedErrors.confirmNewPassword = 'New password and confirmation password must match.';
-      }
-
-      setPasswordErrors(updatedErrors);
-
-      const hasErrors = Object.values(updatedErrors).some((error) => error !== '');
-      const allFieldsFilled = Object.values(updatedPasswords).every(
-        (value_) => value_.trim() !== ''
-      );
-
-      setIsSubmitDisabled(hasErrors || !allFieldsFilled);
-
-      return updatedPasswords;
-    });
+    setPasswords((previous) => ({ ...previous, [field]: value }));
+    setTouched((previous) => ({ ...previous, [field]: true }));
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -143,6 +147,7 @@ export const UserProfileChangePassword = () => {
     setPasswords(initPasswordState.values);
     setPasswordErrors(initPasswordState.errors);
     setShowPasswords(initPasswordState.visibility);
+    setTouched(initPasswordState.touched);
     setIsSubmitDisabled(true);
   };
 
@@ -159,6 +164,12 @@ export const UserProfileChangePassword = () => {
           width: '100%',
         }}
       >
+        <TextField
+          type="text"
+          name="username"
+          autoComplete="username"
+          style={{ display: 'none' }}
+        />
         {passwordFieldKeys.map((field) => {
           return (
             <TextField
@@ -166,9 +177,9 @@ export const UserProfileChangePassword = () => {
               type={showPasswords[field] ? 'text' : 'password'}
               value={passwords[field]}
               label={PASSWORD_FIELDS[field]}
-              error={!!passwordErrors[field]}
-              helperText={passwordErrors[field]}
-              autoComplete="password"
+              error={!!passwordErrors[field] && touched[field]}
+              helperText={touched[field] ? passwordErrors[field] : ''}
+              autoComplete={field === 'currentPassword' ? 'current-password' : 'new-password'}
               required
               onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
                 handleChangePassword(event, field)
@@ -178,7 +189,7 @@ export const UserProfileChangePassword = () => {
                   endAdornment: (
                     <InputAdornment position="end">
                       <IconButton
-                        aria-label="toggle password visibility"
+                        aria-label="toggle visibility for ${field}"
                         onClick={() => handleClickShowPassword(field)}
                         edge="end"
                       >
