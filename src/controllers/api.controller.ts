@@ -4,8 +4,8 @@ import type {
   Customer,
   CustomerChangePassword,
   CustomerSignInResult,
-  CustomerUpdate,
-  CustomerUpdateAction,
+  MyCustomerUpdate,
+  MyCustomerUpdateAction,
   ProductProjectionPagedQueryResponse,
   ProductProjectionPagedSearchResponse,
 } from '@commercetools/platform-sdk';
@@ -47,36 +47,29 @@ export class ApiController {
   }
 
   public async changePasswordCustomer({
-    id,
     version,
     currentPassword,
     newPassword,
   }: CustomerChangePassword): Promise<ClientResponse<Customer>> {
     const response = await apiRoot
       .root()
-      .customers()
+      .me()
       .password()
-      .post({ body: { id, version, currentPassword, newPassword } })
+      .post({ body: { version, currentPassword, newPassword } })
       .execute();
     return response;
   }
 
   public async updateCustomer(payload: {
-    id: string;
     version: number;
-    actions: CustomerUpdateAction[];
+    actions: MyCustomerUpdateAction[];
   }): Promise<ClientResponse<Customer>> {
-    const body: CustomerUpdate = {
+    const body: MyCustomerUpdate = {
       version: payload.version,
       actions: payload.actions,
     };
 
-    const response = await apiRoot
-      .root()
-      .customers()
-      .withId({ ID: payload.id })
-      .post({ body })
-      .execute();
+    const response = await apiRoot.root().me().post({ body }).execute();
 
     return response;
   }
