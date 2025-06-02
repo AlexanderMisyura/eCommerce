@@ -249,7 +249,14 @@ export const UserProfileAddresses = () => {
 
         <AddressesTable />
 
-        <Dialog open={isOpenModal} maxWidth={'sm'} fullWidth onClose={handleCloseModal}>
+        <Dialog
+          open={isOpenModal}
+          maxWidth={'sm'}
+          fullWidth
+          onClose={handleCloseModal}
+          disableRestoreFocus={true}
+          closeAfterTransition={true}
+        >
           <DialogContent sx={{ position: 'relative' }}>
             <IconButton
               onClick={handleCloseModal}
