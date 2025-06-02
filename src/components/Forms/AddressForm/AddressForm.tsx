@@ -41,16 +41,16 @@ import { useEffect, useMemo, useState } from 'react';
 
 interface AddressFormProps {
   actionType: 'add' | 'edit' | null;
-  selectAddressValues: {
-    selectAddress: UserAddress;
-    selectAddressType: UserAddressType;
+  selectedAddressValues: {
+    address: UserAddress;
+    addressType: UserAddressType;
   } | null;
   handleCloseModal: () => void;
 }
 
 export const AddressForm: React.FC<AddressFormProps> = ({
   actionType,
-  selectAddressValues,
+  selectedAddressValues: selectAddressValues,
   handleCloseModal,
 }) => {
   const { palette, spacing } = useTheme();
@@ -63,33 +63,33 @@ export const AddressForm: React.FC<AddressFormProps> = ({
     address: {
       city: {
         ...USER_ADDRESS_FORM_DEFAULT_VALUES.city,
-        value: selectAddressValues?.selectAddress.city ?? '',
+        value: selectAddressValues?.address.city ?? '',
       },
       streetName: {
         ...USER_ADDRESS_FORM_DEFAULT_VALUES.streetName,
-        value: selectAddressValues?.selectAddress.streetName ?? '',
+        value: selectAddressValues?.address.streetName ?? '',
       },
       country: {
         ...USER_ADDRESS_FORM_DEFAULT_VALUES.country,
-        value: selectAddressValues?.selectAddress.country ?? '',
+        value: selectAddressValues?.address.country ?? '',
       },
       postalCode: {
         ...USER_ADDRESS_FORM_DEFAULT_VALUES.postalCode,
-        value: selectAddressValues?.selectAddress.postalCode ?? '',
+        value: selectAddressValues?.address.postalCode ?? '',
       },
     },
     addressType: {
       useAsBilling:
-        selectAddressValues?.selectAddressType.useAsBilling ??
+        selectAddressValues?.addressType.useAsBilling ??
         USER_ADDRESS_OPTION_FORM_DEFAULT_VALUES.useAsBilling,
       useAsShipping:
-        selectAddressValues?.selectAddressType.useAsShipping ??
+        selectAddressValues?.addressType.useAsShipping ??
         USER_ADDRESS_OPTION_FORM_DEFAULT_VALUES.useAsShipping,
       setAsDefaultBilling:
-        selectAddressValues?.selectAddressType.setAsDefaultBilling ??
+        selectAddressValues?.addressType.setAsDefaultBilling ??
         USER_ADDRESS_OPTION_FORM_DEFAULT_VALUES.setAsDefaultBilling,
       setAsDefaultShipping:
-        selectAddressValues?.selectAddressType.setAsDefaultShipping ??
+        selectAddressValues?.addressType.setAsDefaultShipping ??
         USER_ADDRESS_OPTION_FORM_DEFAULT_VALUES.setAsDefaultShipping,
     },
   });
@@ -104,8 +104,20 @@ export const AddressForm: React.FC<AddressFormProps> = ({
       return field.value !== '';
     });
 
-    setIsValidForm(!hasErrors && allFilled);
-  }, [formValues]);
+    const isDifferentAddress = Object.keys(formValues.address).some((key) => {
+      const typedKey = key as keyof typeof formValues.address;
+      return formValues.address[typedKey].value !== initialValues.address[typedKey].value;
+    });
+
+    const isDifferentAddressType = Object.keys(formValues.addressType).some((key) => {
+      const typedKey = key as keyof typeof formValues.addressType;
+      return formValues.addressType[typedKey] !== initialValues.addressType[typedKey];
+    });
+
+    const isFormChanged = isDifferentAddress || isDifferentAddressType;
+
+    setIsValidForm(!hasErrors && allFilled && isFormChanged);
+  }, [formValues, initialValues]);
 
   const debouncedValidateField = useMemo(
     () =>
@@ -232,6 +244,7 @@ export const AddressForm: React.FC<AddressFormProps> = ({
       const customer = response.body;
       setCurrentCustomer(customer);
       handleCloseModal();
+      showToast('Your profile has been updated', 'success');
     } catch (error) {
       if (error instanceof Error) {
         showToast(error.message, 'error');
@@ -256,13 +269,14 @@ export const AddressForm: React.FC<AddressFormProps> = ({
           country: formValues.address.country.value,
           postalCode: formValues.address.postalCode.value,
         },
-        addressId: selectAddressValues?.selectAddress.id ?? '',
+        addressId: selectAddressValues?.address.id ?? '',
         addressType: formValues.addressType,
       });
 
       const customer = response.body;
       setCurrentCustomer(customer);
       handleCloseModal();
+      showToast('Your profile has been updated', 'success');
     } catch (error) {
       if (error instanceof Error) {
         showToast(error.message, 'warning');

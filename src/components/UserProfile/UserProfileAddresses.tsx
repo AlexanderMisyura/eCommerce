@@ -30,9 +30,9 @@ export const UserProfileAddresses = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [isDisabledDeleteButton, setIsDisabledDeleteButton] = useState(false);
   const [addressActionType, setAddressActionType] = useState<'add' | 'edit' | null>(null);
-  const [selectAddressValues, setSelectAddressValues] = useState<{
-    selectAddress: UserAddress;
-    selectAddressType: UserAddressType;
+  const [selectedAddressValues, setSelectAddressValues] = useState<{
+    address: UserAddress;
+    addressType: UserAddressType;
   } | null>(null);
 
   if (!currentCustomer) return null;
@@ -70,7 +70,7 @@ export const UserProfileAddresses = () => {
     selectAddress: UserAddress;
     selectAddressType: UserAddressType;
   }) => {
-    setSelectAddressValues({ selectAddress, selectAddressType });
+    setSelectAddressValues({ address: selectAddress, addressType: selectAddressType });
     setIsOpenModal(true);
     setAddressActionType('edit');
     //   }
@@ -262,7 +262,7 @@ export const UserProfileAddresses = () => {
             <AddressForm
               actionType={addressActionType}
               handleCloseModal={handleCloseModal}
-              selectAddressValues={selectAddressValues}
+              selectedAddressValues={selectedAddressValues}
             />
           </DialogContent>
         </Dialog>
