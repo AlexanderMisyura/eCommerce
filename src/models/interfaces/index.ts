@@ -13,10 +13,7 @@ export type { Addresses } from './registration/addresses';
 export type { AddressesOptions } from './registration/addresses-options';
 export type { AddressesState } from './registration/addresses-state';
 export type { Credentials } from './registration/credentials';
-export type {
-  CredentialsState,
-  UserProfileCredentialState,
-} from './registration/credentials-state';
+export type { CredentialsState } from './registration/credentials-state';
 export type { RegistrationData } from './registration/registration-data';
 export type { RegistrationFieldState } from './registration/registration-field-state';
 export type {
@@ -34,3 +31,4 @@ export type {
   UserAddressFieldsState,
   UserAddressFormState,
 } from './user-profile/user-address-form-state';
+export type { UserCredentialsFormState } from './user-profile/user-credentials-form-state';

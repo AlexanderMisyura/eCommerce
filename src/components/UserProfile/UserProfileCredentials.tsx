@@ -14,7 +14,7 @@ import { Backdrop, Button, IconButton, Stack, TextField, useTheme } from '@mui/m
 import Box from '@mui/material/Box';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import type { PickerValue } from '@mui/x-date-pickers/internals';
-import type { UserProfileCredentialState } from '@ts-interfaces';
+import type { UserCredentialsFormState } from '@ts-interfaces';
 import { validateDateOfBirth, validateEmail, validateProperName } from '@utils';
 import dayjs from 'dayjs';
 import { useState } from 'react';
@@ -27,7 +27,7 @@ export const UserProfileCredentials = () => {
 
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [formValues, setFormValues] = useState<UserProfileCredentialState>({
+  const [formValues, setFormValues] = useState<UserCredentialsFormState>({
     firstName: {
       ...CUSTOMER_CREDENTIALS_STATE_DEFAULT.firstName,
       value: currentCustomer?.firstName ?? '',
@@ -50,7 +50,7 @@ export const UserProfileCredentials = () => {
   if (!currentCustomer) return null;
 
   const debouncedValidateField = (
-    fieldName: keyof UserProfileCredentialState,
+    fieldName: keyof UserCredentialsFormState,
     value: string
   ): void => {
     let error = false;
@@ -93,7 +93,7 @@ export const UserProfileCredentials = () => {
 
   /* Handlers */
   const handleInputChange =
-    (fieldName: keyof UserProfileCredentialState) =>
+    (fieldName: keyof UserCredentialsFormState) =>
     (event: React.ChangeEvent<HTMLInputElement>): void => {
       const value = event.target.value;
 
@@ -124,7 +124,6 @@ export const UserProfileCredentials = () => {
 
     try {
       const response = await controller.updateCustomer({
-        id: currentCustomer.id,
         version: currentCustomer.version,
         actions: [
           { action: 'setFirstName', firstName: formValues.firstName.value },
