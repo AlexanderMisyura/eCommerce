@@ -18,7 +18,13 @@ import {
   UserProfilePage,
 } from '@pages';
 import { UrlPath } from '@ts-enums';
-import { productDetailsLoader, productsLoader, registrationAction, signInAction } from '@utils';
+import {
+  categoriesLoader,
+  productDetailsLoader,
+  productsLoader,
+  registrationAction,
+  signInAction,
+} from '@utils';
 import App from 'App';
 import { createBrowserRouter, redirect } from 'react-router';
 
@@ -58,10 +64,13 @@ export const router = createBrowserRouter([
           {
             path: UrlPath.CATALOG,
             Component: CatalogPage,
+            loader: categoriesLoader,
+            id: 'catalog',
             children: [
               { index: true, loader: () => redirect(`/${UrlPath.CATALOG_ALL}`) },
               {
-                path: ':categorySlug',
+                path: '*',
+                id: 'product-list',
                 Component: ProductCards,
                 loader: productsLoader,
                 HydrateFallback: Spinner,

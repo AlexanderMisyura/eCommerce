@@ -16,6 +16,8 @@ interface ImportMetaEnv {
   readonly VITE_CTP_CATEGORY_LOTR_ID: string;
   readonly VITE_CTP_CATEGORY_TECHNIC_ID: string;
   readonly VITE_CTP_CATEGORY_BATMAN_ID: string;
+  readonly VITE_CTP_CATEGORY_SPACESHIPS_ID: string;
+  readonly VITE_CTP_CATEGORY_CARS_ID: string;
 }
 
 interface ImportMeta {

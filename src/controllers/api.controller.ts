@@ -83,7 +83,7 @@ export class ApiController {
       .categories()
       .get({
         queryArgs: {
-          where: `name(en-US in ("${CATEGORY.BATMAN}", "${CATEGORY.LOTR}", "${CATEGORY.STAR_WARS}", "${CATEGORY.TECHNIC}"))`,
+          where: `name(en-US in ("${CATEGORY.BATMAN}", "${CATEGORY.LOTR}", "${CATEGORY.STAR_WARS}", "${CATEGORY.TECHNIC}", "${CATEGORY.SPACESHIPS}", "${CATEGORY.CARS}"))`,
         },
       })
       .execute();

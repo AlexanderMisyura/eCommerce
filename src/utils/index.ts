@@ -9,6 +9,7 @@ export {
   stateUserCredentialsFormDebounceWrapper,
 } from './debounce-wrapper';
 export { isTokenStore } from './is-token-store';
+export { categoriesLoader } from './loaders/categories-loader';
 export { productDetailsLoader } from './loaders/product-details-loader';
 export { productsLoader } from './loaders/products-loader';
 export { transformToLegoProduct } from './transform-to-lego-product';

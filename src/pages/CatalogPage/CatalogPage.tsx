@@ -2,7 +2,6 @@ import { BreadcrumbsNav, ProductFilter } from '@components';
 import { CATEGORY, CATEGORY_SLUG_PRETTY_NAME_MAP } from '@constants';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
 import { Outlet } from 'react-router';
 import { theme } from 'theme';
 
@@ -16,7 +15,6 @@ export const CatalogPage: React.FC = () => {
         rowGap: theme.spacing(8),
       }}
     >
-      <Typography variant="h2">Catalog</Typography>
       <BreadcrumbsNav
         nameMap={CATEGORY_SLUG_PRETTY_NAME_MAP}
         filterPredicate={(pathname) => pathname !== CATEGORY.ALL}

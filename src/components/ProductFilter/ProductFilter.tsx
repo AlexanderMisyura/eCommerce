@@ -1,3 +1,4 @@
+import type { Category } from '@commercetools/platform-sdk';
 import {
   CATEGORY,
   CATEGORY_SLUG_PRETTY_NAME_MAP,
@@ -6,7 +7,6 @@ import {
   RECOMMENDED_AGE,
   SORT_OPTIONS,
 } from '@constants';
-import { ApiController } from '@controllers';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useMediaQuery, useTheme } from '@mui/material';
 import Accordion from '@mui/material/Accordion';
@@ -24,19 +24,24 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { UrlPath } from '@ts-enums';
 import { useEffect, useState } from 'react';
-import { Form, useNavigate, useNavigation, useParams, useSearchParams } from 'react-router';
-
-const controller = ApiController.getInstance();
-
-const categories = await controller.getCategories();
+import {
+  Form,
+  useNavigate,
+  useNavigation,
+  useParams,
+  useRouteLoaderData,
+  useSearchParams,
+} from 'react-router';
 
 export const ProductFilter: React.FC = () => {
+  const categories = useRouteLoaderData<Category[]>('catalog');
+
   const navigation = useNavigation();
   const isLoading = navigation.state === 'loading';
 
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { categorySlug } = useParams();
+  const categoryPath = useParams()['*'] ?? CATEGORY.ALL;
 
   const [price, setPrice] = useState<number[]>([PRICE.MIN, PRICE.MAX]);
   const [pieces, setPieces] = useState<number[]>([PIECES.MIN, PIECES.MAX]);
@@ -73,10 +78,10 @@ export const ProductFilter: React.FC = () => {
   }, [searchParams]);
 
   const handleChangeCategory = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newCategory = event.target.value;
+    const newCategoryPath = event.target.value;
     const newSearchParams = new URLSearchParams(searchParams);
     newSearchParams.delete('page');
-    void navigate(`/${UrlPath.CATALOG}/${newCategory}?${newSearchParams.toString()}`);
+    void navigate(`/${UrlPath.CATALOG}/${newCategoryPath}?${newSearchParams.toString()}`);
   };
 
   const handleAgeChange = (age: string) => {
@@ -97,7 +102,7 @@ export const ProductFilter: React.FC = () => {
   return (
     <Box minWidth={{ sm: '200px', lg: '250px' }} width={{ sm: '200px', lg: '250px' }}>
       <Form
-        action={categorySlug ? `/${UrlPath.CATALOG}/${categorySlug}` : `/${UrlPath.CATALOG_ALL}`}
+        action={categoryPath ? `/${UrlPath.CATALOG}/${categoryPath}` : `/${UrlPath.CATALOG_ALL}`}
       >
         <input type="hidden" name="sort" value={searchParams.get('sort') ?? SORT_OPTIONS.DEFAULT} />
         <Grid container justifyContent="space-between">
@@ -109,16 +114,36 @@ export const ProductFilter: React.FC = () => {
               <TextField
                 select
                 id="category"
-                value={categorySlug ?? CATEGORY.ALL}
+                value={categoryPath}
                 onChange={handleChangeCategory}
                 disabled={isLoading}
               >
-                <MenuItem value={CATEGORY.ALL}>All Lego Sets</MenuItem>
-                {categories.map((category) => (
-                  <MenuItem key={category.id} value={category.slug['en-US']}>
-                    {CATEGORY_SLUG_PRETTY_NAME_MAP[category.slug['en-US']]}
-                  </MenuItem>
-                ))}
+                <MenuItem sx={{ fontSize: '1.25rem' }} value={CATEGORY.ALL}>
+                  All Lego Sets
+                </MenuItem>
+                {categories
+                  ?.filter((category) => !category.parent)
+                  .map((category) => {
+                    return [
+                      <MenuItem sx={{ pl: 6 }} key={category.id} value={category.slug['en-US']}>
+                        {CATEGORY_SLUG_PRETTY_NAME_MAP[category.slug['en-US']]}
+                      </MenuItem>,
+
+                      ...categories
+                        .filter((subCategory) => subCategory.parent?.id === category.id)
+                        .map((subCategory) => {
+                          return (
+                            <MenuItem
+                              key={subCategory.id}
+                              value={`${category.slug['en-US']}/${subCategory.slug['en-US']}`}
+                              sx={{ pl: 8, fontSize: '0.9rem' }}
+                            >
+                              {`${CATEGORY_SLUG_PRETTY_NAME_MAP[category.slug['en-US']]} > ${CATEGORY_SLUG_PRETTY_NAME_MAP[subCategory.slug['en-US']]}`}
+                            </MenuItem>
+                          );
+                        }),
+                    ];
+                  })}
               </TextField>
             </FormControl>
           </Grid>
