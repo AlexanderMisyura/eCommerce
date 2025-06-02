@@ -2,6 +2,7 @@ import type {
   Category,
   ClientResponse,
   Customer,
+  CustomerChangePassword,
   CustomerSignInResult,
   ProductProjectionPagedQueryResponse,
   ProductProjectionPagedSearchResponse,
@@ -40,6 +41,21 @@ export class ApiController {
     apiRoot.setUserData(customer);
     await this.requestMeInfo();
 
+    return response;
+  }
+
+  public async changePasswordCustomer({
+    id,
+    version,
+    currentPassword,
+    newPassword,
+  }: CustomerChangePassword): Promise<ClientResponse<Customer>> {
+    const response = await apiRoot
+      .root()
+      .customers()
+      .password()
+      .post({ body: { id, version, currentPassword, newPassword } })
+      .execute();
     return response;
   }
 
