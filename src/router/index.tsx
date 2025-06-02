@@ -1,4 +1,11 @@
-import { ProductCards, Spinner } from '@components';
+import {
+  ProductCards,
+  Spinner,
+  UserProfileAddresses,
+  UserProfileChangePassword,
+  UserProfileCredentials,
+  UserProfileOverview,
+} from '@components';
 import {
   AboutUsPage,
   CatalogPage,
@@ -26,7 +33,28 @@ export const router = createBrowserRouter([
           { path: UrlPath.ABOUT, Component: AboutUsPage },
           { path: UrlPath.SIGN_IN, Component: SignInPage, action: signInAction },
           { path: UrlPath.REGISTRATION, Component: RegistrationPage, action: registrationAction },
-          { path: UrlPath.USER_PROFILE, Component: UserProfilePage },
+          {
+            path: UrlPath.USER_PROFILE,
+            Component: UserProfilePage,
+            children: [
+              {
+                index: true,
+                Component: UserProfileOverview,
+              },
+              {
+                path: UrlPath.USER_PROFILE_CREDENTIALS,
+                Component: UserProfileCredentials,
+              },
+              {
+                path: UrlPath.USER_PROFILE_ADDRESSES,
+                Component: UserProfileAddresses,
+              },
+              {
+                path: UrlPath.USER_PROFILE_CHANGE_PASSWORD,
+                Component: UserProfileChangePassword,
+              },
+            ],
+          },
           {
             path: UrlPath.CATALOG,
             Component: CatalogPage,

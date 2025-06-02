@@ -1,20 +1,37 @@
-import { PagePlaceholder } from '@components';
+import { BreadcrumbsNav, UserProfileInfoPanel, UserProfileNav } from '@components';
+import { useCustomerContext } from '@hooks';
 import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
-import { theme } from 'theme';
+import Stack from '@mui/material/Stack';
+import { UrlPath } from '@ts-enums';
+import { useEffect } from 'react';
+import { Outlet, useNavigate } from 'react-router';
 
 export const UserProfilePage = () => {
+  const { currentCustomer, loading } = useCustomerContext();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!loading && !currentCustomer) void navigate(UrlPath.HOME);
+  }, [currentCustomer, loading, navigate]);
+
   return (
-    <Container
-      sx={{
-        display: 'flex',
-        flexGrow: 1,
-        flexDirection: 'column',
-        rowGap: theme.spacing(8),
-      }}
-    >
-      <Typography variant="h2">User Profile Page</Typography>
-      <PagePlaceholder /> {/* TODO: Remove */}
+    <Container>
+      <Stack sx={{ flexDirection: 'column' }}>
+        <BreadcrumbsNav sx={{ marginBottom: 4 }} />
+        <Stack
+          sx={{
+            flexDirection: { xs: 'column', md: 'row' },
+            justifyContent: 'center',
+            flexGrow: 1,
+            gap: 4,
+          }}
+        >
+          <UserProfileNav />
+          <UserProfileInfoPanel>
+            <Outlet />
+          </UserProfileInfoPanel>
+        </Stack>
+      </Stack>
     </Container>
   );
 };
