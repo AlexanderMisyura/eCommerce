@@ -1,6 +1,6 @@
 export enum UrlPath {
   HOME = '/',
-  SIGN_IN = 'sign-in',
+  SIGN_IN = '/sign-in',
   REGISTRATION = 'registration',
   CATALOG = 'catalog',
   CATALOG_ALL = 'catalog/all',

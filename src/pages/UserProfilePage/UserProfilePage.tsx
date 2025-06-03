@@ -11,7 +11,7 @@ export const UserProfilePage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!loading && !currentCustomer) void navigate(UrlPath.HOME);
+    if (!loading && !currentCustomer) void navigate(UrlPath.SIGN_IN);
   }, [currentCustomer, loading, navigate]);
 
   return (

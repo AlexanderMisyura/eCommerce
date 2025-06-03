@@ -143,7 +143,7 @@ export function RegistrationForm() {
               Already have an account?{' '}
               <MuiLink
                 component={Link}
-                to={`/${UrlPath.SIGN_IN}`}
+                to={`${UrlPath.SIGN_IN}`}
                 variant="inherit"
                 sx={{ alignSelf: 'center' }}
                 viewTransition
