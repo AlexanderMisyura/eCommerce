@@ -122,7 +122,7 @@ export function SignInForm() {
   }, [data, navigate, setCurrentCustomer, showToast]);
 
   return (
-    <Form action={`/${UrlPath.SIGN_IN}`} method="post" onSubmit={handleSubmit}>
+    <Form action={`${UrlPath.SIGN_IN}`} method="post" onSubmit={handleSubmit}>
       <Stack direction="column" justifyContent="space-between">
         <Card variant="outlined">
           <Typography
