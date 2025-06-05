@@ -8,6 +8,7 @@ import type {
   MyCustomerUpdateAction,
   ProductProjectionPagedQueryResponse,
   ProductProjectionPagedSearchResponse,
+  Project,
 } from '@commercetools/platform-sdk';
 import { CATEGORY } from '@constants';
 import { apiRoot } from '@services';
@@ -41,18 +42,16 @@ export class ApiController {
   public async registerCustomer(
     customer: RegistrationType
   ): Promise<ClientResponse<CustomerSignInResult>> {
-    const response = await apiRoot.root().customers().post({ body: customer }).execute();
     apiRoot.setUserData(customer);
-    await this.requestMeInfo();
-
+    const response = await apiRoot.root().customers().post({ body: customer }).execute();
+    if (response) apiRoot.resetUser();
     return response;
   }
 
   public async signInCustomer(customer: SignInType): Promise<ClientResponse<CustomerSignInResult>> {
-    const response = await apiRoot.root().login().post({ body: customer }).execute();
     apiRoot.setUserData(customer);
-    await this.requestMeInfo();
-
+    const response = await apiRoot.root().login().post({ body: customer }).execute();
+    if (response) apiRoot.resetUser();
     return response;
   }
 
@@ -85,6 +84,16 @@ export class ApiController {
 
   public logoutCustomer(): void {
     apiRoot.reset();
+  }
+
+  public async requestMeInfo(): Promise<ClientResponse<Customer>> {
+    return await apiRoot.root().me().get().execute();
+  }
+
+  public async prepareRequestProject(): Promise<ClientResponse<Project> | undefined> {
+    if (!apiRoot.isTokenExist()) {
+      return await apiRoot.root().get().execute();
+    }
   }
 
   public async getCategories(): Promise<Category[]> {
@@ -291,9 +300,5 @@ export class ApiController {
       .execute();
 
     return finalResponse;
-  }
-
-  private async requestMeInfo(): Promise<ClientResponse<Customer>> {
-    return await apiRoot.root().me().get().execute();
   }
 }

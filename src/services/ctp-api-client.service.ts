@@ -11,6 +11,7 @@ import {
   type MiddlewareResponse,
   type PasswordAuthMiddlewareOptions,
   type RefreshAuthMiddlewareOptions,
+  type TokenStore,
 } from '@commercetools/ts-client';
 import CTP_CONFIG from '@config/ctp-api-client-config';
 import type { SignInType } from '@ts-types';
@@ -33,7 +34,7 @@ class ApiRoot {
     maskSensitiveHeaderData: false,
     includeOriginalRequest: true,
     includeRequestInErrorResponse: true,
-    enableRetry: true,
+    enableRetry: false,
     retryConfig: {
       maxRetries: 3,
       retryDelay: 200,
@@ -50,6 +51,7 @@ class ApiRoot {
 
   public root(): ByProjectKeyRequestBuilder {
     if (this.userData) {
+      console.log('password flow');
       return this.withPasswordFlow();
     } else if (this.tokenCache.isExist()) {
       return this.withRefreshTokenFlow();
@@ -66,8 +68,16 @@ class ApiRoot {
     return this.tokenCache.isExist();
   }
 
+  public getToken(): TokenStore {
+    return this.tokenCache?.get();
+  }
+
   public reset(): void {
     this.tokenCache.reset();
+    this.resetUser();
+  }
+
+  public resetUser() {
     this.userData = null;
   }
 

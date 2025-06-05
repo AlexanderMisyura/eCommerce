@@ -1,4 +1,5 @@
 import type { Customer } from '@commercetools/platform-sdk';
+import { ApiController } from '@controllers';
 import { apiRoot } from '@services';
 import type { ReactNode } from 'react';
 import { useEffect, useMemo, useState } from 'react';
@@ -17,7 +18,7 @@ export const CustomerProvider: React.FC<CustomerProviderProps> = ({ children }) 
     const getMeData = async () => {
       try {
         if (apiRoot.isTokenExist()) {
-          const response = await apiRoot.root().me().get().execute();
+          const response = await ApiController.getInstance().requestMeInfo();
           setCurrentCustomer(response.body);
         }
       } catch (error) {
