@@ -18,14 +18,24 @@ import { createProductQuery } from 'utils/create-product-query';
 export class ApiController {
   private static instance: ApiController;
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private constructor() {}
-
   public static getInstance(): ApiController {
     if (!ApiController.instance) {
       ApiController.instance = new ApiController();
     }
     return ApiController.instance;
+  }
+
+  public async getCart() {
+    const response = await apiRoot
+      .root()
+      .carts()
+      .post({
+        body: {
+          currency: 'USD',
+        },
+      })
+      .execute();
+    console.log({ response });
   }
 
   public async registerCustomer(

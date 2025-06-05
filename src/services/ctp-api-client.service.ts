@@ -4,6 +4,7 @@ import {
 } from '@commercetools/platform-sdk';
 import {
   type AuthMiddlewareOptions,
+  type Client,
   ClientBuilder,
   type HttpMiddlewareOptions,
   type LoggerMiddlewareOptions,
@@ -53,7 +54,7 @@ class ApiRoot {
     } else if (this.tokenCache.isExist()) {
       return this.withRefreshTokenFlow();
     } else {
-      return this.withClientCredentialsFlow();
+      return this.withAnonymousTokenFlow();
     }
   }
 
@@ -68,6 +69,34 @@ class ApiRoot {
   public reset(): void {
     this.tokenCache.reset();
     this.userData = null;
+  }
+
+  private createApiRootFromClient(client: Client) {
+    const apiRoot = createApiBuilderFromCtpClient(client).withProjectKey({
+      projectKey: PROJECT_KEY,
+    });
+
+    return apiRoot;
+  }
+
+  private withAnonymousTokenFlow() {
+    const authMiddlewareOptions: AuthMiddlewareOptions = {
+      host: AUTH_URL,
+      projectKey: PROJECT_KEY,
+      credentials: { clientId: CLIENT_ID, clientSecret: CLIENT_SECRET },
+      scopes: [SCOPES],
+      httpClient: fetch,
+      tokenCache: this.tokenCache,
+    };
+
+    const client = new ClientBuilder()
+      .withProjectKey(PROJECT_KEY)
+      .withAnonymousSessionFlow(authMiddlewareOptions)
+      .withHttpMiddleware(this.httpMiddlewareOptions)
+      .withLoggerMiddleware(this.loggerMiddlewareOptions)
+      .build();
+
+    return this.createApiRootFromClient(client);
   }
 
   private withPasswordFlow(): ByProjectKeyRequestBuilder {
@@ -101,29 +130,6 @@ class ApiRoot {
     return apiRoot;
   }
 
-  private withClientCredentialsFlow(): ByProjectKeyRequestBuilder {
-    const authMiddlewareOptions: AuthMiddlewareOptions = {
-      host: AUTH_URL,
-      projectKey: PROJECT_KEY,
-      credentials: { clientId: CLIENT_ID, clientSecret: CLIENT_SECRET },
-      scopes: [SCOPES],
-      httpClient: fetch,
-    };
-
-    const client = new ClientBuilder()
-      .withProjectKey(PROJECT_KEY)
-      .withClientCredentialsFlow(authMiddlewareOptions)
-      .withHttpMiddleware(this.httpMiddlewareOptions)
-      .withLoggerMiddleware(this.loggerMiddlewareOptions)
-      .build();
-
-    const apiRoot = createApiBuilderFromCtpClient(client).withProjectKey({
-      projectKey: PROJECT_KEY,
-    });
-
-    return apiRoot;
-  }
-
   private withRefreshTokenFlow(): ByProjectKeyRequestBuilder {
     const options: RefreshAuthMiddlewareOptions = {
       host: AUTH_URL,
@@ -144,11 +150,7 @@ class ApiRoot {
       .withLoggerMiddleware(this.loggerMiddlewareOptions)
       .build();
 
-    const apiRoot = createApiBuilderFromCtpClient(client).withProjectKey({
-      projectKey: PROJECT_KEY,
-    });
-
-    return apiRoot;
+    return this.createApiRootFromClient(client);
   }
 }
 
