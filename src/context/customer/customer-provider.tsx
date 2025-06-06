@@ -1,5 +1,4 @@
 import type { Customer } from '@commercetools/platform-sdk';
-import { ApiController } from '@controllers';
 import { apiRoot } from '@services';
 import type { ReactNode } from 'react';
 import { useEffect, useMemo, useState } from 'react';
@@ -17,8 +16,8 @@ export const CustomerProvider: React.FC<CustomerProviderProps> = ({ children }) 
   useEffect(() => {
     const getMeData = async () => {
       try {
-        if (apiRoot.isTokenExist()) {
-          const response = await ApiController.getInstance().requestMeInfo();
+        if (apiRoot.isAuthorizeToken === 'auth' && apiRoot.isTokenExist()) {
+          const response = await apiRoot.root().me().get().execute();
           setCurrentCustomer(response.body);
         }
       } catch (error) {

@@ -27,7 +27,7 @@ export class ApiController {
   }
 
   public async getCart() {
-    const response = await apiRoot
+    await apiRoot
       .root()
       .carts()
       .post({
@@ -36,7 +36,6 @@ export class ApiController {
         },
       })
       .execute();
-    console.log({ response });
   }
 
   public async registerCustomer(
@@ -44,15 +43,21 @@ export class ApiController {
   ): Promise<ClientResponse<CustomerSignInResult>> {
     apiRoot.setUserData(customer);
     const response = await apiRoot.root().customers().post({ body: customer }).execute();
-    if (response) apiRoot.resetUser();
+    apiRoot.resetToken();
+    await this.signInCustomer(customer);
     return response;
   }
 
   public async signInCustomer(customer: SignInType): Promise<ClientResponse<CustomerSignInResult>> {
     apiRoot.setUserData(customer);
     const response = await apiRoot.root().login().post({ body: customer }).execute();
-    if (response) apiRoot.resetUser();
+    if (response) this.changeFlowToAuth();
     return response;
+  }
+
+  public changeFlowToAuth() {
+    apiRoot.resetUser();
+    apiRoot.setAuthStatusToken('auth');
   }
 
   public async changePasswordCustomer({

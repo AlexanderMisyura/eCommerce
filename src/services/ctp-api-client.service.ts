@@ -14,13 +14,15 @@ import {
   type TokenStore,
 } from '@commercetools/ts-client';
 import CTP_CONFIG from '@config/ctp-api-client-config';
-import type { SignInType } from '@ts-types';
+import type { SignInType, StatusToken } from '@ts-types';
+import { isStatusToken } from '@utils';
 
 import { InMemoryTokenCache } from './in-memory-token-cache';
 
 const { PROJECT_KEY, CLIENT_SECRET, CLIENT_ID, AUTH_URL, API_URL, SCOPES } = CTP_CONFIG;
 
 class ApiRoot {
+  public isAuthorizeToken: StatusToken = 'notAuth';
   private userData: SignInType | null;
   private tokenCache: InMemoryTokenCache;
   private loggerMiddlewareOptions: LoggerMiddlewareOptions = {
@@ -34,7 +36,7 @@ class ApiRoot {
     maskSensitiveHeaderData: false,
     includeOriginalRequest: true,
     includeRequestInErrorResponse: true,
-    enableRetry: false,
+    enableRetry: true,
     retryConfig: {
       maxRetries: 3,
       retryDelay: 200,
@@ -47,17 +49,28 @@ class ApiRoot {
   constructor(tokenCache: InMemoryTokenCache) {
     this.userData = null;
     this.tokenCache = tokenCache;
+    const tokenStatus = localStorage.getItem('tokenStatus');
+    if (tokenStatus) {
+      const parseTokenStatus: unknown = JSON.parse(tokenStatus);
+      if (isStatusToken(parseTokenStatus)) {
+        this.setAuthStatusToken(parseTokenStatus);
+      }
+    }
   }
 
   public root(): ByProjectKeyRequestBuilder {
     if (this.userData) {
-      console.log('password flow');
       return this.withPasswordFlow();
-    } else if (this.tokenCache.isExist()) {
+    } else if (this.tokenCache.isExist() && this.isAuthorizeToken === 'auth') {
       return this.withRefreshTokenFlow();
     } else {
       return this.withAnonymousTokenFlow();
     }
+  }
+
+  public setAuthStatusToken(value: StatusToken): void {
+    this.isAuthorizeToken = value;
+    localStorage.setItem('tokenStatus', JSON.stringify(value));
   }
 
   public setUserData(value: SignInType): void {
@@ -74,11 +87,16 @@ class ApiRoot {
 
   public reset(): void {
     this.tokenCache.reset();
+    this.setAuthStatusToken('notAuth');
     this.resetUser();
   }
 
   public resetUser() {
     this.userData = null;
+  }
+
+  public resetToken() {
+    this.tokenCache.resetToken();
   }
 
   private createApiRootFromClient(client: Client) {

@@ -2,9 +2,12 @@ import { Footer, Header } from '@components';
 import { ApiController } from '@controllers';
 import { useEffect } from 'react';
 import { Outlet, ScrollRestoration } from 'react-router';
+
 const initializedToken = async () => {
-  await ApiController.getInstance().prepareRequestProject();
+  const controller = ApiController.getInstance();
+  await controller.prepareRequestProject();
 };
+
 function App() {
   useEffect(() => {
     initializedToken().catch((error) => {

@@ -8,6 +8,7 @@ export {
   stateCredentialsDebounceWrapper,
   stateUserCredentialsFormDebounceWrapper,
 } from './debounce-wrapper';
+export { isStatusToken } from './is-status-token';
 export { isTokenStore } from './is-token-store';
 export { categoriesLoader } from './loaders/categories-loader';
 export { productDetailsLoader } from './loaders/product-details-loader';
