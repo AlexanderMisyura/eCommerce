@@ -1,5 +1,6 @@
 import type {
   Category,
+  CategoryPagedQueryResponse,
   ClientResponse,
   Customer,
   CustomerChangePassword,
@@ -8,7 +9,6 @@ import type {
   MyCustomerUpdateAction,
   ProductProjectionPagedQueryResponse,
   ProductProjectionPagedSearchResponse,
-  Project,
 } from '@commercetools/platform-sdk';
 import { CATEGORY } from '@constants';
 import { apiRoot } from '@services';
@@ -95,9 +95,11 @@ export class ApiController {
     return await apiRoot.root().me().get().execute();
   }
 
-  public async prepareRequestProject(): Promise<ClientResponse<Project> | undefined> {
+  public async prepareRequestProject(): Promise<
+    ClientResponse<CategoryPagedQueryResponse> | undefined
+  > {
     if (!apiRoot.isTokenExist()) {
-      return await apiRoot.root().get().execute();
+      return await apiRoot.root().categories().get().execute();
     }
   }
 
