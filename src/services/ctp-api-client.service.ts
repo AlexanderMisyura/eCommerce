@@ -9,12 +9,11 @@ import {
   type HttpMiddlewareOptions,
   type LoggerMiddlewareOptions,
   type MiddlewareResponse,
-  type PasswordAuthMiddlewareOptions,
   type RefreshAuthMiddlewareOptions,
+  type TokenStore,
 } from '@commercetools/ts-client';
 import CTP_CONFIG from '@config/ctp-api-client-config';
 import { anonymousIdService } from '@services';
-import type { SignInType } from '@ts-types';
 
 import { LocalStorageTokenCache } from './local-storage-token-cache';
 
@@ -55,31 +54,8 @@ class ApiRoot {
     return this.withAnonymousTokenFlow();
   }
 
-  public withPasswordFlow(credentials: SignInType): ByProjectKeyRequestBuilder {
-    const options: PasswordAuthMiddlewareOptions = {
-      host: AUTH_URL,
-      projectKey: PROJECT_KEY,
-      credentials: {
-        clientId: CLIENT_ID,
-        clientSecret: CLIENT_SECRET,
-        user: {
-          username: credentials.email,
-          password: credentials.password,
-        },
-      },
-      scopes: [SCOPES],
-      httpClient: fetch,
-      tokenCache: this.tokenCache,
-    };
-
-    const client = new ClientBuilder()
-      .withProjectKey(PROJECT_KEY)
-      .withPasswordFlow(options)
-      .withHttpMiddleware(this.httpMiddlewareOptions)
-      .withLoggerMiddleware(this.loggerMiddlewareOptions)
-      .build();
-
-    return this.createApiRootFromClient(client);
+  public saveToken(token: TokenStore): void {
+    this.tokenCache.set(token);
   }
 
   public reset(): void {
@@ -91,13 +67,13 @@ class ApiRoot {
     return this.tokenCache.isExist();
   }
 
-  private createApiRootFromClient(client: Client) {
+  private createApiRootFromClient(client: Client): ByProjectKeyRequestBuilder {
     return createApiBuilderFromCtpClient(client).withProjectKey({
       projectKey: PROJECT_KEY,
     });
   }
 
-  private withAnonymousTokenFlow() {
+  private withAnonymousTokenFlow(): ByProjectKeyRequestBuilder {
     const authMiddlewareOptions: AuthMiddlewareOptions = {
       host: AUTH_URL,
       projectKey: PROJECT_KEY,
