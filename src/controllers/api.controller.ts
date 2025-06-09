@@ -9,11 +9,16 @@ import type {
   ProductProjectionPagedQueryResponse,
   ProductProjectionPagedSearchResponse,
 } from '@commercetools/platform-sdk';
+import { createApiBuilderFromCtpClient } from '@commercetools/platform-sdk';
+import { ClientBuilder, type PasswordAuthMiddlewareOptions } from '@commercetools/ts-client';
+import CTP_CONFIG from '@config/ctp-api-client-config';
 import { CATEGORY } from '@constants';
-import { anonymousIdService, apiRoot } from '@services';
+import { anonymousIdService, apiRoot, InMemoryTokenCache } from '@services';
 import type { QueryOptions, UserAddress, UserAddressType } from '@ts-interfaces';
 import type { RegistrationType, SignInType } from '@ts-types';
 import { createProductQuery } from 'utils/create-product-query';
+
+const { PROJECT_KEY, CLIENT_SECRET, CLIENT_ID, AUTH_URL, API_URL, SCOPES } = CTP_CONFIG;
 
 export class ApiController {
   private static instance: ApiController;
@@ -50,23 +55,44 @@ export class ApiController {
   }
 
   public async signInCustomer(customer: SignInType): Promise<ClientResponse<CustomerSignInResult>> {
-    const response = await apiRoot
-      .withPasswordFlow(customer)
+    const temporaryTokenCache = new InMemoryTokenCache();
+
+    const options: PasswordAuthMiddlewareOptions = {
+      host: AUTH_URL,
+      projectKey: PROJECT_KEY,
+      credentials: {
+        clientId: CLIENT_ID,
+        clientSecret: CLIENT_SECRET,
+        user: {
+          username: customer.email,
+          password: customer.password,
+        },
+      },
+      scopes: [SCOPES],
+      httpClient: fetch,
+      tokenCache: temporaryTokenCache,
+    };
+
+    const temporaryClient = new ClientBuilder()
+      .withProjectKey(PROJECT_KEY)
+      .withPasswordFlow(options)
+      .withHttpMiddleware({ host: API_URL, httpClient: fetch })
+      .build();
+
+    const temporaryApiRoot = createApiBuilderFromCtpClient(temporaryClient).withProjectKey({
+      projectKey: PROJECT_KEY,
+    });
+
+    const response = await temporaryApiRoot
       .login()
       .post({ body: { ...customer, anonymousId: anonymousIdService.getAnonymousId() } })
-      .execute()
-      .then();
+      .execute();
 
-    await apiRoot
-      .withPasswordFlow(customer)
-      .categories()
-      .get()
-      .execute()
-      .then(() => {
-        if (response.statusCode === 200) {
-          anonymousIdService.resetAnonymousId();
-        }
-      });
+    if (response.statusCode === 200) {
+      const newTokenCache = temporaryTokenCache.get();
+      apiRoot.saveToken(newTokenCache);
+      anonymousIdService.resetAnonymousId();
+    }
 
     return response;
   }
