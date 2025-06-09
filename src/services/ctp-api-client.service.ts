@@ -11,20 +11,17 @@ import {
   type MiddlewareResponse,
   type PasswordAuthMiddlewareOptions,
   type RefreshAuthMiddlewareOptions,
-  type TokenStore,
 } from '@commercetools/ts-client';
 import CTP_CONFIG from '@config/ctp-api-client-config';
-import type { SignInType, StatusToken } from '@ts-types';
-import { isStatusToken } from '@utils';
+import { anonymousIdService } from '@services';
+import type { SignInType } from '@ts-types';
 
-import { InMemoryTokenCache } from './in-memory-token-cache';
+import { LocalStorageTokenCache } from './local-storage-token-cache';
 
 const { PROJECT_KEY, CLIENT_SECRET, CLIENT_ID, AUTH_URL, API_URL, SCOPES } = CTP_CONFIG;
 
 class ApiRoot {
-  public isAuthorizeToken: StatusToken = 'notAuth';
-  private userData: SignInType | null;
-  private tokenCache: InMemoryTokenCache;
+  private tokenCache: LocalStorageTokenCache;
   private loggerMiddlewareOptions: LoggerMiddlewareOptions = {
     loggerFn: (response: MiddlewareResponse) => {
       console.log('Response is:', response);
@@ -46,72 +43,69 @@ class ApiRoot {
     httpClient: fetch,
   };
 
-  constructor(tokenCache: InMemoryTokenCache) {
-    this.userData = null;
-    this.tokenCache = tokenCache;
-    const tokenStatus = localStorage.getItem('tokenStatus');
-    if (tokenStatus) {
-      const parseTokenStatus: unknown = JSON.parse(tokenStatus);
-      if (isStatusToken(parseTokenStatus)) {
-        this.setAuthStatusToken(parseTokenStatus);
-      }
-    }
+  constructor() {
+    this.tokenCache = new LocalStorageTokenCache();
   }
 
   public root(): ByProjectKeyRequestBuilder {
-    if (this.userData) {
-      return this.withPasswordFlow();
-    } else if (this.tokenCache.isExist() && this.isAuthorizeToken === 'auth') {
+    if (this.tokenCache.getRefreshToken()) {
       return this.withRefreshTokenFlow();
-    } else {
-      return this.withAnonymousTokenFlow();
     }
+
+    return this.withAnonymousTokenFlow();
   }
 
-  public setAuthStatusToken(value: StatusToken): void {
-    this.isAuthorizeToken = value;
-    localStorage.setItem('tokenStatus', JSON.stringify(value));
+  public withPasswordFlow(credentials: SignInType): ByProjectKeyRequestBuilder {
+    const options: PasswordAuthMiddlewareOptions = {
+      host: AUTH_URL,
+      projectKey: PROJECT_KEY,
+      credentials: {
+        clientId: CLIENT_ID,
+        clientSecret: CLIENT_SECRET,
+        user: {
+          username: credentials.email,
+          password: credentials.password,
+        },
+      },
+      scopes: [SCOPES],
+      httpClient: fetch,
+      tokenCache: this.tokenCache,
+    };
+
+    const client = new ClientBuilder()
+      .withProjectKey(PROJECT_KEY)
+      .withPasswordFlow(options)
+      .withHttpMiddleware(this.httpMiddlewareOptions)
+      .withLoggerMiddleware(this.loggerMiddlewareOptions)
+      .build();
+
+    return this.createApiRootFromClient(client);
   }
 
-  public setUserData(value: SignInType): void {
-    this.userData = value;
+  public reset(): void {
+    this.tokenCache.reset();
+    anonymousIdService.resetAnonymousId();
   }
 
   public isTokenExist(): boolean {
     return this.tokenCache.isExist();
   }
 
-  public getToken(): TokenStore {
-    return this.tokenCache?.get();
-  }
-
-  public reset(): void {
-    this.tokenCache.reset();
-    this.setAuthStatusToken('notAuth');
-    this.resetUser();
-  }
-
-  public resetUser() {
-    this.userData = null;
-  }
-
-  public resetToken() {
-    this.tokenCache.resetToken();
-  }
-
   private createApiRootFromClient(client: Client) {
-    const apiRoot = createApiBuilderFromCtpClient(client).withProjectKey({
+    return createApiBuilderFromCtpClient(client).withProjectKey({
       projectKey: PROJECT_KEY,
     });
-
-    return apiRoot;
   }
 
   private withAnonymousTokenFlow() {
     const authMiddlewareOptions: AuthMiddlewareOptions = {
       host: AUTH_URL,
       projectKey: PROJECT_KEY,
-      credentials: { clientId: CLIENT_ID, clientSecret: CLIENT_SECRET },
+      credentials: {
+        clientId: CLIENT_ID,
+        clientSecret: CLIENT_SECRET,
+        anonymousId: anonymousIdService.getAnonymousId(),
+      },
       scopes: [SCOPES],
       httpClient: fetch,
       tokenCache: this.tokenCache,
@@ -127,38 +121,12 @@ class ApiRoot {
     return this.createApiRootFromClient(client);
   }
 
-  private withPasswordFlow(): ByProjectKeyRequestBuilder {
-    const options: PasswordAuthMiddlewareOptions = {
-      host: AUTH_URL,
-      projectKey: PROJECT_KEY,
-      credentials: {
-        clientId: CLIENT_ID,
-        clientSecret: CLIENT_SECRET,
-        user: {
-          username: this.userData ? this.userData.email : '',
-          password: this.userData ? this.userData.password : '',
-        },
-      },
-      scopes: [SCOPES],
-      httpClient: fetch,
-      tokenCache: this.tokenCache,
-    };
-
-    const client = new ClientBuilder()
-      .withProjectKey(PROJECT_KEY)
-      .withPasswordFlow(options)
-      .withHttpMiddleware(this.httpMiddlewareOptions)
-      .withLoggerMiddleware(this.loggerMiddlewareOptions)
-      .build();
-
-    const apiRoot = createApiBuilderFromCtpClient(client).withProjectKey({
-      projectKey: PROJECT_KEY,
-    });
-
-    return apiRoot;
-  }
-
   private withRefreshTokenFlow(): ByProjectKeyRequestBuilder {
+    const refreshToken = this.tokenCache.getRefreshToken();
+    if (!refreshToken) {
+      return this.withAnonymousTokenFlow();
+    }
+
     const options: RefreshAuthMiddlewareOptions = {
       host: AUTH_URL,
       projectKey: PROJECT_KEY,
@@ -166,7 +134,7 @@ class ApiRoot {
         clientId: CLIENT_ID,
         clientSecret: CLIENT_SECRET,
       },
-      refreshToken: this.tokenCache.get().refreshToken ?? '',
+      refreshToken,
       tokenCache: this.tokenCache,
       httpClient: fetch,
     };
@@ -182,6 +150,6 @@ class ApiRoot {
   }
 }
 
-const apiRoot: ApiRoot = new ApiRoot(new InMemoryTokenCache());
+const apiRoot: ApiRoot = new ApiRoot();
 
 export { apiRoot };
