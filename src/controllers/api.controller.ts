@@ -1,6 +1,5 @@
 import type {
   Category,
-  CategoryPagedQueryResponse,
   ClientResponse,
   Customer,
   CustomerChangePassword,
@@ -11,7 +10,7 @@ import type {
   ProductProjectionPagedSearchResponse,
 } from '@commercetools/platform-sdk';
 import { CATEGORY } from '@constants';
-import { apiRoot } from '@services';
+import { anonymousIdService, apiRoot } from '@services';
 import type { QueryOptions, UserAddress, UserAddressType } from '@ts-interfaces';
 import type { RegistrationType, SignInType } from '@ts-types';
 import { createProductQuery } from 'utils/create-product-query';
@@ -41,23 +40,35 @@ export class ApiController {
   public async registerCustomer(
     customer: RegistrationType
   ): Promise<ClientResponse<CustomerSignInResult>> {
-    apiRoot.setUserData(customer);
-    const response = await apiRoot.root().customers().post({ body: customer }).execute();
-    apiRoot.resetToken();
-    await this.signInCustomer(customer);
-    return response;
+    await apiRoot
+      .root()
+      .customers()
+      .post({ body: { ...customer, anonymousId: anonymousIdService.getAnonymousId() } })
+      .execute();
+
+    return await this.signInCustomer(customer);
   }
 
   public async signInCustomer(customer: SignInType): Promise<ClientResponse<CustomerSignInResult>> {
-    apiRoot.setUserData(customer);
-    const response = await apiRoot.root().login().post({ body: customer }).execute();
-    if (response) this.changeFlowToAuth();
-    return response;
-  }
+    const response = await apiRoot
+      .withPasswordFlow(customer)
+      .login()
+      .post({ body: { ...customer, anonymousId: anonymousIdService.getAnonymousId() } })
+      .execute()
+      .then();
 
-  public changeFlowToAuth() {
-    apiRoot.resetUser();
-    apiRoot.setAuthStatusToken('auth');
+    await apiRoot
+      .withPasswordFlow(customer)
+      .categories()
+      .get()
+      .execute()
+      .then(() => {
+        if (response.statusCode === 200) {
+          anonymousIdService.resetAnonymousId();
+        }
+      });
+
+    return response;
   }
 
   public async changePasswordCustomer({
@@ -93,14 +104,6 @@ export class ApiController {
 
   public async requestMeInfo(): Promise<ClientResponse<Customer>> {
     return await apiRoot.root().me().get().execute();
-  }
-
-  public async prepareRequestProject(): Promise<
-    ClientResponse<CategoryPagedQueryResponse> | undefined
-  > {
-    if (!apiRoot.isTokenExist()) {
-      return await apiRoot.root().categories().get().execute();
-    }
   }
 
   public async getCategories(): Promise<Category[]> {
