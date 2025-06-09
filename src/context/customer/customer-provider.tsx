@@ -1,5 +1,5 @@
 import type { Customer } from '@commercetools/platform-sdk';
-import { apiRoot } from '@services';
+import { anonymousIdService, apiRoot } from '@services';
 import type { ReactNode } from 'react';
 import { useEffect, useMemo, useState } from 'react';
 
@@ -16,7 +16,7 @@ export const CustomerProvider: React.FC<CustomerProviderProps> = ({ children }) 
   useEffect(() => {
     const getMeData = async () => {
       try {
-        if (apiRoot.isAuthorizeToken === 'auth' && apiRoot.isTokenExist()) {
+        if (!anonymousIdService.isAnonymousIdExist() && apiRoot.isTokenExist()) {
           const response = await apiRoot.root().me().get().execute();
           setCurrentCustomer(response.body);
         }
