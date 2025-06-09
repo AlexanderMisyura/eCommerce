@@ -9,17 +9,19 @@ import type {
   ProductProjectionPagedQueryResponse,
   ProductProjectionPagedSearchResponse,
 } from '@commercetools/platform-sdk';
+import { createApiBuilderFromCtpClient } from '@commercetools/platform-sdk';
+import { ClientBuilder, type PasswordAuthMiddlewareOptions } from '@commercetools/ts-client';
+import CTP_CONFIG from '@config/ctp-api-client-config';
 import { CATEGORY } from '@constants';
-import { apiRoot } from '@services';
+import { anonymousIdService, apiRoot, InMemoryTokenCache } from '@services';
 import type { QueryOptions, UserAddress, UserAddressType } from '@ts-interfaces';
 import type { RegistrationType, SignInType } from '@ts-types';
 import { createProductQuery } from 'utils/create-product-query';
 
+const { PROJECT_KEY, CLIENT_SECRET, CLIENT_ID, AUTH_URL, API_URL, SCOPES } = CTP_CONFIG;
+
 export class ApiController {
   private static instance: ApiController;
-
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private constructor() {}
 
   public static getInstance(): ApiController {
     if (!ApiController.instance) {
@@ -28,20 +30,69 @@ export class ApiController {
     return ApiController.instance;
   }
 
+  public async getCart() {
+    await apiRoot
+      .root()
+      .carts()
+      .post({
+        body: {
+          currency: 'USD',
+        },
+      })
+      .execute();
+  }
+
   public async registerCustomer(
     customer: RegistrationType
   ): Promise<ClientResponse<CustomerSignInResult>> {
-    const response = await apiRoot.root().customers().post({ body: customer }).execute();
-    apiRoot.setUserData(customer);
-    await this.requestMeInfo();
+    await apiRoot
+      .root()
+      .customers()
+      .post({ body: { ...customer, anonymousId: anonymousIdService.getAnonymousId() } })
+      .execute();
 
-    return response;
+    return await this.signInCustomer(customer);
   }
 
   public async signInCustomer(customer: SignInType): Promise<ClientResponse<CustomerSignInResult>> {
-    const response = await apiRoot.root().login().post({ body: customer }).execute();
-    apiRoot.setUserData(customer);
-    await this.requestMeInfo();
+    const temporaryTokenCache = new InMemoryTokenCache();
+
+    const options: PasswordAuthMiddlewareOptions = {
+      host: AUTH_URL,
+      projectKey: PROJECT_KEY,
+      credentials: {
+        clientId: CLIENT_ID,
+        clientSecret: CLIENT_SECRET,
+        user: {
+          username: customer.email,
+          password: customer.password,
+        },
+      },
+      scopes: [SCOPES],
+      httpClient: fetch,
+      tokenCache: temporaryTokenCache,
+    };
+
+    const temporaryClient = new ClientBuilder()
+      .withProjectKey(PROJECT_KEY)
+      .withPasswordFlow(options)
+      .withHttpMiddleware({ host: API_URL, httpClient: fetch })
+      .build();
+
+    const temporaryApiRoot = createApiBuilderFromCtpClient(temporaryClient).withProjectKey({
+      projectKey: PROJECT_KEY,
+    });
+
+    const response = await temporaryApiRoot
+      .login()
+      .post({ body: { ...customer, anonymousId: anonymousIdService.getAnonymousId() } })
+      .execute();
+
+    if (response.statusCode === 200) {
+      const newTokenCache = temporaryTokenCache.get();
+      apiRoot.saveToken(newTokenCache);
+      anonymousIdService.resetAnonymousId();
+    }
 
     return response;
   }
@@ -75,6 +126,10 @@ export class ApiController {
 
   public logoutCustomer(): void {
     apiRoot.reset();
+  }
+
+  public async requestMeInfo(): Promise<ClientResponse<Customer>> {
+    return await apiRoot.root().me().get().execute();
   }
 
   public async getCategories(): Promise<Category[]> {
@@ -281,9 +336,5 @@ export class ApiController {
       .execute();
 
     return finalResponse;
-  }
-
-  private async requestMeInfo(): Promise<ClientResponse<Customer>> {
-    return await apiRoot.root().me().get().execute();
   }
 }

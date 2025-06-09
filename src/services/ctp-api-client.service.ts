@@ -4,23 +4,23 @@ import {
 } from '@commercetools/platform-sdk';
 import {
   type AuthMiddlewareOptions,
+  type Client,
   ClientBuilder,
   type HttpMiddlewareOptions,
   type LoggerMiddlewareOptions,
   type MiddlewareResponse,
-  type PasswordAuthMiddlewareOptions,
   type RefreshAuthMiddlewareOptions,
+  type TokenStore,
 } from '@commercetools/ts-client';
 import CTP_CONFIG from '@config/ctp-api-client-config';
-import type { SignInType } from '@ts-types';
+import { anonymousIdService } from '@services';
 
-import { InMemoryTokenCache } from './in-memory-token-cache';
+import { LocalStorageTokenCache } from './local-storage-token-cache';
 
 const { PROJECT_KEY, CLIENT_SECRET, CLIENT_ID, AUTH_URL, API_URL, SCOPES } = CTP_CONFIG;
 
 class ApiRoot {
-  private userData: SignInType | null;
-  private tokenCache: InMemoryTokenCache;
+  private tokenCache: LocalStorageTokenCache;
   private loggerMiddlewareOptions: LoggerMiddlewareOptions = {
     loggerFn: (response: MiddlewareResponse) => {
       console.log('Response is:', response);
@@ -42,45 +42,45 @@ class ApiRoot {
     httpClient: fetch,
   };
 
-  constructor(tokenCache: InMemoryTokenCache) {
-    this.userData = null;
-    this.tokenCache = tokenCache;
+  constructor() {
+    this.tokenCache = new LocalStorageTokenCache();
   }
 
   public root(): ByProjectKeyRequestBuilder {
-    if (this.userData) {
-      return this.withPasswordFlow();
-    } else if (this.tokenCache.isExist()) {
+    if (this.tokenCache.getRefreshToken()) {
       return this.withRefreshTokenFlow();
-    } else {
-      return this.withClientCredentialsFlow();
     }
+
+    return this.withAnonymousTokenFlow();
   }
 
-  public setUserData(value: SignInType): void {
-    this.userData = value;
+  public saveToken(token: TokenStore): void {
+    this.tokenCache.set(token);
+  }
+
+  public reset(): void {
+    this.tokenCache.reset();
+    anonymousIdService.resetAnonymousId();
   }
 
   public isTokenExist(): boolean {
     return this.tokenCache.isExist();
   }
 
-  public reset(): void {
-    this.tokenCache.reset();
-    this.userData = null;
+  private createApiRootFromClient(client: Client): ByProjectKeyRequestBuilder {
+    return createApiBuilderFromCtpClient(client).withProjectKey({
+      projectKey: PROJECT_KEY,
+    });
   }
 
-  private withPasswordFlow(): ByProjectKeyRequestBuilder {
-    const options: PasswordAuthMiddlewareOptions = {
+  private withAnonymousTokenFlow(): ByProjectKeyRequestBuilder {
+    const authMiddlewareOptions: AuthMiddlewareOptions = {
       host: AUTH_URL,
       projectKey: PROJECT_KEY,
       credentials: {
         clientId: CLIENT_ID,
         clientSecret: CLIENT_SECRET,
-        user: {
-          username: this.userData ? this.userData.email : '',
-          password: this.userData ? this.userData.password : '',
-        },
+        anonymousId: anonymousIdService.getAnonymousId(),
       },
       scopes: [SCOPES],
       httpClient: fetch,
@@ -89,42 +89,20 @@ class ApiRoot {
 
     const client = new ClientBuilder()
       .withProjectKey(PROJECT_KEY)
-      .withPasswordFlow(options)
+      .withAnonymousSessionFlow(authMiddlewareOptions)
       .withHttpMiddleware(this.httpMiddlewareOptions)
       .withLoggerMiddleware(this.loggerMiddlewareOptions)
       .build();
 
-    const apiRoot = createApiBuilderFromCtpClient(client).withProjectKey({
-      projectKey: PROJECT_KEY,
-    });
-
-    return apiRoot;
-  }
-
-  private withClientCredentialsFlow(): ByProjectKeyRequestBuilder {
-    const authMiddlewareOptions: AuthMiddlewareOptions = {
-      host: AUTH_URL,
-      projectKey: PROJECT_KEY,
-      credentials: { clientId: CLIENT_ID, clientSecret: CLIENT_SECRET },
-      scopes: [SCOPES],
-      httpClient: fetch,
-    };
-
-    const client = new ClientBuilder()
-      .withProjectKey(PROJECT_KEY)
-      .withClientCredentialsFlow(authMiddlewareOptions)
-      .withHttpMiddleware(this.httpMiddlewareOptions)
-      .withLoggerMiddleware(this.loggerMiddlewareOptions)
-      .build();
-
-    const apiRoot = createApiBuilderFromCtpClient(client).withProjectKey({
-      projectKey: PROJECT_KEY,
-    });
-
-    return apiRoot;
+    return this.createApiRootFromClient(client);
   }
 
   private withRefreshTokenFlow(): ByProjectKeyRequestBuilder {
+    const refreshToken = this.tokenCache.getRefreshToken();
+    if (!refreshToken) {
+      return this.withAnonymousTokenFlow();
+    }
+
     const options: RefreshAuthMiddlewareOptions = {
       host: AUTH_URL,
       projectKey: PROJECT_KEY,
@@ -132,7 +110,7 @@ class ApiRoot {
         clientId: CLIENT_ID,
         clientSecret: CLIENT_SECRET,
       },
-      refreshToken: this.tokenCache.get().refreshToken ?? '',
+      refreshToken,
       tokenCache: this.tokenCache,
       httpClient: fetch,
     };
@@ -144,14 +122,10 @@ class ApiRoot {
       .withLoggerMiddleware(this.loggerMiddlewareOptions)
       .build();
 
-    const apiRoot = createApiBuilderFromCtpClient(client).withProjectKey({
-      projectKey: PROJECT_KEY,
-    });
-
-    return apiRoot;
+    return this.createApiRootFromClient(client);
   }
 }
 
-const apiRoot: ApiRoot = new ApiRoot(new InMemoryTokenCache());
+const apiRoot: ApiRoot = new ApiRoot();
 
 export { apiRoot };
