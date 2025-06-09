@@ -1,20 +1,19 @@
-import { type TokenCache, type TokenStore } from '@commercetools/ts-client';
+import type { TokenCache, TokenStore } from '@commercetools/ts-client';
+import { DEFAULT_TOKEN_STORE } from '@constants';
 import { isTokenStore } from '@utils';
 
-const defaultTokenStore = {
-  expirationTime: 0,
-  refreshToken: undefined,
-  token: '',
-};
+const STORAGE_KEY = 'the-team-e-commerce-token-store';
 
-export class InMemoryTokenCache implements TokenCache {
+export class LocalStorageTokenCache implements TokenCache {
   private myCache: TokenStore;
 
   constructor() {
-    this.myCache = defaultTokenStore;
-    const localStorageToken = localStorage.getItem('token');
+    this.myCache = DEFAULT_TOKEN_STORE;
+    const localStorageToken = localStorage.getItem(STORAGE_KEY);
+
     if (localStorageToken) {
       const parseToken: unknown = JSON.parse(localStorageToken);
+
       if (isTokenStore(parseToken) && parseToken && parseToken.expirationTime > Date.now()) {
         this.myCache = parseToken;
       }
@@ -25,22 +24,26 @@ export class InMemoryTokenCache implements TokenCache {
     return this.myCache;
   }
 
+  public getRefreshToken(): string | undefined {
+    return this.myCache.refreshToken;
+  }
+
   public isExist(): boolean {
     if (this.myCache.token) return true;
     return false;
   }
 
   public reset(): void {
-    this.myCache = defaultTokenStore;
-    localStorage.removeItem('token');
+    this.myCache = DEFAULT_TOKEN_STORE;
+    localStorage.removeItem(STORAGE_KEY);
   }
 
   public resetToken(): void {
-    this.myCache = defaultTokenStore;
+    this.myCache = DEFAULT_TOKEN_STORE;
   }
 
   public set(newCache: TokenStore): void {
     this.myCache = { ...newCache };
-    localStorage.setItem('token', JSON.stringify(this.myCache));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(this.myCache));
   }
 }
