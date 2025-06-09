@@ -20,16 +20,7 @@ import { createProductQuery } from 'utils/create-product-query';
 
 const { PROJECT_KEY, CLIENT_SECRET, CLIENT_ID, AUTH_URL, API_URL, SCOPES } = CTP_CONFIG;
 
-export class ApiController {
-  private static instance: ApiController;
-
-  public static getInstance(): ApiController {
-    if (!ApiController.instance) {
-      ApiController.instance = new ApiController();
-    }
-    return ApiController.instance;
-  }
-
+class ApiController {
   public async getCart() {
     await apiRoot
       .root()
@@ -338,3 +329,7 @@ export class ApiController {
     return finalResponse;
   }
 }
+
+const controller = new ApiController();
+
+export { controller };

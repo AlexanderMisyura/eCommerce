@@ -3,12 +3,10 @@ import type {
   ProductProjectionPagedSearchResponse,
 } from '@commercetools/platform-sdk';
 import { CARDS_PER_PAGE_LIMIT, CATEGORY, CATEGORY_SLUG_ID_MAP } from '@constants';
-import { ApiController } from '@controllers';
+import { controller } from '@controllers';
 import type { QueryOptions } from '@ts-interfaces';
 import type { LoaderFunctionArgs } from 'react-router';
 import { data } from 'react-router';
-
-const controller = ApiController.getInstance();
 
 export async function productsLoader({
   params,

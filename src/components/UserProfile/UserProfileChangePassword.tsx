@@ -1,4 +1,4 @@
-import { ApiController } from '@controllers';
+import { controller } from '@controllers';
 import { useCustomerContext, useToast } from '@hooks';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
@@ -116,7 +116,7 @@ export const UserProfileChangePassword = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     setIsLoading(true);
     event.preventDefault();
-    const controller = ApiController.getInstance();
+
     try {
       await controller.changePasswordCustomer({
         id: currentCustomer.id,
