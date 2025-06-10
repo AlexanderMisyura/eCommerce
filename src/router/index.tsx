@@ -18,16 +18,16 @@ import {
   UserProfilePage,
 } from '@pages';
 import { UrlPath } from '@ts-enums';
+import App from 'App';
+import { createBrowserRouter, redirect } from 'react-router';
+
+import { registrationAction, signInAction } from './actions';
 import {
   categoriesLoader,
   customerFullDataLoader,
   productDetailsLoader,
   productsLoader,
-  registrationAction,
-  signInAction,
-} from '@utils';
-import App from 'App';
-import { createBrowserRouter, redirect } from 'react-router';
+} from './loaders';
 
 export const router = createBrowserRouter([
   {
