@@ -32,7 +32,6 @@ export const Pagination: React.FC<PaginationProps> = ({ productsTotal }) => {
           return (
             <PaginationItem
               component={Link}
-              viewTransition
               to={`${location.pathname}?${newSearchParams.toString()}`}
               {...item}
             />

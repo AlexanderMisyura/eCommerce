@@ -16,6 +16,7 @@ import { theme } from 'theme';
 
 const root = document.createElement('div');
 root.id = 'root';
+root.classList.add('h-full');
 document.body.append(root);
 
 createRoot(root).render(
