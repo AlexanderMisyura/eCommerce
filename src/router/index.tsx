@@ -64,6 +64,7 @@ export const router = createBrowserRouter([
           {
             path: UrlPath.CATALOG,
             Component: CatalogPage,
+            HydrateFallback: Spinner,
             loader: categoriesLoader,
             id: 'catalog',
             children: [
