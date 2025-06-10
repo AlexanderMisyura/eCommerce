@@ -1,4 +1,5 @@
 import type {
+  Cart,
   Category,
   ClientResponse,
   Customer,
@@ -327,6 +328,34 @@ class ApiController {
       .execute();
 
     return finalResponse;
+  }
+
+  public async getFullCustomerData(): Promise<{
+    customer: Customer | null;
+    cart: Cart;
+  }> {
+    let customer: Customer | null = null;
+
+    if (!anonymousIdService.isAnonymousIdExist() && apiRoot.isTokenExist()) {
+      const customerResponse = await apiRoot.root().me().get().execute();
+      customer = customerResponse.body;
+    }
+
+    const cartResponse = await apiRoot.root().me().carts().get().execute();
+    let cart = cartResponse.body.results[0];
+
+    if (!cart) {
+      const newCartResponse = await apiRoot
+        .root()
+        .me()
+        .carts()
+        .post({ body: { currency: 'USD' } })
+        .execute();
+
+      cart = newCartResponse.body;
+    }
+
+    return { customer, cart };
   }
 }
 
