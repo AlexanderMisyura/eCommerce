@@ -1,5 +1,6 @@
 export { AuthPanel } from './AuthPanel/AuthPanel';
 export { BreadcrumbsNav } from './BreadcrumbsNav/BreadcrumbsNav';
+export { CartEmpty } from './CartEmpty/CartEmpty';
 export { Footer } from './Footer/Footer';
 export { AddressForm } from './Forms/AddressForm/AddressForm';
 export { Header } from './Header/Header';
