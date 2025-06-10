@@ -1,4 +1,5 @@
 import type {
+  Cart,
   Category,
   ClientResponse,
   Customer,
@@ -20,16 +21,7 @@ import { createProductQuery } from 'utils/create-product-query';
 
 const { PROJECT_KEY, CLIENT_SECRET, CLIENT_ID, AUTH_URL, API_URL, SCOPES } = CTP_CONFIG;
 
-export class ApiController {
-  private static instance: ApiController;
-
-  public static getInstance(): ApiController {
-    if (!ApiController.instance) {
-      ApiController.instance = new ApiController();
-    }
-    return ApiController.instance;
-  }
-
+class ApiController {
   public async getCart() {
     await apiRoot
       .root()
@@ -337,4 +329,25 @@ export class ApiController {
 
     return finalResponse;
   }
+
+  public async getFullCustomerData(): Promise<{
+    customer: Customer | null;
+    cart: Cart | null;
+  }> {
+    let customer: Customer | null = null;
+
+    if (!anonymousIdService.isAnonymousIdExist() && apiRoot.isTokenExist()) {
+      const customerResponse = await apiRoot.root().me().get().execute();
+      customer = customerResponse.body;
+    }
+
+    const cartResponse = await apiRoot.root().me().carts().get().execute();
+    const cart = cartResponse.body.results[0] || null;
+
+    return { customer, cart };
+  }
 }
+
+const controller = new ApiController();
+
+export { controller };

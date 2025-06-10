@@ -20,6 +20,7 @@ import {
 import { UrlPath } from '@ts-enums';
 import {
   categoriesLoader,
+  customerFullDataLoader,
   productDetailsLoader,
   productsLoader,
   registrationAction,
@@ -31,6 +32,9 @@ import { createBrowserRouter, redirect } from 'react-router';
 export const router = createBrowserRouter([
   {
     Component: App,
+    loader: customerFullDataLoader,
+    id: 'app-root',
+    HydrateFallback: Spinner,
     children: [
       {
         errorElement: <ErrorPage />,
@@ -64,6 +68,7 @@ export const router = createBrowserRouter([
           {
             path: UrlPath.CATALOG,
             Component: CatalogPage,
+            HydrateFallback: Spinner,
             loader: categoriesLoader,
             id: 'catalog',
             children: [

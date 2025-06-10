@@ -1,10 +1,8 @@
-import { ApiController } from '@controllers';
+import { controller } from '@controllers';
 import type { SignInData } from '@ts-interfaces';
 import type { SignInType } from '@ts-types';
 import { convertFormDataToString, validateSignIn } from '@utils';
 import type { ActionFunctionArgs } from 'react-router';
-
-const controller = ApiController.getInstance();
 
 export const signInAction = async ({ request }: ActionFunctionArgs): Promise<SignInData> => {
   const data = await request.formData();
