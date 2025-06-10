@@ -1,9 +1,7 @@
 import type { Customer } from '@commercetools/platform-sdk';
 import { ProfileButton } from '@components';
-import { ApiController } from '@controllers';
+import { controller } from '@controllers';
 import Button from '@mui/material/Button';
-
-const controller = ApiController.getInstance();
 
 interface ProfilePanelProps {
   currentCustomer: Customer;

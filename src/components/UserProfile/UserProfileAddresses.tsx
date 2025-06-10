@@ -1,4 +1,4 @@
-import { ApiController } from '@controllers';
+import { controller } from '@controllers';
 import { useCustomerContext, useToast } from '@hooks';
 import CloseIcon from '@mui/icons-material/Close';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
@@ -92,7 +92,6 @@ export const UserProfileAddresses = () => {
   }): Promise<void> => {
     event.stopPropagation();
     setIsDisabledDeleteButton(true);
-    const controller = ApiController.getInstance();
 
     try {
       const response = await controller.removeCustomerAddress({ version, addressId });

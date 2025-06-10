@@ -1,8 +1,23 @@
+import type { Cart, Customer } from '@commercetools/platform-sdk';
 import { Footer, Header, Spinner } from '@components';
+import { useCustomerContext } from '@hooks';
 import { UrlPath } from '@ts-enums';
-import { Outlet, ScrollRestoration, useLocation, useNavigation } from 'react-router';
+import { useEffect } from 'react';
+import {
+  Outlet,
+  ScrollRestoration,
+  useLocation,
+  useNavigation,
+  useRouteLoaderData,
+} from 'react-router';
 
 function App() {
+  const { setCurrentCustomer, setCart, setLoading } = useCustomerContext();
+  const customerFullData = useRouteLoaderData<{
+    customer: Customer | undefined;
+    cart: Cart;
+  }>('app-root');
+
   const navigation = useNavigation();
   const location = useLocation();
 
@@ -12,6 +27,18 @@ function App() {
 
   const isNewPageLoading =
     navigation.state === 'loading' && navigation.location.pathname !== location.pathname;
+
+  useEffect(() => {
+    setLoading(false);
+
+    if (customerFullData?.customer) {
+      setCurrentCustomer(customerFullData.customer);
+    }
+
+    if (customerFullData?.cart) {
+      setCart(customerFullData.cart);
+    }
+  }, [customerFullData, setCurrentCustomer, setCart, setLoading]);
 
   return (
     <>

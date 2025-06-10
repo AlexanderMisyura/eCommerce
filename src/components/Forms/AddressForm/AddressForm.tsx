@@ -5,7 +5,7 @@ import {
   USER_ADDRESS_FORM_FIELD_NAMES,
   USER_ADDRESS_FORM_FIELD_PLACEHOLDERS,
 } from '@constants';
-import { ApiController } from '@controllers';
+import { controller } from '@controllers';
 import { useCustomerContext, useToast } from '@hooks';
 import {
   Backdrop,
@@ -227,8 +227,6 @@ export const AddressForm: React.FC<AddressFormProps> = ({
     setIsLoading(true);
     event.preventDefault();
 
-    const controller = ApiController.getInstance();
-
     try {
       const response = await controller.addCustomerAddress({
         version: currentCustomer.version,
@@ -257,8 +255,6 @@ export const AddressForm: React.FC<AddressFormProps> = ({
   const handleChangeAddress = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     setIsLoading(true);
     event.preventDefault();
-
-    const controller = ApiController.getInstance();
 
     try {
       const response = await controller.changeCustomerAddress({

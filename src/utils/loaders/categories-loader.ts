@@ -1,7 +1,5 @@
 import type { Category } from '@commercetools/platform-sdk';
-import { ApiController } from '@controllers';
-
-const controller = ApiController.getInstance();
+import { controller } from '@controllers';
 
 export async function categoriesLoader(): Promise<Category[]> {
   return controller.getCategories();

@@ -7,7 +7,7 @@ import {
   FIRST_NAME,
   LAST_NAME,
 } from '@constants';
-import { ApiController } from '@controllers';
+import { controller } from '@controllers';
 import { useCustomerContext, useToast } from '@hooks';
 import CloseIcon from '@mui/icons-material/Close';
 import EditIcon from '@mui/icons-material/Edit';
@@ -146,7 +146,6 @@ export const UserProfileCredentials = () => {
   const handleSave = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsLoading(true);
-    const controller = ApiController.getInstance();
 
     try {
       const response = await controller.updateCustomer({
