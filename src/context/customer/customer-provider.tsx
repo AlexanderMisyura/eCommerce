@@ -1,7 +1,6 @@
-import type { Customer } from '@commercetools/platform-sdk';
-import { anonymousIdService, apiRoot } from '@services';
+import type { Cart, Customer } from '@commercetools/platform-sdk';
 import type { ReactNode } from 'react';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { CustomerContext } from './customer.context';
 
@@ -11,31 +10,12 @@ interface CustomerProviderProps {
 
 export const CustomerProvider: React.FC<CustomerProviderProps> = ({ children }) => {
   const [currentCustomer, setCurrentCustomer] = useState<Customer | null>(null);
+  const [cart, setCart] = useState<Cart | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const getMeData = async () => {
-      try {
-        if (!anonymousIdService.isAnonymousIdExist() && apiRoot.isTokenExist()) {
-          const response = await apiRoot.root().me().get().execute();
-          setCurrentCustomer(response.body);
-        }
-      } catch (error) {
-        console.error('Error, while try to get customer:', error);
-        setCurrentCustomer(null);
-      } finally {
-        setLoading(false);
-      }
-    };
-    getMeData().catch((error) => {
-      console.error('Unexpected error:', error);
-      setCurrentCustomer(null);
-    });
-  }, []);
-
   const value = useMemo(
-    () => ({ currentCustomer, setCurrentCustomer, loading }),
-    [currentCustomer, loading]
+    () => ({ currentCustomer, setCurrentCustomer, cart, setCart, loading, setLoading }),
+    [currentCustomer, cart, loading]
   );
 
   return <CustomerContext value={value}>{children}</CustomerContext>;
