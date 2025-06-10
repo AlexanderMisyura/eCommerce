@@ -332,7 +332,7 @@ class ApiController {
 
   public async getFullCustomerData(): Promise<{
     customer: Customer | null;
-    cart: Cart;
+    cart: Cart | null;
   }> {
     let customer: Customer | null = null;
 
@@ -342,18 +342,7 @@ class ApiController {
     }
 
     const cartResponse = await apiRoot.root().me().carts().get().execute();
-    let cart = cartResponse.body.results[0];
-
-    if (!cart) {
-      const newCartResponse = await apiRoot
-        .root()
-        .me()
-        .carts()
-        .post({ body: { currency: 'USD' } })
-        .execute();
-
-      cart = newCartResponse.body;
-    }
+    const cart = cartResponse.body.results[0] || null;
 
     return { customer, cart };
   }
