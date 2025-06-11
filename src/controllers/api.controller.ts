@@ -322,46 +322,50 @@ export class ApiController {
 
   public async getFullCustomerData(): Promise<{
     customer: Customer | null;
-    cart: Cart;
+    cart: Cart | null;
   }> {
     let customer: Customer | null = null;
 
     if (!anonymousIdService.isAnonymousIdExist() && apiRoot.isTokenExist()) {
       const customerResponse = await apiRoot.root().me().get().execute();
       customer = customerResponse.body;
-    } else {
-      await apiRoot.root().categories().get().execute();
-      await this.createEmptyCart();
     }
 
-    const cartResponse = await this.getCarts();
-    const cart = cartResponse.body.results[0];
+    const cartResponse = await apiRoot.root().me().carts().get().execute();
+    const cart = cartResponse.body.results[0] || null;
 
     return { customer, cart };
   }
 
   /* CART */
-  public async getCarts(): Promise<ClientResponse<CartPagedQueryResponse>> {
-    return await apiRoot.root().me().carts().get().execute();
+  public async getCarts(): Promise<CartPagedQueryResponse> {
+    const response = await apiRoot.root().me().carts().get().execute();
+    return response.body;
   }
 
-  public async createEmptyCart(): Promise<ClientResponse<Cart>> {
-    return await apiRoot
+  public async createEmptyCart(): Promise<Cart> {
+    const response = await apiRoot
       .root()
       .me()
       .carts()
       .post({ body: { currency: 'USD' } })
       .execute();
+    return response.body;
   }
 
-  public async updateCart(cartId: string, version: number, actions: MyCartUpdateAction[]) {
-    return await apiRoot
+  public async updateCart(
+    cartId: string,
+    version: number,
+    actions: MyCartUpdateAction[]
+  ): Promise<Cart> {
+    const response = await apiRoot
       .root()
       .me()
       .carts()
       .withId({ ID: cartId })
       .post({ body: { version, actions } })
       .execute();
+    return response.body;
   }
 
   public async getLastVersionCart(cartId: string): Promise<Cart> {

@@ -11,7 +11,6 @@ export const CartActionPanel = ({ product }: { product: LegoProduct }) => {
   const { cart, setCart } = useCustomerContext();
   const [quantity, setQuantity] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-
   useEffect(() => {
     const getLastCart = async () => {
       if (!cart) return;
@@ -30,16 +29,20 @@ export const CartActionPanel = ({ product }: { product: LegoProduct }) => {
       } else {
         setQuantity(0);
       }
+    } else {
+      setQuantity(0);
     }
   }, [cart, product.id]);
 
   const addProductToCart = async () => {
     setIsLoading(true);
-    if (!cart) return;
-    const response = await cartController.addProductToCart(product.id, 1, cart);
+    let newCart = cart;
+    newCart ??= await controller.createEmptyCart();
+    const response = await cartController.addProductToCart(product.id, 1, newCart);
     setCart(response);
     setIsLoading(false);
   };
+
   const changeProductQuantity = async (number: number) => {
     setIsLoading(true);
     if (!cart) return;
@@ -49,6 +52,7 @@ export const CartActionPanel = ({ product }: { product: LegoProduct }) => {
     setCart(response);
     setIsLoading(false);
   };
+
   return (
     <>
       {!quantity || quantity === 0 ? (

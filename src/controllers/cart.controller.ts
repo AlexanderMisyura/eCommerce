@@ -8,19 +8,23 @@ class CartController {
     this.apiController = apiController;
   }
 
-  public async updateCart(cartId: string, version: number, actions: MyCartUpdateAction[]) {
-    return await this.apiController.updateCart(cartId, version, actions);
+  public async updateCart(
+    cartId: string,
+    version: number,
+    actions: MyCartUpdateAction[]
+  ): Promise<Cart> {
+    const response = await this.apiController.updateCart(cartId, version, actions);
+    return response;
   }
 
   public async addProductToCart(productId: string, quantity: number, cart: Cart) {
-    const response = await this.updateCart(cart.id, cart.version, [
+    return await this.updateCart(cart.id, cart.version, [
       {
         action: 'addLineItem',
         productId,
         quantity,
       },
     ]);
-    return response.body;
   }
 
   public async changeProductQuantity(
@@ -28,14 +32,13 @@ class CartController {
     quantity: number,
     cart: Cart
   ): Promise<Cart> {
-    const response = await this.updateCart(cart.id, cart.version, [
+    return await this.updateCart(cart.id, cart.version, [
       {
         action: 'changeLineItemQuantity',
         lineItemId,
         quantity,
       },
     ]);
-    return response.body;
   }
 }
 
