@@ -1,6 +1,5 @@
-import { PagePlaceholder } from '@components';
+import { AboutUsBanner, BreadcrumbsNav } from '@components';
 import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
 import { theme } from 'theme';
 
 export const AboutUsPage = () => {
@@ -10,11 +9,11 @@ export const AboutUsPage = () => {
         display: 'flex',
         flexGrow: 1,
         flexDirection: 'column',
-        rowGap: theme.spacing(8),
+        rowGap: theme.spacing(4),
       }}
     >
-      <Typography variant="h2">About Us Page</Typography>
-      <PagePlaceholder /> {/* TODO: Remove */}
+      <BreadcrumbsNav />
+      <AboutUsBanner />
     </Container>
   );
 };

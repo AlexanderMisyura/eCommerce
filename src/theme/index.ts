@@ -5,6 +5,7 @@ export const theme = createTheme({
   palette: {
     primary: { main: '#1976d2', light: '#f8fafd' },
     secondary: { main: '#ff9800' },
+    accent: { main: '#fed502', light: '#fff279', dark: '#c9ab00' },
     background: { default: '#f5f5f5', paper: '#ffffff' },
     error: { main: '#970b1e', light: '#b00e24' },
     backgroundCustom: { dark: '#18202b' },
