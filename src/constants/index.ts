@@ -18,6 +18,7 @@ export {
 } from './customer-form-data';
 export { DEFAULT_TOKEN_STORE } from './default-token-store';
 export { DEVELOPMENT_TEAM } from './development-team';
+export { DISCOUNTS } from './discount-data';
 export {
   CARDS_PER_PAGE_LIMIT,
   CATEGORY,
