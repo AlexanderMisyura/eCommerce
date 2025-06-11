@@ -34,9 +34,11 @@ export const CartActionPanel = ({ product }: { product: LegoProduct }) => {
   }, [cart, product.id]);
 
   const addProductToCart = async () => {
+    setIsLoading(true);
     if (!cart) return;
     const response = await cartController.addProductToCart(product.id, 1, cart);
     setCart(response);
+    setIsLoading(false);
   };
   const changeProductQuantity = async (number: number) => {
     setIsLoading(true);
@@ -51,6 +53,7 @@ export const CartActionPanel = ({ product }: { product: LegoProduct }) => {
     <>
       {!quantity || quantity === 0 ? (
         <Button
+          loading={isLoading}
           variant="contained"
           color="success"
           size="large"
