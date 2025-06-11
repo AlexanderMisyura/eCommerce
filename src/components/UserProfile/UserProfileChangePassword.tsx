@@ -1,5 +1,5 @@
 import { controller } from '@controllers';
-import { useCustomerContext, useToast } from '@hooks';
+import { useAppDataContext, useToast } from '@hooks';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import {
@@ -76,7 +76,7 @@ const getPasswordErrors = (values: Record<string, string>): Record<string, strin
 
 export const UserProfileChangePassword = () => {
   const { palette, spacing } = useTheme();
-  const { currentCustomer, setCurrentCustomer } = useCustomerContext();
+  const { currentCustomer, setCurrentCustomer } = useAppDataContext();
   const { showToast } = useToast();
 
   const [passwords, setPasswords] = useState(initPasswordState.values);

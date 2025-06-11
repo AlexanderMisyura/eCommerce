@@ -1,5 +1,5 @@
 import { controller } from '@controllers';
-import { useCustomerContext, useToast } from '@hooks';
+import { useAppDataContext, useToast } from '@hooks';
 import CloseIcon from '@mui/icons-material/Close';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import {
@@ -23,7 +23,7 @@ import type { MouseEvent } from 'react';
 import { useState } from 'react';
 
 export const UserProfileAddresses = () => {
-  const { currentCustomer, setCurrentCustomer } = useCustomerContext();
+  const { currentCustomer, setCurrentCustomer } = useAppDataContext();
   const { spacing } = useTheme();
   const { showToast } = useToast();
 

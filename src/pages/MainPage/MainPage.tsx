@@ -1,11 +1,11 @@
-import { useCustomerContext } from '@hooks';
+import { useAppDataContext } from '@hooks';
 import Container from '@mui/material/Container';
 import Skeleton from '@mui/material/Skeleton';
 import Typography from '@mui/material/Typography';
 import { theme } from 'theme';
 
 export const MainPage = () => {
-  const { currentCustomer, loading } = useCustomerContext();
+  const { currentCustomer, loading } = useAppDataContext();
   return (
     <Container
       sx={{

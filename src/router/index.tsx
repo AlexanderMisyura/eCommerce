@@ -22,17 +22,12 @@ import App from 'App';
 import { createBrowserRouter, redirect } from 'react-router';
 
 import { cartAction, registrationAction, signInAction } from './actions';
-import {
-  categoriesLoader,
-  customerFullDataLoader,
-  productDetailsLoader,
-  productsLoader,
-} from './loaders';
+import { appDataLoader, categoriesLoader, productDetailsLoader, productsLoader } from './loaders';
 
 export const router = createBrowserRouter([
   {
     Component: App,
-    loader: customerFullDataLoader,
+    loader: appDataLoader,
     id: 'app-root',
     HydrateFallback: Spinner,
     children: [

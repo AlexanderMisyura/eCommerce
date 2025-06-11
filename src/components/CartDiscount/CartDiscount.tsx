@@ -1,6 +1,6 @@
 import type { Cart } from '@commercetools/platform-sdk';
 import { Spinner } from '@components';
-import { useCustomerContext, useToast } from '@hooks';
+import { useAppDataContext, useToast } from '@hooks';
 import DiscountIcon from '@mui/icons-material/Discount';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -15,7 +15,7 @@ import { ZodError } from 'zod';
 export const CartDiscount = () => {
   const fetcher = useFetcher<Cart>();
   const inputReference = useRef<HTMLInputElement>(null);
-  const { cart, setCart } = useCustomerContext();
+  const { cart, setCart } = useAppDataContext();
   const [errorMessage, setErrorMessage] = useState<string>('');
   const { showToast } = useToast();
 

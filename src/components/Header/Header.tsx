@@ -1,6 +1,6 @@
 import LogoIcon from '@assets/icons/logo.png';
 import { AuthPanel, HeaderSkeleton, LogoLink, Navigation, ProfilePanel } from '@components';
-import { useCustomerContext } from '@hooks';
+import { useAppDataContext } from '@hooks';
 import CloseIcon from '@mui/icons-material/Close';
 import MenuIcon from '@mui/icons-material/Menu';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
@@ -12,7 +12,7 @@ import { theme } from 'theme';
 
 export const Header = () => {
   const [open, setOpen] = useState(false);
-  const { currentCustomer, setCurrentCustomer, loading } = useCustomerContext();
+  const { currentCustomer, setCurrentCustomer, loading } = useAppDataContext();
 
   const handleBurgerMenuToggle = () => {
     setOpen((previous) => !previous);
