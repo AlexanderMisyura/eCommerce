@@ -1,5 +1,5 @@
-import { ProductImage } from '@components';
-import { Box, Button, Chip, Grid, Paper } from '@mui/material';
+import { CartActionPanel, ProductImage } from '@components';
+import { Box, Chip, Grid, Paper } from '@mui/material';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import { ProductResponseSchema } from '@schemas';
@@ -59,9 +59,7 @@ export const ProductPage = () => {
               )}
             </Box>
             <Box marginTop={4} display="flex" justifyContent={{ xs: 'right', md: 'left' }}>
-              <Button variant="contained" color="success" size="large">
-                Add to cart
-              </Button>
+              <CartActionPanel product={product} />
             </Box>
           </Grid>
         </Grid>

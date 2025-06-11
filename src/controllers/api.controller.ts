@@ -1,10 +1,12 @@
 import type {
   Cart,
+  CartPagedQueryResponse,
   Category,
   ClientResponse,
   Customer,
   CustomerChangePassword,
   CustomerSignInResult,
+  MyCartUpdateAction,
   MyCustomerUpdate,
   MyCustomerUpdateAction,
   ProductProjectionPagedQueryResponse,
@@ -21,19 +23,7 @@ import { createProductQuery } from 'utils/create-product-query';
 
 const { PROJECT_KEY, CLIENT_SECRET, CLIENT_ID, AUTH_URL, API_URL, SCOPES } = CTP_CONFIG;
 
-class ApiController {
-  public async getCart() {
-    await apiRoot
-      .root()
-      .carts()
-      .post({
-        body: {
-          currency: 'USD',
-        },
-      })
-      .execute();
-  }
-
+export class ApiController {
   public async registerCustomer(
     customer: RegistrationType
   ): Promise<ClientResponse<CustomerSignInResult>> {
@@ -332,19 +322,52 @@ class ApiController {
 
   public async getFullCustomerData(): Promise<{
     customer: Customer | null;
-    cart: Cart | null;
+    cart: Cart;
   }> {
     let customer: Customer | null = null;
 
     if (!anonymousIdService.isAnonymousIdExist() && apiRoot.isTokenExist()) {
       const customerResponse = await apiRoot.root().me().get().execute();
       customer = customerResponse.body;
+    } else {
+      await apiRoot.root().categories().get().execute();
+      await this.createEmptyCart();
     }
 
-    const cartResponse = await apiRoot.root().me().carts().get().execute();
-    const cart = cartResponse.body.results[0] || null;
+    const cartResponse = await this.getCarts();
+    const cart = cartResponse.body.results[0];
 
     return { customer, cart };
+  }
+
+  /* CART */
+  public async getCarts(): Promise<ClientResponse<CartPagedQueryResponse>> {
+    return await apiRoot.root().me().carts().get().execute();
+  }
+
+  public async createEmptyCart(): Promise<ClientResponse<Cart>> {
+    return await apiRoot
+      .root()
+      .me()
+      .carts()
+      .post({ body: { currency: 'USD' } })
+      .execute();
+  }
+
+  public async updateCart(cartId: string, version: number, actions: MyCartUpdateAction[]) {
+    return await apiRoot
+      .root()
+      .me()
+      .carts()
+      .withId({ ID: cartId })
+      .post({ body: { version, actions } })
+      .execute();
+  }
+
+  public async getLastVersionCart(cartId: string): Promise<Cart> {
+    const response = await apiRoot.root().me().carts().withId({ ID: cartId }).get().execute();
+
+    return response.body;
   }
 }
 
