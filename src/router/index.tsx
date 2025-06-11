@@ -21,7 +21,7 @@ import { UrlPath } from '@ts-enums';
 import App from 'App';
 import { createBrowserRouter, redirect } from 'react-router';
 
-import { registrationAction, signInAction } from './actions';
+import { cartAction, registrationAction, signInAction } from './actions';
 import {
   categoriesLoader,
   customerFullDataLoader,
@@ -82,7 +82,11 @@ export const router = createBrowserRouter([
               },
             ],
           },
-          { path: UrlPath.SHOPPING_CART, Component: ShoppingCartPage },
+          {
+            path: UrlPath.SHOPPING_CART,
+            Component: ShoppingCartPage,
+            action: cartAction,
+          },
           {
             path: UrlPath.PRODUCT,
             children: [
