@@ -10,7 +10,7 @@ export const TechnologiesSection = () => {
       <Grid
         container
         spacing={4}
-        sx={{ maxWidth: '380px', marginInline: 'auto', textAlign: 'center' }}
+        sx={{ maxWidth: '500px', marginInline: 'auto', textAlign: 'center' }}
       >
         {TECH_STACK.map((tech: TechItem) => (
           <Grid
@@ -19,7 +19,9 @@ export const TechnologiesSection = () => {
             title={tech.fullName}
             sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
           >
-            <ExternalLink href={tech.link}>{tech.icon({ width: 40, height: 40 })}</ExternalLink>
+            <ExternalLink href={tech.link}>
+              {tech.icon({ width: 'clamp(40px, 10vw, 80px)', height: 'clamp(40px, 10vw, 80px)' })}
+            </ExternalLink>
             <Typography variant="caption" textAlign="center" mt={1}>
               {tech.name}
             </Typography>

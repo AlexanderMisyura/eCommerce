@@ -1,3 +1,4 @@
+import GithubLogo from '@assets/icons/github-logo.svg';
 import RSSchoolLogo from '@assets/icons/rs-logo.svg';
 import CommerceToolsLogo from '@assets/icons/technologies/commercetools-logo.svg';
 import ESLintLogo from '@assets/icons/technologies/eslint-logo.svg';
@@ -31,4 +32,5 @@ export const SVG_LOGO = {
   eslint: createSvgLogo(ESLintLogo),
   prettier: createSvgLogo(PrettierLogo),
   rsSchool: createSvgLogo(RSSchoolLogo),
+  github: createSvgLogo(GithubLogo),
 } as const;

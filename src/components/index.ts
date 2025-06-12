@@ -3,6 +3,7 @@ export { AboutUsBanner } from './Banners/AboutUsBanner/AboutUsBanner';
 export { DiscountBanner as DiscountBanners } from './Banners/DiscountBanner/DiscountBanner';
 export { BreadcrumbsNav } from './BreadcrumbsNav/BreadcrumbsNav';
 export { DiscountButton } from './Buttons/DiscountButton/DiscountButton';
+export * from './Cards/TeamMemberCard/TeamMemberCard';
 export { Footer } from './Footer/Footer';
 export { AddressForm } from './Forms/AddressForm/AddressForm';
 export { Header } from './Header/Header';

@@ -20,7 +20,7 @@ export const theme = createTheme({
     h3: { fontSize: '1.5rem', fontWeight: 600 },
     h4: { fontSize: '1.25rem', fontWeight: 500 },
     h5: { fontSize: '1.125rem', fontWeight: 500 },
-    h6: { fontSize: '1rem', fontWeight: 400 },
+    h6: { fontSize: '1rem', fontWeight: 500 },
     body1: { fontSize: '1rem', lineHeight: 1.6 },
     body2: { fontSize: '0.875rem', lineHeight: 1.5 },
   },

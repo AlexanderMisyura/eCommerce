@@ -17,7 +17,7 @@ export {
   SHIPPING_ADDRESS_INDEX,
 } from './customer-form-data';
 export { DEFAULT_TOKEN_STORE } from './default-token-store';
-export { DEVELOPMENT_TEAM } from './development-team';
+export * from './development-team';
 export { DISCOUNTS } from './discount-data';
 export * from './icons';
 export {
