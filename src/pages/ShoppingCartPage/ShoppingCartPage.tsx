@@ -1,4 +1,5 @@
 import { CartDiscount, CartEmpty } from '@components';
+import { controller } from '@controllers';
 import { useAppDataContext } from '@hooks';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -7,7 +8,15 @@ import Typography from '@mui/material/Typography';
 import { theme } from 'theme';
 
 export const ShoppingCartPage = () => {
-  const { cart } = useAppDataContext();
+  const { cart, setCart } = useAppDataContext();
+
+  const handleClearCart = () => {
+    if (!cart) return;
+
+    void controller.deleteCart(cart.id, cart.version);
+
+    setCart(null);
+  };
 
   return (
     <Container
@@ -58,7 +67,7 @@ export const ShoppingCartPage = () => {
             );
           })}
           <Box display="flex" justifyContent="center">
-            <Button variant="contained" color="error">
+            <Button onClick={handleClearCart} variant="contained" color="error">
               Clear Cart
             </Button>
           </Box>

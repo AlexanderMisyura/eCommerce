@@ -370,6 +370,10 @@ class ApiController {
     return cartsResponse.body.results[0] || null;
   }
 
+  public async deleteCart(ID: string, version: number) {
+    await apiRoot.root().me().carts().withId({ ID }).delete({ queryArgs: { version } }).execute();
+  }
+
   public async updateCart(ID: string, version: number, actions: MyCartUpdateAction[]) {
     const updateResponse = await apiRoot
       .root()
