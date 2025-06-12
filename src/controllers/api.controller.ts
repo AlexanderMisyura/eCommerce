@@ -1,5 +1,6 @@
 import type {
   Cart,
+  CartPagedQueryResponse,
   Category,
   ClientResponse,
   Customer,
@@ -381,6 +382,27 @@ class ApiController {
     }
 
     return cart;
+  }
+
+  public async getCarts(): Promise<CartPagedQueryResponse> {
+    const response = await apiRoot.root().me().carts().get().execute();
+    return response.body;
+  }
+
+  public async createEmptyCart(): Promise<Cart> {
+    const response = await apiRoot
+      .root()
+      .me()
+      .carts()
+      .post({ body: { currency: 'USD' } })
+      .execute();
+    return response.body;
+  }
+
+  public async getLastVersionCart(cartId: string): Promise<Cart> {
+    const response = await apiRoot.root().me().carts().withId({ ID: cartId }).get().execute();
+
+    return response.body;
   }
 }
 

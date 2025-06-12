@@ -1,5 +1,5 @@
+import { CartActionPanel } from '@components';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardActionArea from '@mui/material/CardActionArea';
 import CardActions from '@mui/material/CardActions';
@@ -90,9 +90,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         </Link>
       </CardActionArea>
       <CardActions sx={{ justifyContent: 'flex-end' }}>
-        <Button variant="contained" color="success">
-          Add to cart
-        </Button>
+        <CartActionPanel product={product} />
       </CardActions>
     </Card>
   );
