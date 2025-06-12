@@ -1,9 +1,11 @@
-import { PagePlaceholder } from '@components';
+import { CartDiscount, CartEmpty } from '@components';
+import { useAppDataContext } from '@hooks';
 import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
 import { theme } from 'theme';
 
 export const ShoppingCartPage = () => {
+  const { cart } = useAppDataContext();
+
   return (
     <Container
       sx={{
@@ -13,8 +15,7 @@ export const ShoppingCartPage = () => {
         rowGap: theme.spacing(8),
       }}
     >
-      <Typography variant="h2">Shopping Cart Page</Typography>
-      <PagePlaceholder /> {/* TODO: Remove */}
+      {cart?.lineItems.length ? <CartDiscount /> : <CartEmpty />}
     </Container>
   );
 };
