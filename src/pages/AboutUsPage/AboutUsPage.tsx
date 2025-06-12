@@ -2,6 +2,8 @@ import { AboutUsBanner, BreadcrumbsNav } from '@components';
 import Container from '@mui/material/Container';
 import { theme } from 'theme';
 
+import { MeetOurTeamSection, TeamMembersSection, TechnologiesSection } from './Sections';
+
 export const AboutUsPage = () => {
   return (
     <Container
@@ -9,11 +11,15 @@ export const AboutUsPage = () => {
         display: 'flex',
         flexGrow: 1,
         flexDirection: 'column',
-        rowGap: theme.spacing(4),
+        rowGap: { xs: theme.spacing(6), md: theme.spacing(8) },
       }}
     >
       <BreadcrumbsNav />
       <AboutUsBanner />
+
+      <MeetOurTeamSection />
+      <TeamMembersSection />
+      <TechnologiesSection />
     </Container>
   );
 };

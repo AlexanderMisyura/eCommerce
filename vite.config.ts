@@ -35,7 +35,7 @@ export default defineConfig({
 
     createSvgSpritePlugin({
       exportType: 'react',
-      include: '**/assets/icons/*.svg',
+      include: '**/assets/icons/**/*.svg',
     }),
 
     react(),

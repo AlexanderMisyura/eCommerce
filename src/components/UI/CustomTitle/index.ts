@@ -1,0 +1,1 @@
+export * from './CustomTitleH2';

@@ -42,7 +42,7 @@ export const AboutUsBanner = () => {
         }}
       >
         <Typography
-          variant="h2"
+          variant="h1"
           sx={{ fontSize: { xs: '2rem', md: '3rem' }, color: palette.common.white }}
         >
           About Us
