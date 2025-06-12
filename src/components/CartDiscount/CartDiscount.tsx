@@ -5,14 +5,15 @@ import DiscountIcon from '@mui/icons-material/Discount';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
+import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
 import { CartAction, UrlPath } from '@ts-enums';
 import { useEffect, useRef, useState } from 'react';
-import { useFetcher } from 'react-router';
+import { useFetcher, useLoaderData } from 'react-router';
 import { ZodError } from 'zod';
 
 export const CartDiscount = () => {
+  const preloadedCart = useLoaderData<Cart>();
   const fetcher = useFetcher<Cart>();
   const inputReference = useRef<HTMLInputElement>(null);
   const { cart, setCart } = useAppDataContext();
@@ -23,6 +24,12 @@ export const CartDiscount = () => {
   const cartVersion = cart?.version;
 
   const isLoading = fetcher.state !== 'idle';
+
+  useEffect(() => {
+    if (preloadedCart) {
+      setCart(preloadedCart);
+    }
+  }, [preloadedCart, setCart]);
 
   useEffect(() => {
     if (fetcher.data) {
@@ -68,6 +75,8 @@ export const CartDiscount = () => {
       method: 'post',
       encType: 'application/json',
     });
+
+    inputReference.current.value = '';
   };
 
   const removeDiscount = (discountId: string) => {
@@ -95,7 +104,7 @@ export const CartDiscount = () => {
   };
 
   return (
-    <Box display="flex" flexDirection="column" gap={2}>
+    <Box display="flex" flexDirection="column" gap={8} mb={8}>
       <Box display="flex" justifyContent="center" gap={{ xs: 4, sm: 8 }}>
         <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
           <DiscountIcon color={isLoading ? 'disabled' : 'error'} sx={{ mr: 1, my: 0.5 }} />
@@ -131,18 +140,30 @@ export const CartDiscount = () => {
         gap={4}
       >
         {cart?.discountCodes.map((discount) => (
-          <Box key={discount.discountCode.id} display="flex" alignItems="center" gap={2}>
+          <Stack
+            direction={{ xs: 'column', sm: 'row' }}
+            key={discount.discountCode.id}
+            display="flex"
+            alignItems="center"
+            gap={2}
+          >
             <Chip
               label={discount.discountCode.obj?.name?.['en-US']}
               color="error"
               onDelete={() => removeDiscount(discount.discountCode.id)}
+              sx={{ border: '1px dashed lightgray' }}
             />
             {discount.discountCode.obj?.description?.['en-US'] && (
-              <Typography variant="body2">
-                {discount.discountCode.obj?.description['en-US']}
-              </Typography>
+              <Chip
+                label={discount.discountCode.obj?.description['en-US']}
+                sx={{
+                  backgroundColor: 'white',
+                  border: '1px dashed lightgray',
+                  fontSize: '0.7rem',
+                }}
+              ></Chip>
             )}
-          </Box>
+          </Stack>
         ))}
       </Box>
     </Box>
