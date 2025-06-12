@@ -1,4 +1,5 @@
 import { CartDiscount, CartEmpty } from '@components';
+import { CartProductsBlock } from '@components';
 import { controller } from '@controllers';
 import { useAppDataContext } from '@hooks';
 import Box from '@mui/material/Box';
@@ -86,6 +87,7 @@ export const ShoppingCartPage = () => {
       ) : (
         <CartEmpty />
       )}
+      <CartProductsBlock cart={cart} />
     </Container>
   );
 };
