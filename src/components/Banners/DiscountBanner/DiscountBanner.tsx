@@ -1,11 +1,16 @@
 import discountBackground from '@assets/images/banner_compressed.webp';
-import { DiscountButton } from '@components';
-import { DISCOUNTS } from '@constants';
+import { DiscountButton, Spinner } from '@components';
+import { useAppDataContext } from '@hooks';
 import { Box, useTheme } from '@mui/material';
 import Stack from '@mui/material/Stack';
-
 export const DiscountBanner = () => {
+  const { discountCodes } = useAppDataContext();
   const { palette } = useTheme();
+
+  if (discountCodes.length === 0) {
+    return <Spinner />;
+  }
+
   return (
     <Box sx={{ backgroundColor: palette.backgroundCustom.dark, borderRadius: '10px' }}>
       <Stack
@@ -28,14 +33,13 @@ export const DiscountBanner = () => {
           boxShadow: `inset 0 0 50px ${palette.backgroundCustom.dark}`,
         }}
       >
-        <DiscountButton
-          discountAmount={DISCOUNTS.student.discountAmount}
-          couponCode={DISCOUNTS.student.couponCode}
-        />
-        <DiscountButton
-          discountAmount={DISCOUNTS.general.discountAmount}
-          couponCode={DISCOUNTS.general.couponCode}
-        />
+        {discountCodes.map((code) => (
+          <DiscountButton
+            key={code.id}
+            couponCode={code.code}
+            discountName={code.description?.['en-US']}
+          />
+        ))}
       </Stack>
     </Box>
   );

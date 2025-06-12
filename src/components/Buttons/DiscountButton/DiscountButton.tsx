@@ -5,7 +5,7 @@ import { Box, Button, Stack, Typography, useTheme } from '@mui/material';
 
 interface DiscountButtonProps {
   couponCode: string;
-  discountAmount: string;
+  discountAmount?: string;
   discountName?: string;
   customSX?: SxProps<Theme>;
 }
@@ -13,6 +13,7 @@ interface DiscountButtonProps {
 export const DiscountButton: React.FC<DiscountButtonProps> = ({
   couponCode,
   discountAmount,
+  discountName,
   customSX,
 }) => {
   const { showToast } = useToast();
@@ -64,7 +65,10 @@ export const DiscountButton: React.FC<DiscountButtonProps> = ({
         <Typography sx={{ fontSize: { xs: '0.875rem', md: '1rem' }, fontWeight: 700 }}>
           {couponCode}
         </Typography>
-        <Typography variant="caption">Get {discountAmount} off on your order</Typography>
+        {discountAmount && (
+          <Typography variant="caption">Get {discountAmount} off on your order</Typography>
+        )}
+        {discountName && <Typography variant="caption">{discountName}</Typography>}
       </Stack>
     </Button>
   );
