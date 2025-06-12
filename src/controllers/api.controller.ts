@@ -344,7 +344,11 @@ class ApiController {
       .get({ queryArgs: { expand: 'discountCodes[*].discountCode' } })
       .execute();
 
-    const discountRequest = apiRoot.root().discountCodes().get().execute();
+    const discountRequest = apiRoot
+      .root()
+      .discountCodes()
+      .get({ queryArgs: { expand: 'cartDiscounts[*].cartDiscount' } })
+      .execute();
 
     const [cartResponse, discountResponse] = await Promise.all([cartRequest, discountRequest]);
 
@@ -355,6 +359,17 @@ class ApiController {
   }
 
   /* CART */
+  public async getCardWithDiscount() {
+    const cartsResponse = await apiRoot
+      .root()
+      .me()
+      .carts()
+      .get({ queryArgs: { expand: 'discountCodes[*].discountCode' } })
+      .execute();
+
+    return cartsResponse.body.results[0] || null;
+  }
+
   public async updateCart(ID: string, version: number, actions: MyCartUpdateAction[]) {
     const updateResponse = await apiRoot
       .root()
@@ -371,14 +386,7 @@ class ApiController {
       actions[0].action === CartAction.REMOVE_DISCOUNT_CODE;
 
     if (isDiscountUpdated) {
-      const cartsResponse = await apiRoot
-        .root()
-        .me()
-        .carts()
-        .get({ queryArgs: { expand: 'discountCodes[*].discountCode' } })
-        .execute();
-
-      cart = cartsResponse.body.results[0] || null;
+      cart = await this.getCardWithDiscount();
     }
 
     return cart;
