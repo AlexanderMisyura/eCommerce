@@ -22,7 +22,13 @@ import App from 'App';
 import { createBrowserRouter, redirect } from 'react-router';
 
 import { cartAction, registrationAction, signInAction } from './actions';
-import { appDataLoader, categoriesLoader, productDetailsLoader, productsLoader } from './loaders';
+import {
+  appDataLoader,
+  cartLoader,
+  categoriesLoader,
+  productDetailsLoader,
+  productsLoader,
+} from './loaders';
 
 export const router = createBrowserRouter([
   {
@@ -80,6 +86,8 @@ export const router = createBrowserRouter([
           {
             path: UrlPath.SHOPPING_CART,
             Component: ShoppingCartPage,
+            HydrateFallback: Spinner,
+            loader: cartLoader,
             action: cartAction,
           },
           {
