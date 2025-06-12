@@ -12,7 +12,9 @@ import { theme } from 'theme';
 
 export const Header = () => {
   const [open, setOpen] = useState(false);
-  const { currentCustomer, setCurrentCustomer, loading } = useCustomerContext();
+  const { currentCustomer, setCurrentCustomer, loading, cart } = useCustomerContext();
+
+  const numberOfItemsInCart = cart?.lineItems.reduce((acc, item) => acc + item.quantity, 0) ?? 0;
 
   const handleBurgerMenuToggle = () => {
     setOpen((previous) => !previous);
@@ -48,9 +50,9 @@ export const Header = () => {
           </div>
 
           <Badge
-            badgeContent={0}
+            badgeContent={numberOfItemsInCart}
             showZero
-            max={10}
+            max={99}
             component={Link}
             to={UrlPath.SHOPPING_CART}
             color="warning"

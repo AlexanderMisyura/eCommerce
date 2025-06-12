@@ -2,6 +2,7 @@ export { AuthPanel } from './AuthPanel/AuthPanel';
 export { DiscountBanner as DiscountBanners } from './Banners/DiscountBanner/DiscountBanner';
 export { BreadcrumbsNav } from './BreadcrumbsNav/BreadcrumbsNav';
 export { DiscountButton } from './Buttons/DiscountButton/DiscountButton';
+export { CartActionPanel } from './CartActionPanel/CartActionPanel';
 export { Footer } from './Footer/Footer';
 export { AddressForm } from './Forms/AddressForm/AddressForm';
 export { Header } from './Header/Header';

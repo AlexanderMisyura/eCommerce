@@ -1,10 +1,12 @@
 import type {
   Cart,
+  CartPagedQueryResponse,
   Category,
   ClientResponse,
   Customer,
   CustomerChangePassword,
   CustomerSignInResult,
+  MyCartUpdateAction,
   MyCustomerUpdate,
   MyCustomerUpdateAction,
   ProductProjectionPagedQueryResponse,
@@ -21,19 +23,7 @@ import { createProductQuery } from 'utils/create-product-query';
 
 const { PROJECT_KEY, CLIENT_SECRET, CLIENT_ID, AUTH_URL, API_URL, SCOPES } = CTP_CONFIG;
 
-class ApiController {
-  public async getCart() {
-    await apiRoot
-      .root()
-      .carts()
-      .post({
-        body: {
-          currency: 'USD',
-        },
-      })
-      .execute();
-  }
-
+export class ApiController {
   public async registerCustomer(
     customer: RegistrationType
   ): Promise<ClientResponse<CustomerSignInResult>> {
@@ -345,6 +335,43 @@ class ApiController {
     const cart = cartResponse.body.results[0] || null;
 
     return { customer, cart };
+  }
+
+  /* CART */
+  public async getCarts(): Promise<CartPagedQueryResponse> {
+    const response = await apiRoot.root().me().carts().get().execute();
+    return response.body;
+  }
+
+  public async createEmptyCart(): Promise<Cart> {
+    const response = await apiRoot
+      .root()
+      .me()
+      .carts()
+      .post({ body: { currency: 'USD' } })
+      .execute();
+    return response.body;
+  }
+
+  public async updateCart(
+    cartId: string,
+    version: number,
+    actions: MyCartUpdateAction[]
+  ): Promise<Cart> {
+    const response = await apiRoot
+      .root()
+      .me()
+      .carts()
+      .withId({ ID: cartId })
+      .post({ body: { version, actions } })
+      .execute();
+    return response.body;
+  }
+
+  public async getLastVersionCart(cartId: string): Promise<Cart> {
+    const response = await apiRoot.root().me().carts().withId({ ID: cartId }).get().execute();
+
+    return response.body;
   }
 }
 
