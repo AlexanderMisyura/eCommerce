@@ -1,17 +1,13 @@
 import { createTheme } from '@mui/material';
 
-declare module '@mui/material/styles' {
-  interface BreakpointOverrides {
-    xxl: true;
-  }
-}
-
 export const theme = createTheme({
   spacing: 4,
   palette: {
     primary: { main: '#1976d2', light: '#f8fafd' },
     secondary: { main: '#ff9800' },
     background: { default: '#f5f5f5', paper: '#ffffff' },
+    error: { main: '#970b1e', light: '#b00e24' },
+    backgroundCustom: { dark: '#18202b' },
   },
   typography: {
     fontFamily: 'Roboto, Arial, sans-serif',
