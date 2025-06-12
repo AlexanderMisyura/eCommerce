@@ -1,11 +1,17 @@
 import type { Cart, MyCartUpdateAction } from '@commercetools/platform-sdk';
 
-import { type ApiController, controller } from './api.controller';
+import { controller } from './api.controller';
 
 class CartController {
-  private apiController: ApiController;
-  constructor(apiController: ApiController) {
-    this.apiController = apiController;
+  public async getOrCreateCart(): Promise<Cart> {
+    const responseBody = await controller.getCarts();
+    const existingCart = responseBody.results[0];
+
+    if (existingCart) {
+      return existingCart;
+    }
+
+    return await controller.createEmptyCart();
   }
 
   public async updateCart(
@@ -13,16 +19,17 @@ class CartController {
     version: number,
     actions: MyCartUpdateAction[]
   ): Promise<Cart> {
-    const response = await this.apiController.updateCart(cartId, version, actions);
-    return response;
+    return await controller.updateCart(cartId, version, actions);
   }
 
-  public async addProductToCart(productId: string, quantity: number, cart: Cart) {
-    return await this.updateCart(cart.id, cart.version, [
+  public async addProductToCart(productId: string, currentCart: Cart | null): Promise<Cart> {
+    const cart = currentCart ?? (await this.getOrCreateCart());
+
+    return this.updateCart(cart.id, cart.version, [
       {
         action: 'addLineItem',
         productId,
-        quantity,
+        quantity: 1,
       },
     ]);
   }
@@ -42,6 +49,6 @@ class CartController {
   }
 }
 
-const cartController = new CartController(controller);
+const cartController = new CartController();
 
 export { cartController };
