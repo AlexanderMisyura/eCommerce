@@ -1,6 +1,6 @@
-import type { Cart, Customer } from '@commercetools/platform-sdk';
+import type { Cart, Customer, DiscountCode } from '@commercetools/platform-sdk';
 import { Footer, Header, Spinner } from '@components';
-import { useCustomerContext } from '@hooks';
+import { useAppDataContext } from '@hooks';
 import { UrlPath } from '@ts-enums';
 import { useEffect } from 'react';
 import {
@@ -12,10 +12,11 @@ import {
 } from 'react-router';
 
 function App() {
-  const { setCurrentCustomer, setCart, setLoading } = useCustomerContext();
-  const customerFullData = useRouteLoaderData<{
+  const { setCurrentCustomer, setCart, setDiscountCodes, setLoading } = useAppDataContext();
+  const appData = useRouteLoaderData<{
     customer: Customer | undefined;
     cart: Cart;
+    discountCodes: DiscountCode[];
   }>('app-root');
 
   const navigation = useNavigation();
@@ -31,14 +32,18 @@ function App() {
   useEffect(() => {
     setLoading(false);
 
-    if (customerFullData?.customer) {
-      setCurrentCustomer(customerFullData.customer);
+    if (appData?.customer) {
+      setCurrentCustomer(appData.customer);
     }
 
-    if (customerFullData?.cart) {
-      setCart(customerFullData.cart);
+    if (appData?.cart) {
+      setCart(appData.cart);
     }
-  }, [customerFullData, setCurrentCustomer, setCart, setLoading]);
+
+    if (appData?.discountCodes.length) {
+      setDiscountCodes(appData.discountCodes);
+    }
+  }, [appData, setCurrentCustomer, setCart, setDiscountCodes, setLoading]);
 
   return (
     <>

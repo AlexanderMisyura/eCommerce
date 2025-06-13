@@ -8,7 +8,7 @@ import {
   LAST_NAME,
 } from '@constants';
 import { controller } from '@controllers';
-import { useCustomerContext, useToast } from '@hooks';
+import { useAppDataContext, useToast } from '@hooks';
 import CloseIcon from '@mui/icons-material/Close';
 import EditIcon from '@mui/icons-material/Edit';
 import { Backdrop, Button, IconButton, Stack, TextField, useTheme } from '@mui/material';
@@ -27,7 +27,7 @@ import { useEffect, useMemo, useState } from 'react';
 
 export const UserProfileCredentials = () => {
   const { palette, spacing } = useTheme();
-  const { currentCustomer, setCurrentCustomer } = useCustomerContext();
+  const { currentCustomer, setCurrentCustomer } = useAppDataContext();
   const [datePickerValue, setDatePickerValue] = useState<PickerValue>(null);
   const { showToast } = useToast();
 

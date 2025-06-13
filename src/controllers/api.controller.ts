@@ -6,6 +6,7 @@ import type {
   Customer,
   CustomerChangePassword,
   CustomerSignInResult,
+  DiscountCode,
   MyCartUpdateAction,
   MyCustomerUpdate,
   MyCustomerUpdateAction,
@@ -17,13 +18,15 @@ import { ClientBuilder, type PasswordAuthMiddlewareOptions } from '@commercetool
 import CTP_CONFIG from '@config/ctp-api-client-config';
 import { CATEGORY } from '@constants';
 import { anonymousIdService, apiRoot, InMemoryTokenCache } from '@services';
+import { CartAction } from '@ts-enums';
 import type { QueryOptions, UserAddress, UserAddressType } from '@ts-interfaces';
 import type { RegistrationType, SignInType } from '@ts-types';
 import { createProductQuery } from 'utils/create-product-query';
 
 const { PROJECT_KEY, CLIENT_SECRET, CLIENT_ID, AUTH_URL, API_URL, SCOPES } = CTP_CONFIG;
 
-export class ApiController {
+class ApiController {
+  /* CUSTOMER */
   public async registerCustomer(
     customer: RegistrationType
   ): Promise<ClientResponse<CustomerSignInResult>> {
@@ -128,6 +131,7 @@ export class ApiController {
     return response.body.results;
   }
 
+  /* PRODUCTS */
   public async getProducts(
     options: QueryOptions
   ): Promise<ClientResponse<ProductProjectionPagedSearchResponse>> {
@@ -320,9 +324,11 @@ export class ApiController {
     return finalResponse;
   }
 
-  public async getFullCustomerData(): Promise<{
+  /* APP CONTEXT */
+  public async getAppData(): Promise<{
     customer: Customer | null;
     cart: Cart | null;
+    discountCodes: DiscountCode[];
   }> {
     let customer: Customer | null = null;
 
@@ -331,13 +337,65 @@ export class ApiController {
       customer = customerResponse.body;
     }
 
-    const cartResponse = await apiRoot.root().me().carts().get().execute();
-    const cart = cartResponse.body.results[0] || null;
+    const cartRequest = apiRoot
+      .root()
+      .me()
+      .carts()
+      .get({ queryArgs: { expand: 'discountCodes[*].discountCode' } })
+      .execute();
 
-    return { customer, cart };
+    const discountRequest = apiRoot
+      .root()
+      .discountCodes()
+      .get({ queryArgs: { expand: 'cartDiscounts[*].cartDiscount' } })
+      .execute();
+
+    const [cartResponse, discountResponse] = await Promise.all([cartRequest, discountRequest]);
+
+    const cart = cartResponse.body.results[0] || null;
+    const discountCodes = discountResponse.body.results;
+
+    return { customer, cart, discountCodes };
   }
 
   /* CART */
+  public async getCardWithDiscount() {
+    const cartsResponse = await apiRoot
+      .root()
+      .me()
+      .carts()
+      .get({ queryArgs: { expand: 'discountCodes[*].discountCode' } })
+      .execute();
+
+    return cartsResponse.body.results[0] || null;
+  }
+
+  public async deleteCart(ID: string, version: number) {
+    await apiRoot.root().me().carts().withId({ ID }).delete({ queryArgs: { version } }).execute();
+  }
+
+  public async updateCart(ID: string, version: number, actions: MyCartUpdateAction[]) {
+    const updateResponse = await apiRoot
+      .root()
+      .me()
+      .carts()
+      .withId({ ID })
+      .post({ body: { version, actions } })
+      .execute();
+
+    let cart = updateResponse.body;
+
+    const isDiscountUpdated =
+      actions[0].action === CartAction.ADD_DISCOUNT_CODE ||
+      actions[0].action === CartAction.REMOVE_DISCOUNT_CODE;
+
+    if (isDiscountUpdated) {
+      cart = await this.getCardWithDiscount();
+    }
+
+    return cart;
+  }
+
   public async getCarts(): Promise<CartPagedQueryResponse> {
     const response = await apiRoot.root().me().carts().get().execute();
     return response.body;
@@ -349,21 +407,6 @@ export class ApiController {
       .me()
       .carts()
       .post({ body: { currency: 'USD' } })
-      .execute();
-    return response.body;
-  }
-
-  public async updateCart(
-    cartId: string,
-    version: number,
-    actions: MyCartUpdateAction[]
-  ): Promise<Cart> {
-    const response = await apiRoot
-      .root()
-      .me()
-      .carts()
-      .withId({ ID: cartId })
-      .post({ body: { version, actions } })
       .execute();
     return response.body;
   }

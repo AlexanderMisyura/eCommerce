@@ -1,5 +1,5 @@
 import { cartController } from '@controllers';
-import { useCustomerContext } from '@hooks';
+import { useAppDataContext } from '@hooks';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
@@ -10,7 +10,7 @@ import type { LegoProduct } from '@ts-interfaces';
 import { useEffect, useState } from 'react';
 
 export const CartActionPanel = ({ product }: { product: LegoProduct }) => {
-  const { cart, setCart } = useCustomerContext();
+  const { cart, setCart } = useAppDataContext();
   const [quantity, setQuantity] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 

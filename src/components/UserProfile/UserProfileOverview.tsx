@@ -1,6 +1,6 @@
 import avatarImg from '@assets/images/lego-avatar.jpeg';
 import type { Address } from '@commercetools/platform-sdk';
-import { useCustomerContext } from '@hooks';
+import { useAppDataContext } from '@hooks';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import CreditScoreIcon from '@mui/icons-material/CreditScore';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
@@ -18,7 +18,7 @@ interface UserAddressListProps {
 }
 
 export const UserProfileOverview = () => {
-  const { currentCustomer } = useCustomerContext();
+  const { currentCustomer } = useAppDataContext();
   const { palette } = useTheme();
 
   if (!currentCustomer) return null;
