@@ -46,30 +46,40 @@ export const DiscountButton: React.FC<DiscountButtonProps> = ({
     <Button
       variant="contained"
       color="secondary"
-      startIcon={<DiscountIcon />}
       title="Copy Coupon"
       aria-label={`Copy coupon code ${couponCode}`}
       onClick={() => void handleCopy()}
       sx={{
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        rowGap: '2px',
         color: palette.common.white,
         backgroundColor: palette.error.main,
         transition: `background-color ${transitions.duration.complex} ease`,
         '&:hover': {
           backgroundColor: palette.error.light,
-          transform: 'scale(1.01)',
+          transform: 'translateY(-1px)',
         },
         ...customSX,
       }}
     >
-      <Stack>
-        <Typography sx={{ fontSize: { xs: '0.875rem', md: '1rem' }, fontWeight: 700 }}>
+      <Stack
+        sx={{
+          flexDirection: 'row',
+          justifyContent: 'center',
+          alignItems: 'center',
+          columnGap: 2,
+        }}
+      >
+        <DiscountIcon sx={{ fontSize: 16 }} />
+        <Typography sx={{ fontSize: { xs: '0.875rem', sm: '1rem' }, fontWeight: 700 }}>
           {couponCode}
         </Typography>
-        {discountAmount && (
-          <Typography variant="caption">Get {discountAmount} off on your order</Typography>
-        )}
-        {discountName && <Typography variant="caption">{discountName}</Typography>}
       </Stack>
+      {discountAmount && (
+        <Typography variant="caption">Get {discountAmount} off on your order</Typography>
+      )}
+      {discountName && <Typography variant="caption">{discountName}</Typography>}
     </Button>
   );
 };
