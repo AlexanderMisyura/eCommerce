@@ -5,6 +5,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
+import { formatPrice } from '@utils';
 import { theme } from 'theme';
 
 export const ShoppingCartPage = () => {
@@ -50,7 +51,7 @@ export const ShoppingCartPage = () => {
                     color={cartDiscountPrice || itemDiscountPrice ? 'error' : 'warning'}
                     fontWeight="bold"
                   >
-                    ${displayedPrice / 100}
+                    {formatPrice(displayedPrice)}
                   </Typography>
 
                   {(cartDiscountPrice || itemDiscountPrice) && (
@@ -59,7 +60,7 @@ export const ShoppingCartPage = () => {
                       color="text.secondary"
                       sx={{ ml: 1, textDecoration: 'line-through' }}
                     >
-                      ${price / 100}
+                      {formatPrice(price)}
                     </Typography>
                   )}
                 </Box>
