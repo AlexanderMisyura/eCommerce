@@ -6,17 +6,22 @@ import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import { formatPrice } from '@utils';
+import { useState } from 'react';
 import { theme } from 'theme';
 
 export const ShoppingCartPage = () => {
   const { cart, setCart } = useAppDataContext();
+  const [isCartClearing, setIsCartClearing] = useState(false);
 
   const handleClearCart = () => {
     if (!cart) return;
+    setIsCartClearing(true);
 
     void controller.deleteCart(cart.id, cart.version);
-
-    setCart(null);
+    setTimeout(() => {
+      setCart(null);
+      setIsCartClearing(false);
+    }, 500);
   };
 
   return (
@@ -68,7 +73,12 @@ export const ShoppingCartPage = () => {
             );
           })}
           <Box display="flex" justifyContent="center">
-            <Button onClick={handleClearCart} variant="contained" color="error">
+            <Button
+              loading={isCartClearing}
+              onClick={handleClearCart}
+              variant="outlined"
+              color="error"
+            >
               Clear Cart
             </Button>
           </Box>
