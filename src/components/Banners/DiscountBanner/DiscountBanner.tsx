@@ -1,15 +1,11 @@
 import discountBackground from '@assets/images/banner_compressed.webp';
-import { DiscountButton, Spinner } from '@components';
+import { DiscountButton } from '@components';
 import { useAppDataContext } from '@hooks';
 import { Box, useTheme } from '@mui/material';
 import Stack from '@mui/material/Stack';
 export const DiscountBanner = () => {
   const { discountCodes } = useAppDataContext();
   const { palette } = useTheme();
-
-  if (discountCodes.length === 0) {
-    return <Spinner />;
-  }
 
   return (
     <Box sx={{ backgroundColor: palette.backgroundCustom.dark, borderRadius: '10px' }}>
