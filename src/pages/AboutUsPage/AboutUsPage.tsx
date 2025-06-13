@@ -1,6 +1,6 @@
 import { AboutUsBanner, BreadcrumbsNav } from '@components';
 import Container from '@mui/material/Container';
-import { theme } from 'theme';
+import Stack from '@mui/material/Stack';
 
 import { MeetOurTeamSection, TeamMembersSection, TechnologiesSection } from './Sections';
 
@@ -8,18 +8,17 @@ export const AboutUsPage = () => {
   return (
     <Container
       sx={{
-        display: 'flex',
         flexGrow: 1,
-        flexDirection: 'column',
-        rowGap: { xs: theme.spacing(6), md: theme.spacing(8) },
       }}
     >
-      <BreadcrumbsNav />
-      <AboutUsBanner />
+      <BreadcrumbsNav sx={{ mb: 4 }} />
+      <Stack sx={{ rowGap: 8, mb: 4 }}>
+        <AboutUsBanner />
 
-      <MeetOurTeamSection />
-      <TeamMembersSection />
-      <TechnologiesSection />
+        <MeetOurTeamSection />
+        <TeamMembersSection />
+        <TechnologiesSection />
+      </Stack>
     </Container>
   );
 };

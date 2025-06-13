@@ -20,7 +20,7 @@ export const TechnologiesSection = () => {
             sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
           >
             <ExternalLink href={tech.link}>
-              {tech.icon({ width: 'clamp(40px, 10vw, 80px)', height: 'clamp(40px, 10vw, 80px)' })}
+              {tech.icon({ width: 'clamp(40px, 10vw, 60px)', height: 'clamp(40px, 10vw, 60px)' })}
             </ExternalLink>
             <Typography variant="caption" textAlign="center" mt={1}>
               {tech.name}

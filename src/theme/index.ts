@@ -36,8 +36,14 @@ export const theme = createTheme({
   },
   components: {
     MuiContainer: {
+      styleOverrides: {
+        root: {
+          paddingInline: '1rem',
+        },
+      },
       defaultProps: {
         maxWidth: 'xl',
+        disableGutters: true,
       },
     },
     MuiTableCell: {

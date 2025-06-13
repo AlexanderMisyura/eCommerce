@@ -18,9 +18,12 @@ export const MeetOurTeamSection = () => {
         <Stack sx={{ rowGap: spacing(2), flex: '2 1 0', order: { xs: 2, md: 1 } }}>
           <Typography variant="body1" component="p">
             Hello! We are a compact yet collaborative development team. We came together thanks to a{' '}
-            <span style={{ fontWeight: 700, color: palette.primary.dark }}>
+            <ExternalLink
+              href="https://rs.school/"
+              style={{ fontWeight: 700, color: palette.primary.dark }}
+            >
               free online education program organized by the Rolling Scopes community.{' '}
-            </span>
+            </ExternalLink>
             We worked side by side on this project and had a lot of fun (and some coffee too ☕).
           </Typography>
           <Typography variant="body1" component="p">
