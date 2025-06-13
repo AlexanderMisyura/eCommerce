@@ -1,25 +1,49 @@
 import type { Cart } from '@commercetools/platform-sdk';
 import { CartItem } from '@components';
+import { controller } from '@controllers';
 import { Box, Button, Divider, List, ListItem, Stack, Typography } from '@mui/material';
+import { formatPrice } from '@utils';
+import { useState } from 'react';
 import { Fragment } from 'react/jsx-runtime';
 
 const style = {
   py: 0,
-  width: '100%',
+  // maxWidth: '600px',
+  width: 'auto',
   borderRadius: 2,
   border: '1px solid',
   borderColor: 'divider',
   backgroundColor: 'background.paper',
+  display: 'flex',
+  flexDirection: 'column',
 };
 
-export const CartProductsBlock = ({ cart }: { cart: Cart | null }) => {
-  if (cart === null) return <h2>Cart is empty</h2>;
-  if (cart.lineItems.length === 0) return <h2>Cart is empty</h2>;
+export const CartProductsBlock = ({
+  cart,
+  setCart,
+}: {
+  cart: Cart | null;
+  setCart: (cart: Cart | null) => void;
+}) => {
+  const [isCartClearing, setIsCartClearing] = useState(false);
+  if (cart === null || cart.lineItems.length === 0) return;
+
+  const handleClearCart = () => {
+    if (!cart) return;
+    setIsCartClearing(true);
+
+    void controller.deleteCart(cart.id, cart.version);
+    setTimeout(() => {
+      setCart(null);
+      setIsCartClearing(false);
+    }, 500);
+  };
+
   const { totalPrice, lineItems } = cart;
   const totalQuantity = lineItems.reduce((acc, item) => acc + item.quantity, 0);
 
   return (
-    <Box>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, alignItems: 'flex-start' }}>
       <Box
         sx={{
           px: 4,
@@ -29,6 +53,7 @@ export const CartProductsBlock = ({ cart }: { cart: Cart | null }) => {
           borderRadius: 2,
           mb: 2,
           backgroundColor: 'background.paper',
+          alignSelf: 'stretch',
         }}
       >
         <Stack
@@ -49,14 +74,22 @@ export const CartProductsBlock = ({ cart }: { cart: Cart | null }) => {
               justifyContent: 'flex-start',
             }}
           >
-            <Typography variant="h2">Total price: {totalPrice?.centAmount / 100} $</Typography>
+            <Typography color="warning" variant="h2">
+              Total price: {formatPrice(totalPrice?.centAmount)}
+            </Typography>
             <Typography variant="h2">Total quantity: {totalQuantity}</Typography>
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 4 }}>
-            <Button variant="contained" color="error" size="small">
-              Reset cart
+            <Button
+              variant="outlined"
+              color="error"
+              size="small"
+              loading={isCartClearing}
+              onClick={handleClearCart}
+            >
+              Clear cart
             </Button>
-            <Button variant="contained" color="primary" size="large" sx={{ paddingX: 10 }}>
+            <Button disabled variant="contained" color="primary" size="large" sx={{ paddingX: 10 }}>
               Pay now
             </Button>
           </Box>
@@ -65,7 +98,7 @@ export const CartProductsBlock = ({ cart }: { cart: Cart | null }) => {
       <List sx={style}>
         {lineItems.map((item) => (
           <Fragment key={item.id}>
-            <ListItem key={item.id}>
+            <ListItem>
               <CartItem item={item} />
             </ListItem>
             <Divider variant="middle" component="li" />

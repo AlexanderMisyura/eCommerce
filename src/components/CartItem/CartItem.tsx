@@ -4,13 +4,18 @@ import { controller } from '@controllers';
 import { Box, Typography } from '@mui/material';
 import { ProductResponseSchema } from '@schemas';
 import type { LegoProduct } from '@ts-interfaces';
-import { transformToLegoProduct } from '@utils';
+import { formatPrice, transformToLegoProduct } from '@utils';
 import { CartActionPanel } from 'components/CartActionPanel/CartActionPanel';
 import { useEffect, useState } from 'react';
 
 export const CartItem = ({ item }: { item: LineItem }) => {
   const [product, setProduct] = useState<LegoProduct | null>(null);
   const slug = item.productSlug?.['en-US'] ?? '';
+  const cartDiscountPrice = item.discountedPricePerQuantity[0]?.discountedPrice.value.centAmount;
+  const price = item.price.value.centAmount;
+  const itemDiscountPrice = item.price.discounted?.value.centAmount;
+
+  const displayedPrice = cartDiscountPrice ?? itemDiscountPrice ?? price;
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -68,9 +73,23 @@ export const CartItem = ({ item }: { item: LineItem }) => {
       >
         <Typography variant="h6">Model: {product?.name}</Typography>
         <Typography variant="body1">Quantity: {item.quantity}</Typography>
-        <Typography variant="body1">
-          Price: {(item.quantity * (item.price?.value.centAmount ?? 0)) / 100} $
+        <Typography
+          variant="body1"
+          fontWeight="bold"
+          color={cartDiscountPrice || itemDiscountPrice ? 'error' : 'warning'}
+        >
+          Price: {formatPrice(item.quantity * displayedPrice)}
         </Typography>
+        {(cartDiscountPrice || itemDiscountPrice) && (
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            fontWeight="bold"
+            sx={{ ml: 1, textDecoration: 'line-through' }}
+          >
+            {formatPrice(item.quantity * price)}
+          </Typography>
+        )}
         <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
           {product && <CartActionPanel product={product} />}
         </Box>
