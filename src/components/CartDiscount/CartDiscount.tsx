@@ -42,6 +42,10 @@ export const CartDiscount = () => {
       }
 
       setCart(fetcher.data);
+
+      if (inputReference.current) {
+        inputReference.current.value = '';
+      }
     }
   }, [fetcher.data, setCart, showToast]);
 
@@ -75,8 +79,6 @@ export const CartDiscount = () => {
       method: 'post',
       encType: 'application/json',
     });
-
-    inputReference.current.value = '';
   };
 
   const removeDiscount = (discountId: string) => {
