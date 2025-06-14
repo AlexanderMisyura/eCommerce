@@ -19,7 +19,9 @@ export const DEVELOPMENT_TEAM_DETAILS: DevelopmentTeamDetails[] = [
     firstName: 'Aliaksandr',
     lastName: 'Misiura',
     role: 'Team Lead',
-    bio: 'Since I was a kid, I loved building things — from LEGO to websites. Now I live in Warsaw and work as a junior frontend developer. I like clean code, clean coffee, and clean desks ☕ 🧼. In my free time, I play board games and watch tech videos on YouTube',
+    bio: `A curious mind from Minsk with a background as a mechanical technician, I've explored various roles, from engineering to sales. However, coding and developing beautiful, smooth apps is truly my passion 💻✨
+
+    When I'm not coding or exploring new tech, you can find me diving into tabletop RPGs.🎲 Developer by day, paladin of the Sun God by night!🌞 I'm a reliable and detail-oriented partner, whether dealing with an evil reptilian cult🐍 or tackling a complex development project. Currently on the job hunt 🔍`,
     contributions: ['Register Page', 'Catalog Page', 'Cart Page', 'App Stack', 'Commerce Tools'],
     githubName: 'alexandermisyura',
     githubURL: 'https://github.com/alexandermisyura',
@@ -30,7 +32,10 @@ export const DEVELOPMENT_TEAM_DETAILS: DevelopmentTeamDetails[] = [
     firstName: 'Aleksei',
     lastName: 'Zhuchkov',
     role: 'Developer',
-    bio: 'I’m 35 and I live in Tbilisi, Georgia. I worked as a teacher before I discovered coding. JavaScript became my new passion, and I enjoy creating things from scratch. I also like hiking in the mountains and listening to rock music 🤘. I believe teamwork makes everything better',
+    bio: `Hey, I’m Alexey! 👋 I’m really into coding and always trying to level up my skills 📚. When I’m not behind a screen, you’ll probably find me out doing something active — sports 🏀, adventures 🏕️, anything that gets the blood pumping 💥
+
+    Always up for a challenge ⚔️ — whether it’s debugging a stubborn bit of code 🐛 or racing down a trail 🏃‍♂️
+    `,
     contributions: [
       'Login Page',
       'Product Page',
@@ -47,7 +52,9 @@ export const DEVELOPMENT_TEAM_DETAILS: DevelopmentTeamDetails[] = [
     firstName: 'Rostislav',
     lastName: 'Zhuk',
     role: 'Developer',
-    bio: 'I’m a self-taught developer from Minsk. Before programming, I fixed printers and helped people with their computers. Now I fix bugs instead! I love to learn new things every day. My hobbies are video games, spicy food 🌶️, and dreaming about space travel',
+    bio: `I live in Minsk and now I work in the telecommunications field 📞. In my free time, I enjoy learning programming and writing code. I like to solve problems and create simple and good solutions. It makes me feel happy and motivated 💻
+
+    I also have other hobbies. I play basketball 🏀 and tennis 🎾, and I really like board games ♟️ with friends. I enjoy working in a team, thinking about strategy, and talking with people — in games, in sports, and in development`,
     contributions: ['Main Page', 'Profile Page', 'About us Page', 'Not Found Page', 'Design'],
     githubName: 'zzzhuchok',
     githubURL: 'https://github.com/zzzhuchok',
