@@ -1,6 +1,6 @@
 import { Addresses, Confirm, Credentials } from '@components';
 import { CONTEXT_RESET_TIMEOUT } from '@constants';
-import { useCustomerContext, useRegistrationData, useToast } from '@hooks';
+import { useAppDataContext, useRegistrationData, useToast } from '@hooks';
 import { Link as MuiLink } from '@mui/material';
 import Box from '@mui/material/Box';
 import MuiCard from '@mui/material/Card';
@@ -53,7 +53,7 @@ export function RegistrationForm() {
   const navigate = useNavigate();
 
   const data = useActionData<RegistrationData>();
-  const { setCurrentCustomer } = useCustomerContext();
+  const { setCurrentCustomer } = useAppDataContext();
 
   const { showToast } = useToast();
 

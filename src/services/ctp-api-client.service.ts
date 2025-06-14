@@ -1,5 +1,6 @@
 import {
   type ByProjectKeyRequestBuilder,
+  type ClientRequest,
   createApiBuilderFromCtpClient,
 } from '@commercetools/platform-sdk';
 import {
@@ -40,6 +41,20 @@ class ApiRoot {
       retryCodes: [500, 503],
     },
     httpClient: fetch,
+  };
+
+  private concurrentModificationMiddlewareOptions = {
+    concurrentModificationHandlerFn: (version: number, request: ClientRequest) => {
+      console.log(
+        `%cConcurrent modification, retry with version ${version}`,
+        'background: aqua; font-size: large; font-weight: bold; padding: 5px 15px; border-radius: 5px;'
+      );
+
+      const body = request.body as Record<string, unknown>;
+      body.version = version;
+
+      return Promise.resolve(body);
+    },
   };
 
   constructor() {
@@ -92,6 +107,7 @@ class ApiRoot {
       .withAnonymousSessionFlow(authMiddlewareOptions)
       .withHttpMiddleware(this.httpMiddlewareOptions)
       .withLoggerMiddleware(this.loggerMiddlewareOptions)
+      .withConcurrentModificationMiddleware(this.concurrentModificationMiddlewareOptions)
       .build();
 
     return this.createApiRootFromClient(client);
@@ -120,6 +136,7 @@ class ApiRoot {
       .withRefreshTokenFlow(options)
       .withHttpMiddleware(this.httpMiddlewareOptions)
       .withLoggerMiddleware(this.loggerMiddlewareOptions)
+      .withConcurrentModificationMiddleware(this.concurrentModificationMiddlewareOptions)
       .build();
 
     return this.createApiRootFromClient(client);

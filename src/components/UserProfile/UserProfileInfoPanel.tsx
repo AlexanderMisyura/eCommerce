@@ -1,4 +1,4 @@
-import { useCustomerContext } from '@hooks';
+import { useAppDataContext } from '@hooks';
 import { useTheme } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
@@ -13,7 +13,7 @@ interface UserProfileInfoPanelProps {
 
 export const UserProfileInfoPanel: React.FC<UserProfileInfoPanelProps> = ({ children }) => {
   const { palette } = useTheme();
-  const { loading } = useCustomerContext();
+  const { loading } = useAppDataContext();
   const location = useLocation();
 
   // eslint-disable-next-line unicorn/prefer-array-find

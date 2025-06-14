@@ -6,7 +6,7 @@ import {
   USER_ADDRESS_FORM_FIELD_PLACEHOLDERS,
 } from '@constants';
 import { controller } from '@controllers';
-import { useCustomerContext, useToast } from '@hooks';
+import { useAppDataContext, useToast } from '@hooks';
 import {
   Backdrop,
   Box,
@@ -54,7 +54,7 @@ export const AddressForm: React.FC<AddressFormProps> = ({
   handleCloseModal,
 }) => {
   const { palette, spacing } = useTheme();
-  const { currentCustomer, setCurrentCustomer } = useCustomerContext();
+  const { currentCustomer, setCurrentCustomer } = useAppDataContext();
   const { showToast } = useToast();
 
   const [isLoading, setIsLoading] = useState(false);

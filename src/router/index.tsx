@@ -18,21 +18,22 @@ import {
   UserProfilePage,
 } from '@pages';
 import { UrlPath } from '@ts-enums';
-import {
-  categoriesLoader,
-  customerFullDataLoader,
-  productDetailsLoader,
-  productsLoader,
-  registrationAction,
-  signInAction,
-} from '@utils';
 import App from 'App';
 import { createBrowserRouter, redirect } from 'react-router';
+
+import { cartAction, registrationAction, signInAction } from './actions';
+import {
+  appDataLoader,
+  cartLoader,
+  categoriesLoader,
+  productDetailsLoader,
+  productsLoader,
+} from './loaders';
 
 export const router = createBrowserRouter([
   {
     Component: App,
-    loader: customerFullDataLoader,
+    loader: appDataLoader,
     id: 'app-root',
     HydrateFallback: Spinner,
     children: [
@@ -82,7 +83,13 @@ export const router = createBrowserRouter([
               },
             ],
           },
-          { path: UrlPath.SHOPPING_CART, Component: ShoppingCartPage },
+          {
+            path: UrlPath.SHOPPING_CART,
+            Component: ShoppingCartPage,
+            HydrateFallback: Spinner,
+            loader: cartLoader,
+            action: cartAction,
+          },
           {
             path: UrlPath.PRODUCT,
             children: [
