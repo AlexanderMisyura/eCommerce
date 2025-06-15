@@ -9,7 +9,10 @@ export {
 export { formatPrice } from './format-price';
 export { isStatusToken } from './is-status-token';
 export { isTokenStore } from './is-token-store';
-export { transformToLegoProduct } from './transform-to-lego-product';
+export {
+  transformLineItemToLegoProduct,
+  transformProductProjectionToLegoProduct,
+} from './transform-to-lego-product';
 export {
   validateAddresses,
   validateCountry,

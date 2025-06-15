@@ -1,3 +1,4 @@
+import type { Cart } from '@commercetools/platform-sdk';
 import { cartController } from '@controllers';
 import { useAppDataContext } from '@hooks';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
@@ -19,6 +20,16 @@ export const CartActionPanel = ({ product }: { product: LegoProduct }) => {
     setQuantity(lineItem?.quantity ?? 0);
   }, [cart, product.id]);
 
+  const setCartContext = (previousCart: Cart, newCart: Cart): void => {
+    if (!newCart.discountCodes[0]?.discountCode.obj) {
+      Object.defineProperty(newCart, 'discountCodes', {
+        value: previousCart.discountCodes,
+      });
+    }
+
+    setCart(newCart);
+  };
+
   const addProductToCart = async () => {
     setIsLoading(true);
     const updatedCart = await cartController.addProductToCart(product.id, cart);
@@ -35,7 +46,8 @@ export const CartActionPanel = ({ product }: { product: LegoProduct }) => {
 
     setIsLoading(true);
     const updatedCart = await cartController.changeProductQuantity(lineItem.id, newQuantity, cart);
-    setCart(updatedCart);
+
+    setCartContext(cart, updatedCart);
     setIsLoading(false);
   };
 

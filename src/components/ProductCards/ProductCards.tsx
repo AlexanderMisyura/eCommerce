@@ -6,7 +6,7 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { ProductResponseSchema } from '@schemas';
 import type { LegoProduct } from '@ts-interfaces';
-import { transformToLegoProduct } from '@utils';
+import { transformProductProjectionToLegoProduct } from '@utils';
 import { Suspense } from 'react';
 import { Await, useLoaderData } from 'react-router';
 
@@ -48,7 +48,7 @@ export const ProductCards: React.FC = () => {
             </Box>
             <Grid container spacing={3} marginBottom={4}>
               {resolvedProducts.map((product) => {
-                const legoProduct: LegoProduct = transformToLegoProduct(product);
+                const legoProduct: LegoProduct = transformProductProjectionToLegoProduct(product);
 
                 return (
                   <Grid size={{ xs: 12, md: 6, lg: 4 }} key={legoProduct.id}>

@@ -1,8 +1,11 @@
+import type { LineItem } from '@commercetools/platform-sdk';
 import { NumberOfPiecesSchema, RecommendedAgeSchema } from '@schemas';
 import type { LegoProduct } from '@ts-interfaces';
 import type { LegoProductProjection } from '@ts-types';
 
-export function transformToLegoProduct(projection: LegoProductProjection): LegoProduct {
+export function transformProductProjectionToLegoProduct(
+  projection: LegoProductProjection
+): LegoProduct {
   return {
     id: projection.id,
     key: projection.key,
@@ -21,5 +24,25 @@ export function transformToLegoProduct(projection: LegoProductProjection): LegoP
     },
     images: projection.masterVariant.images?.map((image) => image.url) || [],
     sku: projection.masterVariant.sku,
+  };
+}
+
+export function transformLineItemToLegoProduct(lineItem: LineItem): LegoProduct {
+  return {
+    id: lineItem.productId,
+    key: lineItem.productKey ?? '',
+    name: lineItem.name['en-US'],
+    slug: lineItem.productSlug?.['en-US'] ?? '',
+    description: '',
+    numberOfPieces: NumberOfPiecesSchema.parse(lineItem.variant.attributes?.[0]).value,
+    recommendedAge: RecommendedAgeSchema.parse(lineItem.variant.attributes?.[1]).value['en-US'],
+    categoryId: '',
+    price: {
+      value: lineItem.price.value.centAmount,
+      withDiscountValue: lineItem.price.discounted?.value.centAmount,
+      currency: lineItem.price.value.currencyCode,
+    },
+    images: lineItem.variant.images?.map((image) => image.url) ?? [],
+    sku: lineItem.variant.sku ?? '',
   };
 }
