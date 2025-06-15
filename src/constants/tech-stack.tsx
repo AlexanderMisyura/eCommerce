@@ -1,15 +1,7 @@
 import { SVG_LOGO } from '@constants';
+import type { TechStackItem } from '@ts-interfaces';
 
-import type { SvgLogoItem } from './icons';
-
-export interface TechItem {
-  name: string;
-  fullName: string;
-  icon: SvgLogoItem;
-  link: string;
-}
-
-export const TECH_STACK: TechItem[] = [
+export const TECH_STACK: TechStackItem[] = [
   {
     name: 'React',
     fullName: 'React',

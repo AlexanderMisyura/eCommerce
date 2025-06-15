@@ -11,6 +11,11 @@ declare module '@mui/material/styles' {
       light?: string;
       dark?: string;
     };
+    confirmation: {
+      main?: string;
+      light?: string;
+      dark?: string;
+    };
     backgroundCustom: {
       main?: string;
       dark?: string;
@@ -19,6 +24,12 @@ declare module '@mui/material/styles' {
 
   interface PaletteOptions {
     accent: {
+      main?: string;
+      light?: string;
+      dark?: string;
+    };
+
+    confirmation: {
       main?: string;
       light?: string;
       dark?: string;

@@ -1,3 +1,3 @@
-export * from './MeetOurTeamSection';
-export * from './TeamMembersSection';
-export * from './TechnologiesSection';
+export { MeetOurTeamSection } from './MeetOurTeamSection';
+export { TeamMembersSection } from './TeamMembersSection';
+export { TechnologiesSection } from './TechnologiesSection';

@@ -1,17 +1,7 @@
 import alexandermisyuraAvatar from '@assets/images/avatars/alexandermisyura_avatar.jpeg';
 import kelzerockAvatar from '@assets/images/avatars/kelzerock_avatar.jpeg';
 import zzzhuchokAvatar from '@assets/images/avatars/zzzhuchok_avatar.jpeg';
-
-export interface DevelopmentTeamDetails {
-  photoURL: string;
-  firstName: string;
-  lastName: string;
-  role: 'Team Lead' | 'Developer';
-  bio: string;
-  contributions: string[];
-  githubName: string;
-  githubURL: string;
-}
+import type { DevelopmentTeamDetails } from '@ts-interfaces';
 
 export const DEVELOPMENT_TEAM_DETAILS: DevelopmentTeamDetails[] = [
   {

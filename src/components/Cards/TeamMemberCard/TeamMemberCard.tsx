@@ -1,7 +1,8 @@
-import { type DevelopmentTeamDetails, SVG_LOGO } from '@constants';
+import { SVG_LOGO } from '@constants';
 import CloseIcon from '@mui/icons-material/Close';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
 import { Avatar, Box, IconButton, Modal, Stack, Typography, useTheme } from '@mui/material';
+import type { DevelopmentTeamDetails } from '@ts-interfaces';
 import { ExternalLink } from 'components/Links/ExternalLink';
 import { useState } from 'react';
 
@@ -23,7 +24,7 @@ export const TeamMemberCard: React.FC<TeamMemberCardProps> = ({ member }) => {
           padding: 4,
           borderRadius: 4,
           boxShadow: 4,
-          bgcolor: '#fef6e4',
+          bgcolor: palette.accent.light,
         }}
       >
         {/* CARD HEADER */}
@@ -84,10 +85,10 @@ export const TeamMemberCard: React.FC<TeamMemberCardProps> = ({ member }) => {
           </Typography>
           {member.contributions.map((contribution) => (
             <Stack
-              key={contribution}
+              key={`${member.githubName}-${contribution}`}
               sx={{ flexDirection: 'row', alignItems: 'center', columnGap: 2 }}
             >
-              <DoneAllIcon sx={{ color: '#00a44d' }} />
+              <DoneAllIcon sx={{ color: palette.confirmation.main }} />
               <Typography variant="body1">{contribution}</Typography>
             </Stack>
           ))}
@@ -111,6 +112,7 @@ export const TeamMemberCard: React.FC<TeamMemberCardProps> = ({ member }) => {
           }}
         >
           <IconButton
+            aria-label="Close photo"
             onClick={() => setOpenPhotoModal(false)}
             sx={{
               position: 'absolute',

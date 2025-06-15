@@ -14,12 +14,11 @@ export const AboutUsBanner = () => {
         alignItems: 'center',
         minHeight: { xs: '150px', md: '250px' },
         backgroundColor: palette.accent.main,
-        borderRadius: '10px',
+        borderRadius: 5,
         overflow: 'hidden',
       }}
     >
       <Box
-        role="presentation"
         aria-hidden="true"
         sx={{
           flexBasis: { xs: '70%', md: '60%' },
@@ -38,7 +37,7 @@ export const AboutUsBanner = () => {
           alignItems: 'center',
           flexShrink: 0,
           minWidth: '150px',
-          paddingInline: '8px',
+          paddingInline: 2,
         }}
       >
         <Typography

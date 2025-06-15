@@ -1,7 +1,7 @@
 import { CustomTitleH2, ExternalLink } from '@components';
-import type { TechItem } from '@constants';
 import { TECH_STACK } from '@constants';
 import { Box, Grid, Typography } from '@mui/material';
+import type { TechStackItem } from '@ts-interfaces';
 
 export const TechnologiesSection = () => {
   return (
@@ -12,7 +12,7 @@ export const TechnologiesSection = () => {
         spacing={4}
         sx={{ maxWidth: '500px', marginInline: 'auto', textAlign: 'center' }}
       >
-        {TECH_STACK.map((tech: TechItem) => (
+        {TECH_STACK.map((tech: TechStackItem) => (
           <Grid
             key={tech.fullName}
             size={2.4}

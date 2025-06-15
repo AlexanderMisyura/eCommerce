@@ -1,1 +1,1 @@
-export * from './CustomTitleH2';
+export { CustomTitleH2 } from './CustomTitleH2';

@@ -38,7 +38,7 @@ export const MeetOurTeamSection = () => {
             flex: '1 1 0',
             justifyContent: 'center',
             alignItems: 'center',
-            paddingInline: spacing(),
+            paddingInline: spacing(1),
             order: { xs: 1, md: 2 },
           }}
         >

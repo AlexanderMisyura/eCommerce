@@ -14,7 +14,6 @@ export const AboutUsPage = () => {
       <BreadcrumbsNav sx={{ mb: 4 }} />
       <Stack sx={{ rowGap: 8, mb: 4 }}>
         <AboutUsBanner />
-
         <MeetOurTeamSection />
         <TeamMembersSection />
         <TechnologiesSection />

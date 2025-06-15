@@ -10,9 +10,8 @@ import ReactRouterLogo from '@assets/icons/technologies/react-router-logo.svg';
 import TypeScriptLogo from '@assets/icons/technologies/ts-logo.svg';
 import ViteLogo from '@assets/icons/technologies/vite-logo.svg';
 import ZodLogo from '@assets/icons/technologies/zod-logo.svg';
-import type { ComponentType, ReactElement, SVGProps } from 'react';
-
-export type SvgLogoItem = (props: React.SVGAttributes<SVGElement>) => ReactElement;
+import type { SvgLogoItem } from '@ts-types';
+import type { ComponentType, SVGProps } from 'react';
 
 const DEFAULT_SIZE = 20;
 
