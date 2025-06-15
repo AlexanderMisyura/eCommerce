@@ -17,7 +17,7 @@ export const TECH_STACK: TechItem[] = [
     link: 'https://react.dev/',
   },
   {
-    name: 'TS',
+    name: 'Type Script',
     fullName: 'TypeScript',
     icon: SVG_LOGO.typeScript,
     link: 'https://www.typescriptlang.org/',
@@ -29,7 +29,7 @@ export const TECH_STACK: TechItem[] = [
     link: 'https://vite.dev/',
   },
   {
-    name: 'Router',
+    name: 'React Router',
     fullName: 'React Router',
     icon: SVG_LOGO.reactRouter,
     link: 'https://reactrouter.com/',

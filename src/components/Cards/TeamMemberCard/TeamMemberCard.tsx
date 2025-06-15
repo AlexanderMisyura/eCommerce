@@ -14,10 +14,9 @@ export const TeamMemberCard: React.FC<TeamMemberCardProps> = ({ member }) => {
     <Stack
       sx={{
         rowGap: 4,
-        maxWidth: { xs: '500px', lg: '380px' },
+        maxWidth: { xs: '600px', lg: '380px' },
         height: '100%',
         padding: 4,
-        marginInline: 'auto',
         borderRadius: 4,
         boxShadow: 4,
         bgcolor: '#fef6e4',
@@ -25,8 +24,16 @@ export const TeamMemberCard: React.FC<TeamMemberCardProps> = ({ member }) => {
     >
       {/* CARD HEADER */}
       <Stack sx={{ rowGap: 2 }}>
-        <Stack sx={{ flexDirection: 'row', columnGap: 8 }}>
-          <Stack sx={{ rowGap: 2 }}>
+        <Stack sx={{ flexDirection: 'row', columnGap: 4 }}>
+          <Stack
+            sx={{
+              rowGap: 2,
+              border: `1px solid ${palette.backgroundCustom.dark}`,
+              boxShadow: 4,
+              borderRadius: 1,
+              padding: 1,
+            }}
+          >
             <Avatar
               variant="rounded"
               src={member.photoURL}
@@ -58,7 +65,7 @@ export const TeamMemberCard: React.FC<TeamMemberCardProps> = ({ member }) => {
       {/* CARD BODY */}
       <Box>
         <Box display="flex" alignItems="center" mb={1}>
-          <Typography variant="body1" color="text.secondary">
+          <Typography variant="body1" color="text.secondary" sx={{ whiteSpace: 'pre-line' }}>
             {member.bio}
           </Typography>
         </Box>

@@ -12,6 +12,11 @@ export const TeamMembersSection = () => {
             key={member.githubURL}
             size={{ xs: 12, lg: 4 }}
             sx={{
+              display: 'flex',
+              justifyContent: {
+                xs: index % 2 === 0 ? 'flex-start' : 'flex-end',
+                lg: 'center',
+              },
               position: 'relative',
               top: { xs: 0, lg: index === 0 ? '-20px' : index === 2 ? '20px' : '0' },
             }}
