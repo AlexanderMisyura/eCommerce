@@ -56,7 +56,7 @@ export const AboutUsBanner = () => {
             color: palette.backgroundCustom.dark,
           }}
         >
-          The Team
+          {'< The Team >'}
         </Typography>
       </Stack>
     </Stack>
