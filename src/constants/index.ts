@@ -17,8 +17,9 @@ export {
   SHIPPING_ADDRESS_INDEX,
 } from './customer-form-data';
 export { DEFAULT_TOKEN_STORE } from './default-token-store';
-export { DEVELOPMENT_TEAM } from './development-team';
+export { DEVELOPMENT_TEAM_DETAILS } from './development-team';
 export { DISCOUNTS } from './discount-data';
+export { SVG_LOGO } from './icons';
 export {
   CARDS_PER_PAGE_LIMIT,
   CATEGORY,
@@ -32,6 +33,7 @@ export {
   SORT_OPTIONS,
 } from './implementation-specific';
 export { PASSWORD_MIN_LENGTH } from './password-min-length';
+export { TECH_STACK } from './tech-stack';
 export { CONTEXT_RESET_TIMEOUT, DEBOUNCE_TIMEOUT } from './timeouts';
 export {
   USER_ADDRESS_FORM_CHECKBOX_LABELS,

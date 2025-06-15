@@ -1,6 +1,6 @@
 import GithubLogo from '@assets/icons/github-logo.svg';
 import RSLogo from '@assets/icons/rs-logo.svg';
-import { DEVELOPMENT_TEAM } from '@constants';
+import { DEVELOPMENT_TEAM_DETAILS } from '@constants';
 import { Container } from '@mui/material';
 
 export const Footer = () => {
@@ -10,17 +10,17 @@ export const Footer = () => {
         <div className="flex flex-col items-center gap-2">
           <RSLogo width={60} height={30} />
           <ul className="flex flex-wrap justify-center gap-x-4 text-base">
-            {DEVELOPMENT_TEAM.map(({ name, github }) => (
-              <li key={name}>
+            {DEVELOPMENT_TEAM_DETAILS.map((member) => (
+              <li key={member.githubURL}>
                 <a
                   className="flex items-center gap-1"
-                  href={github}
+                  href={member.githubURL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label={`Github profile of ${name}`}
+                  aria-label={`Github profile of ${member.githubName}`}
                 >
                   <GithubLogo width={20} height={20} />
-                  {name}
+                  {member.githubName}
                 </a>
               </li>
             ))}
