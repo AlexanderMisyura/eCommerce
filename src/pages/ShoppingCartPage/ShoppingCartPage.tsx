@@ -1,5 +1,4 @@
-import { CartDiscount, CartEmpty } from '@components';
-import { CartProductsBlock } from '@components';
+import { CartDiscount, CartEmpty, CartProductsBlock } from '@components';
 import { useAppDataContext } from '@hooks';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';

@@ -29,7 +29,7 @@ export const CartDiscount = () => {
     if (preloadedCart) {
       setCart(preloadedCart);
     }
-  }, [preloadedCart, setCart, cart]);
+  }, [preloadedCart, setCart]);
 
   useEffect(() => {
     if (fetcher.data) {
@@ -40,7 +40,7 @@ export const CartDiscount = () => {
         showToast(fetcher.data.message, 'warning');
         return;
       }
-      console.log('fetcher.data', fetcher.data);
+
       setCart(fetcher.data);
 
       if (inputReference.current) {

@@ -43,7 +43,7 @@ export const CartProductsBlock = ({
   const totalQuantity = lineItems.reduce((acc, item) => acc + item.quantity, 0);
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, alignItems: 'flex-start' }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, alignItems: 'center' }}>
       <Box
         sx={{
           px: 4,
