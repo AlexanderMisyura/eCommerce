@@ -1,50 +1,120 @@
 import type {
+  Cart,
+  CartPagedQueryResponse,
   Category,
   ClientResponse,
   Customer,
+  CustomerChangePassword,
   CustomerSignInResult,
+  DiscountCode,
+  MyCartUpdateAction,
+  MyCustomerUpdate,
+  MyCustomerUpdateAction,
   ProductProjectionPagedQueryResponse,
   ProductProjectionPagedSearchResponse,
 } from '@commercetools/platform-sdk';
+import { createApiBuilderFromCtpClient } from '@commercetools/platform-sdk';
+import { ClientBuilder, type PasswordAuthMiddlewareOptions } from '@commercetools/ts-client';
+import CTP_CONFIG from '@config/ctp-api-client-config';
 import { CATEGORY } from '@constants';
-import { apiRoot } from '@services';
-import type { QueryOptions } from '@ts-interfaces';
+import { anonymousIdService, apiRoot, InMemoryTokenCache } from '@services';
+import { CartAction } from '@ts-enums';
+import type { QueryOptions, UserAddress, UserAddressType } from '@ts-interfaces';
 import type { RegistrationType, SignInType } from '@ts-types';
 import { createProductQuery } from 'utils/create-product-query';
 
-export class ApiController {
-  private static instance: ApiController;
+const { PROJECT_KEY, CLIENT_SECRET, CLIENT_ID, AUTH_URL, API_URL, SCOPES } = CTP_CONFIG;
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private constructor() {}
-
-  public static getInstance(): ApiController {
-    if (!ApiController.instance) {
-      ApiController.instance = new ApiController();
-    }
-    return ApiController.instance;
-  }
-
+class ApiController {
+  /* CUSTOMER */
   public async registerCustomer(
     customer: RegistrationType
   ): Promise<ClientResponse<CustomerSignInResult>> {
-    const response = await apiRoot.root().customers().post({ body: customer }).execute();
-    apiRoot.setUserData(customer);
-    await this.requestMeInfo();
+    await apiRoot
+      .root()
+      .customers()
+      .post({ body: { ...customer, anonymousId: anonymousIdService.getAnonymousId() } })
+      .execute();
+
+    return await this.signInCustomer(customer);
+  }
+
+  public async signInCustomer(customer: SignInType): Promise<ClientResponse<CustomerSignInResult>> {
+    const temporaryTokenCache = new InMemoryTokenCache();
+
+    const options: PasswordAuthMiddlewareOptions = {
+      host: AUTH_URL,
+      projectKey: PROJECT_KEY,
+      credentials: {
+        clientId: CLIENT_ID,
+        clientSecret: CLIENT_SECRET,
+        user: {
+          username: customer.email,
+          password: customer.password,
+        },
+      },
+      scopes: [SCOPES],
+      httpClient: fetch,
+      tokenCache: temporaryTokenCache,
+    };
+
+    const temporaryClient = new ClientBuilder()
+      .withProjectKey(PROJECT_KEY)
+      .withPasswordFlow(options)
+      .withHttpMiddleware({ host: API_URL, httpClient: fetch })
+      .build();
+
+    const temporaryApiRoot = createApiBuilderFromCtpClient(temporaryClient).withProjectKey({
+      projectKey: PROJECT_KEY,
+    });
+
+    const response = await temporaryApiRoot
+      .login()
+      .post({ body: { ...customer, anonymousId: anonymousIdService.getAnonymousId() } })
+      .execute();
+
+    if (response.statusCode === 200) {
+      const newTokenCache = temporaryTokenCache.get();
+      apiRoot.saveToken(newTokenCache);
+      anonymousIdService.resetAnonymousId();
+    }
 
     return response;
   }
 
-  public async signInCustomer(customer: SignInType): Promise<ClientResponse<CustomerSignInResult>> {
-    const response = await apiRoot.root().login().post({ body: customer }).execute();
-    apiRoot.setUserData(customer);
-    await this.requestMeInfo();
+  public async changePasswordCustomer({
+    version,
+    currentPassword,
+    newPassword,
+  }: CustomerChangePassword): Promise<ClientResponse<Customer>> {
+    const response = await apiRoot
+      .root()
+      .me()
+      .password()
+      .post({ body: { version, currentPassword, newPassword } })
+      .execute();
+    return response;
+  }
 
+  public async updateCustomer(payload: {
+    version: number;
+    actions: MyCustomerUpdateAction[];
+  }): Promise<ClientResponse<Customer>> {
+    const body: MyCustomerUpdate = {
+      version: payload.version,
+      actions: payload.actions,
+    };
+
+    const response = await apiRoot.root().me().post({ body }).execute();
     return response;
   }
 
   public logoutCustomer(): void {
     apiRoot.reset();
+  }
+
+  public async requestMeInfo(): Promise<ClientResponse<Customer>> {
+    return await apiRoot.root().me().get().execute();
   }
 
   public async getCategories(): Promise<Category[]> {
@@ -53,7 +123,7 @@ export class ApiController {
       .categories()
       .get({
         queryArgs: {
-          where: `name(en-US in ("${CATEGORY.BATMAN}", "${CATEGORY.LOTR}", "${CATEGORY.STAR_WARS}", "${CATEGORY.TECHNIC}"))`,
+          where: `name(en-US in ("${CATEGORY.BATMAN}", "${CATEGORY.LOTR}", "${CATEGORY.STAR_WARS}", "${CATEGORY.TECHNIC}", "${CATEGORY.SPACESHIPS}", "${CATEGORY.CARS}"))`,
         },
       })
       .execute();
@@ -61,6 +131,7 @@ export class ApiController {
     return response.body.results;
   }
 
+  /* PRODUCTS */
   public async getProducts(
     options: QueryOptions
   ): Promise<ClientResponse<ProductProjectionPagedSearchResponse>> {
@@ -79,7 +150,274 @@ export class ApiController {
       .execute();
   }
 
-  private async requestMeInfo(): Promise<ClientResponse<Customer>> {
-    return await apiRoot.root().me().get().execute();
+  /* ADDRESSES */
+  public async addCustomerAddress({
+    version,
+    address,
+    addressType,
+  }: {
+    version: number;
+    address: UserAddress;
+    addressType: UserAddressType;
+  }): Promise<ClientResponse<Customer>> {
+    const response = await apiRoot
+      .root()
+      .me()
+      .post({
+        body: {
+          version: version,
+          actions: [{ action: 'addAddress', address: address }],
+        },
+      })
+      .execute();
+
+    const updateCustomer = response.body;
+    const newAddress = updateCustomer.addresses.at(-1);
+
+    if (!newAddress?.id) {
+      throw new Error('Failed to add address. Customer version: ${version}.');
+    }
+
+    const actions: MyCustomerUpdateAction[] = [];
+
+    if (addressType.useAsShipping) {
+      actions.push({
+        action: 'addShippingAddressId',
+        addressId: newAddress.id,
+      });
+    }
+
+    if (addressType.useAsBilling) {
+      actions.push({
+        action: 'addBillingAddressId',
+        addressId: newAddress.id,
+      });
+    }
+
+    if (addressType.setAsDefaultShipping) {
+      actions.push({
+        action: 'setDefaultShippingAddress',
+        addressId: newAddress.id,
+      });
+    }
+
+    if (addressType.setAsDefaultBilling) {
+      actions.push({
+        action: 'setDefaultBillingAddress',
+        addressId: newAddress.id,
+      });
+    }
+
+    if (actions.length === 0) return response;
+
+    const finalResponse = await apiRoot
+      .root()
+      .me()
+      .post({ body: { version: updateCustomer.version, actions } })
+      .execute();
+
+    return finalResponse;
+  }
+
+  public async removeCustomerAddress({
+    version,
+    addressId,
+  }: {
+    version: number;
+    addressId: string;
+  }): Promise<ClientResponse<Customer>> {
+    const response = await apiRoot
+      .root()
+      .me()
+      .post({ body: { version, actions: [{ action: 'removeAddress', addressId }] } })
+      .execute();
+
+    return response;
+  }
+
+  public async changeCustomerAddress({
+    version,
+    addressId,
+    address,
+    addressType,
+  }: {
+    version: number;
+    addressId: string;
+    address: UserAddress;
+    addressType: UserAddressType;
+  }): Promise<ClientResponse<Customer>> {
+    const initialResponse = await apiRoot
+      .root()
+      .me()
+      .post({
+        body: { version, actions: [{ action: 'changeAddress', addressId, address }] },
+      })
+      .execute();
+
+    const updateCustomer = initialResponse.body;
+    const changedAddress = updateCustomer.addresses.find((addr) => addr.id === addressId);
+
+    if (!changedAddress?.id) {
+      throw new Error('Ooops...Something went wrong while editing a new address');
+    }
+
+    const actions: MyCustomerUpdateAction[] = [];
+
+    const shouldRemoveShipping =
+      !addressType.useAsShipping && updateCustomer.shippingAddressIds?.includes(addressId);
+
+    if (addressType.useAsShipping || shouldRemoveShipping) {
+      actions.push({
+        action: addressType.useAsShipping ? 'addShippingAddressId' : 'removeShippingAddressId',
+        addressId: changedAddress.id,
+      });
+    }
+
+    const shouldRemoveBilling =
+      !addressType.useAsShipping && updateCustomer.billingAddressIds?.includes(addressId);
+
+    if (addressType.useAsBilling || shouldRemoveBilling) {
+      actions.push({
+        action: addressType.useAsBilling ? 'addBillingAddressId' : 'removeBillingAddressId',
+        addressId: changedAddress.id,
+      });
+    }
+
+    if (addressType.setAsDefaultShipping && updateCustomer.defaultShippingAddressId !== addressId) {
+      actions.push({
+        action: 'setDefaultShippingAddress',
+        addressId: changedAddress.id,
+      });
+    } else if (
+      !addressType.setAsDefaultShipping &&
+      addressType.useAsShipping &&
+      updateCustomer.defaultShippingAddressId === addressId
+    ) {
+      throw new Error(
+        'To remove the default Shipping address, you must set a different default address'
+      );
+    }
+
+    if (addressType.setAsDefaultBilling && updateCustomer.defaultBillingAddressId !== addressId) {
+      actions.push({
+        action: 'setDefaultBillingAddress',
+        addressId: changedAddress.id,
+      });
+    } else if (
+      !addressType.setAsDefaultBilling &&
+      addressType.useAsBilling &&
+      updateCustomer.defaultBillingAddressId === addressId
+    ) {
+      throw new Error(
+        'To remove the default Billing address, you must set a different default address'
+      );
+    }
+
+    if (actions.length === 0) return initialResponse;
+
+    const finalResponse = await apiRoot
+      .root()
+      .me()
+      .post({ body: { version: updateCustomer.version, actions } })
+      .execute();
+
+    return finalResponse;
+  }
+
+  /* APP CONTEXT */
+  public async getAppData(): Promise<{
+    customer: Customer | null;
+    cart: Cart | null;
+    discountCodes: DiscountCode[];
+  }> {
+    let customer: Customer | null = null;
+
+    if (!anonymousIdService.isAnonymousIdExist() && apiRoot.isTokenExist()) {
+      const customerResponse = await apiRoot.root().me().get().execute();
+      customer = customerResponse.body;
+    }
+
+    const cartRequest = apiRoot
+      .root()
+      .me()
+      .carts()
+      .get({ queryArgs: { expand: 'discountCodes[*].discountCode' } })
+      .execute();
+
+    const discountRequest = apiRoot
+      .root()
+      .discountCodes()
+      .get({ queryArgs: { expand: 'cartDiscounts[*].cartDiscount' } })
+      .execute();
+
+    const [cartResponse, discountResponse] = await Promise.all([cartRequest, discountRequest]);
+
+    const cart = cartResponse.body.results[0] || null;
+    const discountCodes = discountResponse.body.results;
+
+    return { customer, cart, discountCodes };
+  }
+
+  /* CART */
+  public async getCardWithDiscount() {
+    const cartsResponse = await apiRoot
+      .root()
+      .me()
+      .carts()
+      .get({ queryArgs: { expand: 'discountCodes[*].discountCode' } })
+      .execute();
+
+    return cartsResponse.body.results[0] || null;
+  }
+
+  public async deleteCart(ID: string, version: number) {
+    await apiRoot.root().me().carts().withId({ ID }).delete({ queryArgs: { version } }).execute();
+  }
+
+  public async updateCart(ID: string, version: number, actions: MyCartUpdateAction[]) {
+    const updateResponse = await apiRoot
+      .root()
+      .me()
+      .carts()
+      .withId({ ID })
+      .post({ body: { version, actions } })
+      .execute();
+
+    let cart = updateResponse.body;
+
+    const isDiscountUpdated =
+      actions[0].action === CartAction.ADD_DISCOUNT_CODE ||
+      actions[0].action === CartAction.REMOVE_DISCOUNT_CODE;
+
+    if (isDiscountUpdated) {
+      cart = await this.getCardWithDiscount();
+    }
+
+    return cart;
+  }
+
+  public async getCarts(): Promise<CartPagedQueryResponse> {
+    const response = await apiRoot.root().me().carts().get().execute();
+    return response.body;
+  }
+
+  public async createEmptyCart(): Promise<Cart> {
+    const response = await apiRoot
+      .root()
+      .me()
+      .carts()
+      .post({ body: { currency: 'USD' } })
+      .execute();
+    return response.body;
+  }
+
+  public async getLastVersionCart(cartId: string): Promise<Cart> {
+    const response = await apiRoot.root().me().carts().withId({ ID: cartId }).get().execute();
+
+    return response.body;
   }
 }
+
+const controller = new ApiController();
+
+export { controller };

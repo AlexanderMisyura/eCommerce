@@ -16,7 +16,9 @@ export {
   PLACEHOLDER,
   SHIPPING_ADDRESS_INDEX,
 } from './customer-form-data';
+export { DEFAULT_TOKEN_STORE } from './default-token-store';
 export { DEVELOPMENT_TEAM } from './development-team';
+export { DISCOUNTS } from './discount-data';
 export {
   CARDS_PER_PAGE_LIMIT,
   CATEGORY,
@@ -31,3 +33,12 @@ export {
 } from './implementation-specific';
 export { PASSWORD_MIN_LENGTH } from './password-min-length';
 export { CONTEXT_RESET_TIMEOUT, DEBOUNCE_TIMEOUT } from './timeouts';
+export {
+  USER_ADDRESS_FORM_CHECKBOX_LABELS,
+  USER_ADDRESS_FORM_CHECKBOX_NAMES,
+  USER_ADDRESS_FORM_DEFAULT_VALUES,
+  USER_ADDRESS_FORM_FIELD_LABELS,
+  USER_ADDRESS_FORM_FIELD_NAMES,
+  USER_ADDRESS_FORM_FIELD_PLACEHOLDERS,
+  USER_ADDRESS_OPTION_FORM_DEFAULT_VALUES,
+} from './user-address-form-data';

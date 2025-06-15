@@ -1,5 +1,6 @@
 import { ProductSlider } from '@components';
-import { Grid, Modal } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import { Grid, IconButton, Modal } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 import type Slider from 'react-slick';
 
@@ -62,6 +63,23 @@ export const ProductImage = ({
           columns={1}
           sx={{ ...styleModal, width: '90%', height: '90%', maxWidth: 1200, maxHeight: 1200 }}
         >
+          <IconButton
+            aria-label="close"
+            onClick={handleClose}
+            sx={{
+              position: 'absolute',
+              top: 8,
+              right: 8,
+              color: 'grey.500',
+              '&:hover': {
+                cursor: 'pointer',
+                color: 'grey.700',
+              },
+              zIndex: 2000,
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
           <ProductSlider images={images} sliderRef={sliderReference} name={name} />
         </Grid>
       </Modal>

@@ -3,9 +3,11 @@ import { createTheme } from '@mui/material';
 export const theme = createTheme({
   spacing: 4,
   palette: {
-    primary: { main: '#1976d2' },
+    primary: { main: '#1976d2', light: '#f8fafd' },
     secondary: { main: '#ff9800' },
     background: { default: '#f5f5f5', paper: '#ffffff' },
+    error: { main: '#970b1e', light: '#b00e24' },
+    backgroundCustom: { dark: '#18202b' },
   },
   typography: {
     fontFamily: 'Roboto, Arial, sans-serif',
@@ -26,14 +28,28 @@ export const theme = createTheme({
       xs: 0,
       sm: 640,
       md: 768,
-      lg: 1280,
-      xl: 1440,
+      lg: 991,
+      xl: 1280,
+      xxl: 1440,
     },
   },
   components: {
     MuiContainer: {
       defaultProps: {
-        maxWidth: 'lg',
+        maxWidth: 'xl',
+      },
+    },
+    MuiTableCell: {
+      styleOverrides: {
+        head: {
+          fontSize: '12px',
+          fontWeight: 'bold',
+          padding: '4px',
+        },
+        body: {
+          fontSize: '12px',
+          padding: '4px',
+        },
       },
     },
   },

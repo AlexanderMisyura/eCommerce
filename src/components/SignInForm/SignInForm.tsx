@@ -1,5 +1,5 @@
 import { DEBOUNCE_TIMEOUT } from '@constants';
-import { useCustomerContext, useToast } from '@hooks';
+import { useAppDataContext, useToast } from '@hooks';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { Link as MuiLink } from '@mui/material';
@@ -51,7 +51,7 @@ export function SignInForm() {
   const navigate = useNavigate();
 
   const data = useActionData<SignInData>();
-  const { setCurrentCustomer } = useCustomerContext();
+  const { setCurrentCustomer } = useAppDataContext();
 
   const { showToast } = useToast();
 
@@ -122,7 +122,7 @@ export function SignInForm() {
   }, [data, navigate, setCurrentCustomer, showToast]);
 
   return (
-    <Form action={`/${UrlPath.SIGN_IN}`} method="post" onSubmit={handleSubmit}>
+    <Form action={`${UrlPath.SIGN_IN}`} method="post" onSubmit={handleSubmit}>
       <Stack direction="column" justifyContent="space-between">
         <Card variant="outlined">
           <Typography

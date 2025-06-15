@@ -1,9 +1,7 @@
-import { ApiController } from '@controllers';
+import { controller } from '@controllers';
 import { RegistrationSchema } from '@schemas';
 import type { RegistrationData } from '@ts-interfaces';
 import type { ActionFunctionArgs } from 'react-router';
-
-const controller = ApiController.getInstance();
 
 export const registrationAction = async ({
   request,

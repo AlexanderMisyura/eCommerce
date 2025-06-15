@@ -1,9 +1,9 @@
-import { ProductImage } from '@components';
-import { Box, Button, Chip, Grid, Paper } from '@mui/material';
+import { CartActionPanel, ProductImage } from '@components';
+import { Box, Chip, Grid, Paper } from '@mui/material';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import { ProductResponseSchema } from '@schemas';
-import { transformToLegoProduct } from '@utils';
+import { formatPrice, transformToLegoProduct } from '@utils';
 import { useLoaderData } from 'react-router';
 
 export const ProductPage = () => {
@@ -42,26 +42,24 @@ export const ProductPage = () => {
                     )}% OFF`}
                   />
                   <Typography variant="h4" color="error" fontWeight="bold">
-                    ${price.withDiscountValue / 100}
+                    {formatPrice(price.withDiscountValue)}
                   </Typography>
                   <Typography
                     variant="h6"
                     color="text.secondary"
                     sx={{ ml: 1, textDecoration: 'line-through' }}
                   >
-                    ${price.value / 100}
+                    {formatPrice(price.value)}
                   </Typography>
                 </>
               ) : (
                 <Typography variant="h4" color="warning" fontWeight="bold">
-                  ${price.value / 100}
+                  {formatPrice(price.value)}
                 </Typography>
               )}
             </Box>
             <Box marginTop={4} display="flex" justifyContent={{ xs: 'right', md: 'left' }}>
-              <Button variant="contained" color="success" size="large">
-                Add to cart
-              </Button>
+              <CartActionPanel product={product} />
             </Box>
           </Grid>
         </Grid>
