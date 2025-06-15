@@ -39,3 +39,7 @@ export type {
   UserAddressFormState,
 } from './user-profile/user-address-form-state';
 export type { UserCredentialsFormState } from './user-profile/user-credentials-form-state';
+
+/* root */
+export type { DevelopmentTeamDetails } from './development-team';
+export type { TechStackItem } from './tech-stack-item';
