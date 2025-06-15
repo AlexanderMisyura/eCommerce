@@ -48,28 +48,67 @@ export const CartItem = ({ item }: { item: LineItem }) => {
           gap: 1,
           flexGrow: 1,
           justifyContent: 'center',
+          alignItems: 'flex-start',
+          width: '100%',
         }}
       >
-        <Typography variant="h6">Model: {item.name['en-US']}</Typography>
-        <Typography variant="body1">Quantity: {item.quantity}</Typography>
-        <Typography
-          variant="body1"
-          fontWeight="bold"
-          color={cartDiscountPrice || itemDiscountPrice ? 'error' : 'warning'}
-        >
-          Price: {formatPrice(item.quantity * displayedPrice)}
+        <Typography variant="h6" fontWeight="bold">
+          {item.name['en-US']}
         </Typography>
-        {(cartDiscountPrice || itemDiscountPrice) && (
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            fontWeight="bold"
-            sx={{ ml: 1, textDecoration: 'line-through' }}
-          >
-            {formatPrice(item.quantity * price)}
-          </Typography>
-        )}
-        <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
+        <Typography variant="body1">Quantity: {item.quantity}</Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          {cartDiscountPrice || itemDiscountPrice ? (
+            <>
+              <Typography variant="body1">
+                Price:{' '}
+                <Typography color="error" component="span">
+                  {formatPrice(displayedPrice)}
+                </Typography>
+              </Typography>
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                sx={{ ml: 1, textDecoration: 'line-through' }}
+              >
+                {formatPrice(price)}
+              </Typography>
+            </>
+          ) : (
+            <Typography variant="body1">
+              Price:{' '}
+              <Typography color="warning" component="span">
+                {formatPrice(displayedPrice)}
+              </Typography>
+            </Typography>
+          )}
+        </Box>
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          {cartDiscountPrice || itemDiscountPrice ? (
+            <>
+              <Typography variant="body1" fontWeight="bold">
+                Total Cost:{' '}
+                <Typography color="error" component="span" fontWeight="bold">
+                  {formatPrice(item.quantity * displayedPrice)}
+                </Typography>
+              </Typography>
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                sx={{ ml: 1, textDecoration: 'line-through' }}
+              >
+                {formatPrice(item.quantity * price)}
+              </Typography>
+            </>
+          ) : (
+            <Typography variant="body1" fontWeight="bold">
+              Total Cost:{' '}
+              <Typography color="warning" component="span" fontWeight="bold">
+                {formatPrice(item.quantity * displayedPrice)}
+              </Typography>
+            </Typography>
+          )}
+        </Box>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2, width: '100%' }}>
           {item && <CartActionPanel product={transformLineItemToLegoProduct(item)} />}
         </Box>
       </Box>
