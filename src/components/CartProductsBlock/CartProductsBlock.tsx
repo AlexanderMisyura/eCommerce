@@ -1,14 +1,23 @@
 import type { Cart } from '@commercetools/platform-sdk';
 import { CartItem } from '@components';
 import { controller } from '@controllers';
-import { Box, Button, Divider, List, ListItem, Stack, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogContent,
+  Divider,
+  List,
+  ListItem,
+  Stack,
+  Typography,
+} from '@mui/material';
 import { formatPrice } from '@utils';
 import { useState } from 'react';
 import { Fragment } from 'react/jsx-runtime';
 
 const style = {
   py: 0,
-  // maxWidth: '600px',
   width: 'auto',
   borderRadius: 2,
   border: '1px solid',
@@ -26,6 +35,7 @@ export const CartProductsBlock = ({
   setCart: (cart: Cart | null) => void;
 }) => {
   const [isCartClearing, setIsCartClearing] = useState(false);
+  const [isOpenModal, setIsOpenModal] = useState(false);
   if (cart === null || cart.lineItems.length === 0) return;
 
   const handleClearCart = () => {
@@ -37,6 +47,14 @@ export const CartProductsBlock = ({
       setCart(null);
       setIsCartClearing(false);
     }, 500);
+  };
+
+  const handleCloseModal = () => {
+    setIsOpenModal(false);
+  };
+
+  const handleOpenModal = () => {
+    setIsOpenModal(true);
   };
 
   const { totalPrice, lineItems } = cart;
@@ -85,7 +103,7 @@ export const CartProductsBlock = ({
               color="error"
               size="small"
               loading={isCartClearing}
-              onClick={handleClearCart}
+              onClick={handleOpenModal}
             >
               Clear cart
             </Button>
@@ -105,6 +123,24 @@ export const CartProductsBlock = ({
           </Fragment>
         ))}
       </List>
+      <Dialog
+        open={isOpenModal}
+        onClose={handleCloseModal}
+        sx={{ textAlign: 'center' }}
+        disableRestoreFocus
+      >
+        <DialogContent sx={{ p: 4, maxWidth: '350px' }}>
+          <Typography>Are you sure you want to clear your cart?</Typography>
+          <Box sx={{ display: 'flex', justifyContent: 'space-evenly', mt: 2 }}>
+            <Button loading={isCartClearing} color="error" onClick={handleClearCart}>
+              Clear
+            </Button>
+            <Button loading={isCartClearing} onClick={handleCloseModal}>
+              Cancel
+            </Button>
+          </Box>
+        </DialogContent>
+      </Dialog>
     </Box>
   );
 };
