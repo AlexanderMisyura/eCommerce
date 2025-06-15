@@ -9,7 +9,7 @@ export const theme = createTheme({
     background: { default: '#f5f5f5', paper: '#ffffff' },
     error: { main: '#970b1e', light: '#b00e24' },
     confirmation: { main: '#00a44d' },
-    backgroundCustom: { dark: '#18202b' },
+    backgroundCustom: { dark: '#18202b', main: '#506487' },
   },
   typography: {
     fontFamily: 'Roboto, Arial, sans-serif',
