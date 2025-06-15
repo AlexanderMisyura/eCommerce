@@ -3,12 +3,12 @@ import { Box, Chip, Grid, Paper } from '@mui/material';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import { ProductResponseSchema } from '@schemas';
-import { formatPrice, transformToLegoProduct } from '@utils';
+import { formatPrice, transformProductProjectionToLegoProduct } from '@utils';
 import { useLoaderData } from 'react-router';
 
 export const ProductPage = () => {
   const response = ProductResponseSchema.parse(useLoaderData());
-  const product = transformToLegoProduct(response.body.results[0]);
+  const product = transformProductProjectionToLegoProduct(response.body.results[0]);
 
   const { images, name, description, price, recommendedAge, numberOfPieces } = product;
 
