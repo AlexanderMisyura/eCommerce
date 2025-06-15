@@ -59,6 +59,11 @@ export const CartProductsBlock = ({
 
   const { totalPrice, lineItems } = cart;
   const totalQuantity = lineItems.reduce((acc, item) => acc + item.quantity, 0);
+  const totalPriceWithoutDiscount = lineItems.reduce(
+    (acc, item) => acc + item.price.value.centAmount * item.quantity,
+    0
+  );
+  const isDiscountApplied = totalPrice?.centAmount !== totalPriceWithoutDiscount;
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, alignItems: 'center' }}>
@@ -92,10 +97,24 @@ export const CartProductsBlock = ({
               justifyContent: 'flex-start',
             }}
           >
-            <Typography color="warning" variant="h2">
-              Total price: {formatPrice(totalPrice?.centAmount)}
-            </Typography>
-            <Typography variant="h2">Total quantity: {totalQuantity}</Typography>
+            <Box display="flex" alignItems="center">
+              <Typography variant="h3">
+                Total price:{' '}
+                <Typography
+                  component="span"
+                  variant="h3"
+                  color={isDiscountApplied ? 'error' : 'warning'}
+                >
+                  {formatPrice(totalPrice?.centAmount)}
+                </Typography>
+              </Typography>
+              {isDiscountApplied && (
+                <Typography variant="body1" sx={{ ml: 2, textDecoration: 'line-through' }}>
+                  {formatPrice(totalPriceWithoutDiscount)}
+                </Typography>
+              )}
+            </Box>
+            <Typography variant="h3">Total quantity: {totalQuantity}</Typography>
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 4 }}>
             <Button
