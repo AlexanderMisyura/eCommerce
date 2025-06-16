@@ -1,6 +1,6 @@
 import avatarImg from '@assets/images/user-avatar_compress.png';
 import type { Customer } from '@commercetools/platform-sdk';
-import { Typography, useMediaQuery, useTheme } from '@mui/material';
+import { Box, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { UrlPath } from '@ts-enums';
 import { NavLink } from 'react-router';
 
@@ -21,7 +21,14 @@ export const ProfileButton: React.FC<ProfileButtonProps> = (props) => {
   const avatarLetters = `${first}${last}`.toUpperCase();
 
   return (
-    <>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: 1,
+      }}
+    >
       <NavLink
         to={UrlPath.USER_PROFILE}
         title="User Profile"
@@ -50,6 +57,6 @@ export const ProfileButton: React.FC<ProfileButtonProps> = (props) => {
           {customer.firstName}
         </Typography>
       )}
-    </>
+    </Box>
   );
 };

@@ -21,7 +21,7 @@ import { Link, useLocation } from 'react-router';
 
 export const Header = () => {
   const [open, setOpen] = useState(false);
-  const { currentCustomer, setCurrentCustomer, loading, cart } = useAppDataContext();
+  const { currentCustomer, loading, cart } = useAppDataContext();
   const { palette, spacing } = useTheme();
 
   const location = useLocation();
@@ -111,6 +111,7 @@ export const Header = () => {
             <CloseIcon />
           </IconButton>
         </Box>
+
         <Divider variant="middle" />
 
         <Box sx={{ padding: spacing(2), flexGrow: 1 }}>
