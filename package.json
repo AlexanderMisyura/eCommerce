@@ -13,7 +13,8 @@
     "stylelint": "stylelint \"**/*.{scss,css}\"",
     "preview": "vite preview",
     "prepare": "husky",
-    "test": "vitest"
+    "test": "vitest",
+    "coverage": "vitest run --coverage"
   },
   "dependencies": {
     "@commercetools/platform-sdk": "^8.9.0",
@@ -51,6 +52,7 @@
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
     "@vitejs/plugin-react-swc": "^3.9.0",
+    "@vitest/coverage-v8": "^3.1.2",
     "eslint": "^9.22.0",
     "eslint-config-prettier": "^10.1.2",
     "eslint-formatter-friendly": "^7.0.0",

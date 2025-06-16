@@ -9,7 +9,7 @@ import type {
 import type { SignInType } from '@ts-types';
 import dayjs from 'dayjs';
 
-export function validateEmail(email: string) {
+export function validateEmail(email: string): string[] {
   const errors: string[] = [];
 
   if (email.length === 0) {
@@ -42,7 +42,7 @@ export function validateEmail(email: string) {
   return errors;
 }
 
-export function validatePassword(password: string) {
+export function validatePassword(password: string): string[] {
   const errors: string[] = [];
 
   if (password.length === 0) {
@@ -81,7 +81,7 @@ export function validateSignIn(submission: SignInType): SignInValidationErrors {
   return validationErrors;
 }
 
-export function validateProperName(name: string, fieldName?: string) {
+export function validateProperName(name: string, fieldName?: string): string[] {
   const errors: string[] = [];
 
   if (name.length === 0) {
@@ -99,7 +99,7 @@ export function validateProperName(name: string, fieldName?: string) {
   return errors;
 }
 
-export function validateDateOfBirth(dateOfBirth: string) {
+export function validateDateOfBirth(dateOfBirth: string): string[] {
   const errors: string[] = [];
 
   if (!dateOfBirth) {
@@ -113,17 +113,17 @@ export function validateDateOfBirth(dateOfBirth: string) {
   return errors;
 }
 
-export function validateStreetName(city: string) {
+export function validateStreetName(city: string): string[] {
   const errors: string[] = [];
 
   if (city.length === 0) {
-    errors.push('Please fill your city');
+    errors.push('Please fill your street');
   }
 
   return errors;
 }
 
-export function validatePostalCode(postalCode: string) {
+export function validatePostalCode(postalCode: string): string[] {
   const errors: string[] = [];
 
   if (postalCode.length === 0) {
@@ -137,7 +137,7 @@ export function validatePostalCode(postalCode: string) {
   return errors;
 }
 
-export function validateCountry(country: string) {
+export function validateCountry(country: string): string[] {
   const errors: string[] = [];
 
   if (country.length === 0) {
@@ -163,7 +163,7 @@ export function validateCredentials(credentials: Credentials): CredentialsValida
   return validationErrors;
 }
 
-export function validateAddresses(address: Addresses) {
+export function validateAddresses(address: Addresses): AddressesValidationErrors {
   const validationErrors: AddressesValidationErrors = {
     shippingStreetNameErrors: validateStreetName(address.shippingStreetName),
     shippingCityErrors: validateProperName(address.shippingCity, CITY),

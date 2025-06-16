@@ -7,7 +7,6 @@ export {
   stateUserCredentialsFormDebounceWrapper,
 } from './debounce-wrapper';
 export { formatPrice } from './format-price';
-export { isStatusToken } from './is-status-token';
 export { isTokenStore } from './is-token-store';
 export {
   transformLineItemToLegoProduct,
