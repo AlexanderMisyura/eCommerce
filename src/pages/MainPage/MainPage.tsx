@@ -36,24 +36,27 @@ export const MainPage = () => {
               img: BatmanLego,
               url: `${UrlPath.CATALOG}/batman`,
               subtitle: 'The Dark Brick Rises!',
+              discount: '',
             },
             {
               img: StarWarsLego,
-              url: `${UrlPath.CATALOG}/star-wars`,
+              url: `${UrlPath.CATALOG}/star-wars/spaceships`,
               subtitle: 'The Force is in Your Hands!',
+              discount: '5% Off Spaceships Only!',
             },
             {
               img: TechnicsLego,
               url: `${UrlPath.CATALOG}/technic`,
               subtitle: 'Speed. Power. Bricks!',
+              discount: '',
             },
-          ].map(({ img, url, subtitle }) => (
+          ].map(({ img, url, subtitle, discount }) => (
             <Box
               component={Link}
               key={url}
               to={url}
               sx={{
-                width: { xs: '60%', md: '32%' },
+                width: { xs: '85%', lg: '32%' },
                 maxWidth: '300px',
                 display: 'block',
                 textDecoration: 'none',
@@ -70,9 +73,17 @@ export const MainPage = () => {
                   mb: 4,
                 }}
               />
-              <Typography variant="h4" sx={{ textAlign: 'center', color: palette.text.secondary }}>
-                {subtitle}
-              </Typography>
+              <Stack sx={{ alignItems: 'center' }}>
+                <Typography
+                  variant="h4"
+                  sx={{ textAlign: 'center', color: palette.text.secondary }}
+                >
+                  {subtitle}
+                </Typography>
+                <Typography variant="subtitle1" sx={{ color: palette.error.main, fontWeight: 700 }}>
+                  {discount}
+                </Typography>
+              </Stack>
             </Box>
           ))}
         </Stack>
