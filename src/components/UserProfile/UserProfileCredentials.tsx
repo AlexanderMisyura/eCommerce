@@ -1,4 +1,4 @@
-import { LegoLoader } from '@components';
+import { Spinner } from '@components';
 import {
   CUSTOMER_CREDENTIALS_STATE_DEFAULT,
   DATE_OF_BIRTH_FORMAT,
@@ -26,7 +26,7 @@ import dayjs from 'dayjs';
 import { useEffect, useMemo, useState } from 'react';
 
 export const UserProfileCredentials = () => {
-  const { palette, spacing } = useTheme();
+  const { spacing } = useTheme();
   const { currentCustomer, setCurrentCustomer } = useAppDataContext();
   const [datePickerValue, setDatePickerValue] = useState<PickerValue>(null);
   const { showToast } = useToast();
@@ -295,7 +295,7 @@ export const UserProfileCredentials = () => {
       </Box>
 
       <Backdrop open={isLoading} sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
-        <LegoLoader color={palette.grey[300]} />
+        <Spinner />
       </Backdrop>
     </>
   );
