@@ -1,16 +1,25 @@
 import avatarImg from '@assets/images/user-avatar_compress.png';
 import type { Address } from '@commercetools/platform-sdk';
+import { controller } from '@controllers';
 import { useAppDataContext } from '@hooks';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import CreditScoreIcon from '@mui/icons-material/CreditScore';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
-import { useTheme } from '@mui/material';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  useTheme,
+} from '@mui/material';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { ProfileAvatar } from 'components/ProfileButton/ProfileAvatar';
-import type { JSX } from 'react';
+import { type JSX, useState } from 'react';
 interface UserAddressListProps {
   type: 'billing' | 'shipping';
   addresses: Address[];
@@ -18,7 +27,8 @@ interface UserAddressListProps {
 }
 
 export const UserProfileOverview = () => {
-  const { currentCustomer } = useAppDataContext();
+  const [logoutConfirmOpen, setLogoutConfirmOpen] = useState(false);
+  const { currentCustomer, setCart, setCurrentCustomer } = useAppDataContext();
   const { palette } = useTheme();
 
   if (!currentCustomer) return null;
@@ -126,8 +136,26 @@ export const UserProfileOverview = () => {
     });
   };
 
+  const handleLogout = () => {
+    controller.logoutCustomer();
+    setCurrentCustomer(null);
+    setCart(null);
+    setLogoutConfirmOpen(false);
+  };
+
   return (
     <>
+      <Button
+        variant="outlined"
+        size="small"
+        onClick={() => setLogoutConfirmOpen(true)}
+        aria-label="Log out"
+        title="Log out"
+        sx={{ fontWeight: 700, borderWidth: '2px', alignSelf: 'flex-end' }}
+      >
+        Log out
+      </Button>
+
       <Stack direction={'row'} justifyContent={'center'}>
         <ProfileAvatar avatarSize={150} imgSource={avatarImg} />
       </Stack>
@@ -174,6 +202,21 @@ export const UserProfileOverview = () => {
           </ul>
         </Box>
       </Stack>
+
+      <Dialog open={logoutConfirmOpen} onClose={() => setLogoutConfirmOpen(false)}>
+        <DialogTitle>Confirm Logout</DialogTitle>
+        <DialogContent>
+          <DialogContentText>Are you sure you want to log out?</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setLogoutConfirmOpen(false)} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleLogout} color="error">
+            Yes
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };

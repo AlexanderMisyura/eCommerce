@@ -7,6 +7,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import {
   AppBar,
   Badge,
+  Box,
   Container,
   Divider,
   Drawer,
@@ -40,7 +41,6 @@ export const Header = () => {
     return currentCustomer ? (
       <ProfilePanel
         className="flex items-center justify-center gap-x-2"
-        setCurrentCustomer={setCurrentCustomer}
         currentCustomer={currentCustomer}
         {...panelProps}
       />
@@ -106,18 +106,21 @@ export const Header = () => {
           },
         }}
       >
-        <div className="flex justify-between gap-x-4 p-4">
-          {renderUserPanel({ isOpenBurgerMenu: true })}
+        <Box sx={{ padding: spacing(2), alignSelf: 'flex-end' }}>
           <IconButton onClick={handleBurgerMenuToggle}>
             <CloseIcon />
           </IconButton>
-        </div>
+        </Box>
         <Divider variant="middle" />
-        <Navigation
-          navClassName="grow-1 p-4 text-center"
-          itemClassName="py-2"
-          onClick={handleBurgerMenuToggle}
-        />
+
+        <Box sx={{ padding: spacing(2), flexGrow: 1 }}>
+          <Box>{renderUserPanel({ isOpenBurgerMenu: true })}</Box>
+          <Navigation
+            navClassName="grow-1 p-4 text-center"
+            itemClassName="py-2"
+            onClick={handleBurgerMenuToggle}
+          />
+        </Box>
       </Drawer>
     </AppBar>
   );
