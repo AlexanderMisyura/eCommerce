@@ -119,6 +119,11 @@ export const CartDiscount = () => {
             error={Boolean(errorMessage)}
             helperText={errorMessage}
             onBlur={() => setErrorMessage('')}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter') {
+                submitDiscount();
+              }
+            }}
           />
         </Box>
         <Box display="flex" alignItems="center" justifyContent="center">
