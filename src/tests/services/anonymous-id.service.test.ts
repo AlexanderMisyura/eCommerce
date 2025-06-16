@@ -26,4 +26,15 @@ describe('AnonymousIdService', () => {
     const id = anonymousIdService.getAnonymousId();
     expect(id).toMatch(idRegex);
   });
+
+  it('should remove the anonymous ID from local storage', () => {
+    anonymousIdService.resetAnonymousId();
+    expect(localStorage.getItem(ANONYMOUS_ID_KEY)).toBeNull();
+  });
+
+  it('should check if the anonymous ID exists in local storage', () => {
+    expect(anonymousIdService.isAnonymousIdExist()).toBe(false);
+    localStorage.setItem(ANONYMOUS_ID_KEY, '123e4567-e89b-12d3-a456-426655440000');
+    expect(anonymousIdService.isAnonymousIdExist()).toBe(true);
+  });
 });
