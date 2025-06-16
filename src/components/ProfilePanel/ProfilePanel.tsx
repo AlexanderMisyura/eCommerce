@@ -42,6 +42,7 @@ export const ProfilePanel: React.FC<ProfilePanelProps> = (props) => {
         onClick={handleLogout}
         aria-label="Log out"
         title="Log out"
+        sx={{ fontWeight: 700, borderWidth: '2px' }}
       >
         Log out
       </Button>

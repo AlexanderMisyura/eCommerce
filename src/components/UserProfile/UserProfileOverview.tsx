@@ -1,4 +1,4 @@
-import avatarImg from '@assets/images/lego-avatar.jpeg';
+import avatarImg from '@assets/images/user-avatar_compress.png';
 import type { Address } from '@commercetools/platform-sdk';
 import { useAppDataContext } from '@hooks';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
