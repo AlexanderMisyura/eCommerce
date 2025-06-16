@@ -14,7 +14,6 @@ export { AddressForm } from './Forms/AddressForm/AddressForm';
 export { Header } from './Header/Header';
 export { HeaderSkeleton } from './Header/HeaderSkeleton';
 export { ExternalLink } from './Links/ExternalLink';
-export { LegoLoader } from './Loaders/LegoLoader';
 export { LogoLink } from './LogoLink/LogoLink';
 export { Navigation } from './Navigation/Navigation';
 export { PagePlaceholder } from './PagePlaceholder/PagePlaceholder';

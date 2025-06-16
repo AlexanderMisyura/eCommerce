@@ -1,3 +1,4 @@
+import { Spinner } from '@components';
 import { controller } from '@controllers';
 import { useAppDataContext, useToast } from '@hooks';
 import Visibility from '@mui/icons-material/Visibility';
@@ -13,7 +14,6 @@ import {
 } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import { validatePassword } from '@utils';
-import { LegoLoader } from 'components/Loaders/LegoLoader';
 import { useEffect, useState } from 'react';
 
 interface PasswordsState {
@@ -75,7 +75,7 @@ const getPasswordErrors = (values: Record<string, string>): Record<string, strin
 };
 
 export const UserProfileChangePassword = () => {
-  const { palette, spacing } = useTheme();
+  const { spacing } = useTheme();
   const { currentCustomer, setCurrentCustomer } = useAppDataContext();
   const { showToast } = useToast();
 
@@ -215,7 +215,7 @@ export const UserProfileChangePassword = () => {
       </Box>
 
       <Backdrop open={isLoading} sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
-        <LegoLoader color={palette.grey[300]} />
+        <Spinner />
       </Backdrop>
     </>
   );

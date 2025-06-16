@@ -23,7 +23,7 @@ import Slider from '@mui/material/Slider';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { UrlPath } from '@ts-enums';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   Form,
   useNavigate,
@@ -46,6 +46,8 @@ export const ProductFilter: React.FC = () => {
   const [price, setPrice] = useState<number[]>([PRICE.MIN, PRICE.MAX]);
   const [pieces, setPieces] = useState<number[]>([PIECES.MIN, PIECES.MAX]);
   const [ages, setAges] = useState<Record<string, boolean>>({});
+
+  const searchReference = useRef<HTMLInputElement>(null);
 
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
@@ -95,6 +97,9 @@ export const ProductFilter: React.FC = () => {
     setPrice([PRICE.MIN, PRICE.MAX]);
     setPieces([PIECES.MIN, PIECES.MAX]);
     setAges({});
+    if (searchReference.current) {
+      searchReference.current.value = '';
+    }
 
     void navigate(`/${UrlPath.CATALOG}/all`);
   };
@@ -153,6 +158,7 @@ export const ProductFilter: React.FC = () => {
             </Typography>
             <FormControl fullWidth sx={{ mb: 3 }}>
               <TextField
+                inputRef={searchReference}
                 type="search"
                 id="search-query"
                 name="q"

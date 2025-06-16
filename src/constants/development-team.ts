@@ -6,8 +6,8 @@ import type { DevelopmentTeamDetails } from '@ts-interfaces';
 export const DEVELOPMENT_TEAM_DETAILS: DevelopmentTeamDetails[] = [
   {
     photoURL: alexandermisyuraAvatar,
-    firstName: 'Aliaksandr',
-    lastName: 'Misiura',
+    firstName: 'Alexander',
+    lastName: 'Misyura',
     role: 'Team Lead',
     bio: `A curious mind from Minsk with a background as a mechanical technician, I've explored various roles, from engineering to sales. However, coding and developing beautiful, smooth apps is truly my passion 💻✨
 

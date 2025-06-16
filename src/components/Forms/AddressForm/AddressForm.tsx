@@ -1,3 +1,4 @@
+import { Spinner } from '@components';
 import {
   COUNTRY,
   DEBOUNCE_TIMEOUT,
@@ -29,7 +30,6 @@ import {
   validateProperName,
   validateStreetName,
 } from '@utils';
-import { LegoLoader } from 'components/Loaders/LegoLoader';
 import {
   USER_ADDRESS_FORM_CHECKBOX_LABELS,
   USER_ADDRESS_FORM_CHECKBOX_NAMES,
@@ -53,7 +53,7 @@ export const AddressForm: React.FC<AddressFormProps> = ({
   selectedAddressValues: selectAddressValues,
   handleCloseModal,
 }) => {
-  const { palette, spacing } = useTheme();
+  const { spacing } = useTheme();
   const { currentCustomer, setCurrentCustomer } = useAppDataContext();
   const { showToast } = useToast();
 
@@ -428,7 +428,7 @@ export const AddressForm: React.FC<AddressFormProps> = ({
       </Stack>
 
       <Backdrop open={isLoading} sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
-        <LegoLoader color={palette.grey[300]} />
+        <Spinner />
       </Backdrop>
     </>
   );
