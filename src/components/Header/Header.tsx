@@ -117,7 +117,7 @@ export const Header = () => {
           <Box>{renderUserPanel({ isOpenBurgerMenu: true })}</Box>
           <Navigation
             navClassName="grow-1 p-4 text-center"
-            itemClassName="py-2"
+            itemClassName="py-4 flex flex-col text-xl"
             onClick={handleBurgerMenuToggle}
           />
         </Box>
