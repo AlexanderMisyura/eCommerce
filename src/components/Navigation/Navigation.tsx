@@ -31,8 +31,6 @@ export const Navigation: React.FC<NavigationProps> = (props) => {
                 pointerEvents: isActive ? 'none' : 'auto',
                 color: isActive ? palette.primary.main : 'inherit',
                 fontWeight: isActive ? 700 : 'inherit',
-                // display: 'inline-block',
-                // width: '100%',
               })}
             >
               {title}

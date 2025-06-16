@@ -1,7 +1,5 @@
 import type { Customer } from '@commercetools/platform-sdk';
 import { ProfileButton } from '@components';
-// import { controller } from '@controllers';
-// import { useAppDataContext } from '@hooks';
 
 interface ProfilePanelProps {
   currentCustomer: Customer;

@@ -73,7 +73,6 @@ export const UserProfileAddresses = () => {
     setSelectAddressValues({ address: selectAddress, addressType: selectAddressType });
     setIsOpenModal(true);
     setAddressActionType('edit');
-    //   }
   };
 
   const handleAddAddress = (): void => {
