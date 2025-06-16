@@ -4,15 +4,28 @@ import { useAppDataContext } from '@hooks';
 import CloseIcon from '@mui/icons-material/Close';
 import MenuIcon from '@mui/icons-material/Menu';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import { AppBar, Badge, Container, Divider, Drawer, IconButton, Toolbar } from '@mui/material';
+import {
+  AppBar,
+  Badge,
+  Box,
+  Container,
+  Divider,
+  Drawer,
+  IconButton,
+  Toolbar,
+  useTheme,
+} from '@mui/material';
 import { UrlPath } from '@ts-enums';
 import { useState } from 'react';
-import { Link } from 'react-router';
-import { theme } from 'theme';
+import { Link, useLocation } from 'react-router';
 
 export const Header = () => {
   const [open, setOpen] = useState(false);
-  const { currentCustomer, setCurrentCustomer, loading, cart } = useAppDataContext();
+  const { currentCustomer, loading, cart } = useAppDataContext();
+  const { palette, spacing } = useTheme();
+
+  const location = useLocation();
+  const isActiveShoppingCart = location.pathname.slice(1) === UrlPath.SHOPPING_CART.toString();
 
   const numberOfItemsInCart = cart?.lineItems.reduce((acc, item) => acc + item.quantity, 0) ?? 0;
 
@@ -28,7 +41,6 @@ export const Header = () => {
     return currentCustomer ? (
       <ProfilePanel
         className="flex items-center justify-center gap-x-2"
-        setCurrentCustomer={setCurrentCustomer}
         currentCustomer={currentCustomer}
         {...panelProps}
       />
@@ -42,7 +54,7 @@ export const Header = () => {
   ) : (
     <AppBar color="inherit" position="sticky">
       <Container>
-        <Toolbar disableGutters sx={{ columnGap: theme.spacing(4) }}>
+        <Toolbar disableGutters sx={{ columnGap: spacing(4), minHeight: { xs: spacing(16) } }}>
           <LogoLink className="mr-auto md:mr-6" srcImg={LogoIcon} path={UrlPath.HOME} />
           <div className="hidden grow-1 items-center md:flex">
             <Navigation navClassName="mr-auto" listClassName="flex gap-x-4" />
@@ -58,14 +70,16 @@ export const Header = () => {
             color="warning"
             title="Shopping Cart"
             sx={{
-              marginRight: 4,
+              marginRight: 2,
               '& .MuiBadge-badge': {
                 fontSize: '12px',
                 padding: '4px',
               },
             }}
           >
-            <ShoppingCartIcon />
+            <ShoppingCartIcon
+              sx={{ color: isActiveShoppingCart ? palette.primary.main : palette.text.secondary }}
+            />
           </Badge>
 
           <IconButton
@@ -92,18 +106,22 @@ export const Header = () => {
           },
         }}
       >
-        <div className="flex justify-between gap-x-4 p-4">
-          {renderUserPanel({ isOpenBurgerMenu: true })}
+        <Box sx={{ padding: spacing(2), alignSelf: 'flex-end' }}>
           <IconButton onClick={handleBurgerMenuToggle}>
             <CloseIcon />
           </IconButton>
-        </div>
+        </Box>
+
         <Divider variant="middle" />
-        <Navigation
-          navClassName="grow-1 p-4 text-center"
-          itemClassName="py-2"
-          onClick={handleBurgerMenuToggle}
-        />
+
+        <Box sx={{ padding: spacing(2), flexGrow: 1 }}>
+          <Box>{renderUserPanel({ isOpenBurgerMenu: true })}</Box>
+          <Navigation
+            navClassName="grow-1 p-4 text-center"
+            itemClassName="py-4 flex flex-col text-xl"
+            onClick={handleBurgerMenuToggle}
+          />
+        </Box>
       </Drawer>
     </AppBar>
   );

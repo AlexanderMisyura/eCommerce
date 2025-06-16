@@ -1,3 +1,4 @@
+import { styled } from '@mui/material';
 import { type ReactNode, useCallback, useMemo } from 'react';
 import { toast, ToastContainer, Zoom } from 'react-toastify';
 
@@ -23,7 +24,12 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({ children }) => {
   return (
     <ToastContext value={value}>
       {children}
-      <ToastContainer autoClose={3500} transition={Zoom} />
+      <StyledToastContainer autoClose={3500} transition={Zoom} position="top-right" />
     </ToastContext>
   );
 };
+
+const StyledToastContainer = styled(ToastContainer)`
+  top: 72px;
+  right: 8px;
+`;

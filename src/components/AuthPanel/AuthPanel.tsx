@@ -19,7 +19,7 @@ export const AuthPanel: React.FC<AuthPanelProps> = (props) => {
   };
 
   return (
-    <div className={clsx('flex items-center gap-x-3', className)}>
+    <div className={clsx('flex items-center justify-center gap-x-3 p-4', className)}>
       <Button
         variant="outlined"
         size="small"
