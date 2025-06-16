@@ -372,7 +372,6 @@ export function Credentials({ handleNext, handleReset, setStepErrors, stepIndex 
             justifyContent: 'flex-end',
             flexDirection: 'row',
             pt: 2,
-            // position: 'relative',
           }}
         >
           <Button

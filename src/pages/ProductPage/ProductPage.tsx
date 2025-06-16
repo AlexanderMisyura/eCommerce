@@ -1,14 +1,15 @@
-import { ProductImage } from '@components';
+import { CartActionPanel, ProductImage } from '@components';
 import { Box, Button, Chip, Grid, Paper } from '@mui/material';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import { ProductResponseSchema } from '@schemas';
-import { transformToLegoProduct } from '@utils';
-import { useLoaderData } from 'react-router';
+import { formatPrice, transformProductProjectionToLegoProduct } from '@utils';
+import { useLoaderData, useNavigate } from 'react-router';
 
 export const ProductPage = () => {
   const response = ProductResponseSchema.parse(useLoaderData());
-  const product = transformToLegoProduct(response.body.results[0]);
+  const product = transformProductProjectionToLegoProduct(response.body.results[0]);
+  const navigate = useNavigate();
 
   const { images, name, description, price, recommendedAge, numberOfPieces } = product;
 
@@ -42,30 +43,33 @@ export const ProductPage = () => {
                     )}% OFF`}
                   />
                   <Typography variant="h4" color="error" fontWeight="bold">
-                    ${price.withDiscountValue / 100}
+                    {formatPrice(price.withDiscountValue)}
                   </Typography>
                   <Typography
                     variant="h6"
                     color="text.secondary"
                     sx={{ ml: 1, textDecoration: 'line-through' }}
                   >
-                    ${price.value / 100}
+                    {formatPrice(price.value)}
                   </Typography>
                 </>
               ) : (
                 <Typography variant="h4" color="warning" fontWeight="bold">
-                  ${price.value / 100}
+                  {formatPrice(price.value)}
                 </Typography>
               )}
             </Box>
             <Box marginTop={4} display="flex" justifyContent={{ xs: 'right', md: 'left' }}>
-              <Button variant="contained" color="success" size="large">
-                Add to cart
-              </Button>
+              <CartActionPanel product={product} />
             </Box>
           </Grid>
         </Grid>
       </Paper>
+      <Box marginTop={6} display="flex" justifyContent="center">
+        <Button variant="outlined" onClick={() => void navigate(-1)}>
+          Go Back
+        </Button>
+      </Box>
     </Container>
   );
 };

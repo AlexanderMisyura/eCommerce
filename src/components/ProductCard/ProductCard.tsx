@@ -1,5 +1,5 @@
+import { CartActionPanel } from '@components';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardActionArea from '@mui/material/CardActionArea';
 import CardActions from '@mui/material/CardActions';
@@ -9,6 +9,7 @@ import Chip from '@mui/material/Chip';
 import Typography from '@mui/material/Typography';
 import { UrlPath } from '@ts-enums';
 import type { LegoProduct } from '@ts-interfaces';
+import { formatPrice } from '@utils';
 import { Link } from 'react-router';
 
 interface ProductCardProps {
@@ -70,19 +71,19 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
               {price.withDiscountValue ? (
                 <>
                   <Typography variant="h6" color="error" fontWeight="bold">
-                    ${price.withDiscountValue / 100}
+                    {formatPrice(price.withDiscountValue)}
                   </Typography>
                   <Typography
                     variant="body2"
                     color="text.secondary"
                     sx={{ ml: 1, textDecoration: 'line-through' }}
                   >
-                    ${price.value / 100}
+                    {formatPrice(price.value)}
                   </Typography>
                 </>
               ) : (
                 <Typography variant="h6" color="warning" fontWeight="bold">
-                  ${price.value / 100}
+                  {formatPrice(price.value)}
                 </Typography>
               )}
             </Box>
@@ -90,9 +91,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         </Link>
       </CardActionArea>
       <CardActions sx={{ justifyContent: 'flex-end' }}>
-        <Button variant="contained" color="success">
-          Add to cart
-        </Button>
+        <CartActionPanel product={product} />
       </CardActions>
     </Card>
   );

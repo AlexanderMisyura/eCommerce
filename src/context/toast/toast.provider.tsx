@@ -1,5 +1,6 @@
+import { styled } from '@mui/material';
 import { type ReactNode, useCallback, useMemo } from 'react';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast, ToastContainer, Zoom } from 'react-toastify';
 
 import { ToastContext } from './toast.context';
 
@@ -9,8 +10,11 @@ interface ToastProviderProps {
 
 export const ToastProvider: React.FC<ToastProviderProps> = ({ children }) => {
   const showToast = useCallback(
-    (message: string, type: 'success' | 'error' | 'info' | 'warning' | 'default' = 'default') => {
-      toast(message, { type });
+    (
+      message: string | ReactNode,
+      type: 'success' | 'error' | 'info' | 'warning' | 'default' = 'default'
+    ) => {
+      toast(message, { type, style: { width: 'clamp(320px, 40vw, 420px)' } });
     },
     []
   );
@@ -20,7 +24,12 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({ children }) => {
   return (
     <ToastContext value={value}>
       {children}
-      <ToastContainer />
+      <StyledToastContainer autoClose={3500} transition={Zoom} position="top-right" />
     </ToastContext>
   );
 };
+
+const StyledToastContainer = styled(ToastContainer)`
+  top: 72px;
+  right: 8px;
+`;

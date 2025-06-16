@@ -1,5 +1,3 @@
-export { registrationAction } from './actions-for-forms/registration-action';
-export { signInAction } from './actions-for-forms/sign-in-action';
 export { convertFormDataToString } from './convert-form-data-to-string';
 export {
   eventDebounceWrapper,
@@ -8,11 +6,12 @@ export {
   stateCredentialsDebounceWrapper,
   stateUserCredentialsFormDebounceWrapper,
 } from './debounce-wrapper';
+export { formatPrice } from './format-price';
 export { isTokenStore } from './is-token-store';
-export { categoriesLoader } from './loaders/categories-loader';
-export { productDetailsLoader } from './loaders/product-details-loader';
-export { productsLoader } from './loaders/products-loader';
-export { transformToLegoProduct } from './transform-to-lego-product';
+export {
+  transformLineItemToLegoProduct,
+  transformProductProjectionToLegoProduct,
+} from './transform-to-lego-product';
 export {
   validateAddresses,
   validateCountry,

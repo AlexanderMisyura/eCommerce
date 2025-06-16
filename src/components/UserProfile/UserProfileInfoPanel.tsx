@@ -1,8 +1,8 @@
-import { useCustomerContext } from '@hooks';
+import { Spinner } from '@components';
+import { useAppDataContext } from '@hooks';
 import { useTheme } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import { LegoLoader } from 'components/Loaders/LegoLoader';
 import { BREADCRUMBS_NAME_MAP } from 'constants/breadcrumbs-name-map';
 import type { ReactNode } from 'react';
 import { useLocation } from 'react-router';
@@ -13,7 +13,7 @@ interface UserProfileInfoPanelProps {
 
 export const UserProfileInfoPanel: React.FC<UserProfileInfoPanelProps> = ({ children }) => {
   const { palette } = useTheme();
-  const { loading } = useCustomerContext();
+  const { loading } = useAppDataContext();
   const location = useLocation();
 
   // eslint-disable-next-line unicorn/prefer-array-find
@@ -37,7 +37,7 @@ export const UserProfileInfoPanel: React.FC<UserProfileInfoPanelProps> = ({ chil
           position: 'relative',
         }}
       >
-        {loading ? <LegoLoader /> : children}
+        {loading ? <Spinner /> : children}
       </Stack>
     </Stack>
   );

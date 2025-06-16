@@ -1,3 +1,4 @@
+import { Spinner } from '@components';
 import {
   COUNTRY,
   DEBOUNCE_TIMEOUT,
@@ -5,8 +6,8 @@ import {
   USER_ADDRESS_FORM_FIELD_NAMES,
   USER_ADDRESS_FORM_FIELD_PLACEHOLDERS,
 } from '@constants';
-import { ApiController } from '@controllers';
-import { useCustomerContext, useToast } from '@hooks';
+import { controller } from '@controllers';
+import { useAppDataContext, useToast } from '@hooks';
 import {
   Backdrop,
   Box,
@@ -29,7 +30,6 @@ import {
   validateProperName,
   validateStreetName,
 } from '@utils';
-import { LegoLoader } from 'components/Loaders/LegoLoader';
 import {
   USER_ADDRESS_FORM_CHECKBOX_LABELS,
   USER_ADDRESS_FORM_CHECKBOX_NAMES,
@@ -53,8 +53,8 @@ export const AddressForm: React.FC<AddressFormProps> = ({
   selectedAddressValues: selectAddressValues,
   handleCloseModal,
 }) => {
-  const { palette, spacing } = useTheme();
-  const { currentCustomer, setCurrentCustomer } = useCustomerContext();
+  const { spacing } = useTheme();
+  const { currentCustomer, setCurrentCustomer } = useAppDataContext();
   const { showToast } = useToast();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -227,8 +227,6 @@ export const AddressForm: React.FC<AddressFormProps> = ({
     setIsLoading(true);
     event.preventDefault();
 
-    const controller = ApiController.getInstance();
-
     try {
       const response = await controller.addCustomerAddress({
         version: currentCustomer.version,
@@ -257,8 +255,6 @@ export const AddressForm: React.FC<AddressFormProps> = ({
   const handleChangeAddress = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     setIsLoading(true);
     event.preventDefault();
-
-    const controller = ApiController.getInstance();
 
     try {
       const response = await controller.changeCustomerAddress({
@@ -432,7 +428,7 @@ export const AddressForm: React.FC<AddressFormProps> = ({
       </Stack>
 
       <Backdrop open={isLoading} sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
-        <LegoLoader color={palette.grey[300]} />
+        <Spinner />
       </Backdrop>
     </>
   );

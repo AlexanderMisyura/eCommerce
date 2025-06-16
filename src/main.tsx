@@ -4,7 +4,7 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import './styles/global.css';
 
-import { CustomerProvider, RegistrationDataProvider, ToastProvider } from '@context';
+import { AppDataProvider, RegistrationDataProvider, ToastProvider } from '@context';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -16,6 +16,7 @@ import { theme } from 'theme';
 
 const root = document.createElement('div');
 root.id = 'root';
+root.classList.add('h-full');
 document.body.append(root);
 
 createRoot(root).render(
@@ -23,13 +24,13 @@ createRoot(root).render(
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <CustomerProvider>
+        <AppDataProvider>
           <RegistrationDataProvider>
             <ToastProvider>
               <RouterProvider router={router} />
             </ToastProvider>
           </RegistrationDataProvider>
-        </CustomerProvider>
+        </AppDataProvider>
       </ThemeProvider>
     </LocalizationProvider>
   </StrictMode>

@@ -1,9 +1,12 @@
-import { PagePlaceholder } from '@components';
+import { CartDiscount, CartEmpty, CartProductsBlock } from '@components';
+import { useAppDataContext } from '@hooks';
+import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
 import { theme } from 'theme';
 
 export const ShoppingCartPage = () => {
+  const { cart, setCart } = useAppDataContext();
+
   return (
     <Container
       sx={{
@@ -13,8 +16,14 @@ export const ShoppingCartPage = () => {
         rowGap: theme.spacing(8),
       }}
     >
-      <Typography variant="h2">Shopping Cart Page</Typography>
-      <PagePlaceholder /> {/* TODO: Remove */}
+      {cart?.lineItems.length ? (
+        <Box display="flex" flexDirection="column" gap={4}>
+          <CartDiscount />
+          <CartProductsBlock cart={cart} setCart={setCart} />
+        </Box>
+      ) : (
+        <CartEmpty />
+      )}
     </Container>
   );
 };

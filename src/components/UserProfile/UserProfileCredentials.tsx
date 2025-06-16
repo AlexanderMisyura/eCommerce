@@ -1,4 +1,4 @@
-import { LegoLoader } from '@components';
+import { Spinner } from '@components';
 import {
   CUSTOMER_CREDENTIALS_STATE_DEFAULT,
   DATE_OF_BIRTH_FORMAT,
@@ -7,8 +7,8 @@ import {
   FIRST_NAME,
   LAST_NAME,
 } from '@constants';
-import { ApiController } from '@controllers';
-import { useCustomerContext, useToast } from '@hooks';
+import { controller } from '@controllers';
+import { useAppDataContext, useToast } from '@hooks';
 import CloseIcon from '@mui/icons-material/Close';
 import EditIcon from '@mui/icons-material/Edit';
 import { Backdrop, Button, IconButton, Stack, TextField, useTheme } from '@mui/material';
@@ -26,8 +26,8 @@ import dayjs from 'dayjs';
 import { useEffect, useMemo, useState } from 'react';
 
 export const UserProfileCredentials = () => {
-  const { palette, spacing } = useTheme();
-  const { currentCustomer, setCurrentCustomer } = useCustomerContext();
+  const { spacing } = useTheme();
+  const { currentCustomer, setCurrentCustomer } = useAppDataContext();
   const [datePickerValue, setDatePickerValue] = useState<PickerValue>(null);
   const { showToast } = useToast();
 
@@ -146,7 +146,6 @@ export const UserProfileCredentials = () => {
   const handleSave = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsLoading(true);
-    const controller = ApiController.getInstance();
 
     try {
       const response = await controller.updateCustomer({
@@ -296,7 +295,7 @@ export const UserProfileCredentials = () => {
       </Box>
 
       <Backdrop open={isLoading} sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
-        <LegoLoader color={palette.grey[300]} />
+        <Spinner />
       </Backdrop>
     </>
   );
