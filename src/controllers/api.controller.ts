@@ -25,6 +25,10 @@ import { createProductQuery } from 'utils/create-product-query';
 
 const { PROJECT_KEY, CLIENT_SECRET, CLIENT_ID, AUTH_URL, API_URL, SCOPES } = CTP_CONFIG;
 
+interface SignInOptions {
+  isCartMerge?: boolean;
+}
+
 class ApiController {
   /* CUSTOMER */
   public async registerCustomer(
@@ -36,10 +40,15 @@ class ApiController {
       .post({ body: { ...customer, anonymousId: anonymousIdService.getAnonymousId() } })
       .execute();
 
-    return await this.signInCustomer(customer);
+    return await this.signInCustomer(customer, { isCartMerge: false });
   }
 
-  public async signInCustomer(customer: SignInType): Promise<ClientResponse<CustomerSignInResult>> {
+  public async signInCustomer(
+    customer: SignInType,
+    signInOptions: SignInOptions = (() => {
+      return { isCartMerge: true };
+    })()
+  ): Promise<ClientResponse<CustomerSignInResult>> {
     const temporaryTokenCache = new InMemoryTokenCache();
 
     const options: PasswordAuthMiddlewareOptions = {
@@ -68,10 +77,13 @@ class ApiController {
       projectKey: PROJECT_KEY,
     });
 
-    const response = await temporaryApiRoot
-      .login()
-      .post({ body: { ...customer, anonymousId: anonymousIdService.getAnonymousId() } })
-      .execute();
+    const body: SignInType & { anonymousId?: string } = customer;
+
+    if (signInOptions.isCartMerge) {
+      body.anonymousId = anonymousIdService.getAnonymousId();
+    }
+
+    const response = await temporaryApiRoot.login().post({ body }).execute();
 
     if (response.statusCode === 200) {
       const newTokenCache = temporaryTokenCache.get();
