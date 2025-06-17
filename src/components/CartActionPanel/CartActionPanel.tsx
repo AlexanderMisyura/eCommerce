@@ -50,9 +50,9 @@ export const CartActionPanel = ({ product }: { product: LegoProduct }) => {
     setIsLoading(true);
     const updatedCart = await cartController.changeProductQuantity(lineItem.id, newQuantity, cart);
     if (newQuantity === 0) {
-      showToast(`Item "${product.name}}" deleted from cart!`, 'info');
+      showToast(`Item "${product.name}" deleted from cart!`, 'info');
     } else {
-      showToast(`You add to cart "${product.name}}" (quantity - ${newQuantity})`, 'info');
+      showToast(`You add to cart "${product.name}" (quantity - ${newQuantity})`, 'info');
     }
 
     setCartContext(cart, updatedCart);
@@ -68,7 +68,7 @@ export const CartActionPanel = ({ product }: { product: LegoProduct }) => {
 
     setIsLoading(true);
     const updatedCart = await cartController.changeProductQuantity(lineItem.id, 0, cart);
-    showToast(`Item "${product.name}}" deleted from cart!`, 'warning');
+    showToast(`Item "${product.name}" deleted from cart!`, 'warning');
 
     setCartContext(cart, updatedCart);
     setIsLoading(false);
@@ -87,7 +87,7 @@ export const CartActionPanel = ({ product }: { product: LegoProduct }) => {
           Add to cart
         </Button>
       ) : (
-        <ButtonGroup variant="contained" color="success" size="large">
+        <ButtonGroup variant="contained" color="success" size="small">
           {quantity > 1 && (
             <Button
               loading={isLoading}
