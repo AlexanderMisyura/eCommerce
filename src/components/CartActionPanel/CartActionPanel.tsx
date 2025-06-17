@@ -51,6 +51,20 @@ export const CartActionPanel = ({ product }: { product: LegoProduct }) => {
     setIsLoading(false);
   };
 
+  const removeProductFromCart = async () => {
+    if (!cart) return;
+
+    const lineItem = cart.lineItems.find((item) => item.productId === product.id);
+
+    if (!lineItem) return;
+
+    setIsLoading(true);
+    const updatedCart = await cartController.changeProductQuantity(lineItem.id, 0, cart);
+
+    setCartContext(cart, updatedCart);
+    setIsLoading(false);
+  };
+
   return (
     <>
       {quantity === 0 ? (
@@ -65,6 +79,15 @@ export const CartActionPanel = ({ product }: { product: LegoProduct }) => {
         </Button>
       ) : (
         <ButtonGroup variant="contained" color="success" size="large">
+          {quantity > 1 && (
+            <Button
+              loading={isLoading}
+              color="warning"
+              onClick={() => void removeProductFromCart()}
+            >
+              <DeleteIcon />
+            </Button>
+          )}
           <Button loading={isLoading} onClick={() => void changeProductQuantity(quantity - 1)}>
             {quantity === 1 ? <DeleteIcon /> : <RemoveCircleIcon />}
           </Button>
