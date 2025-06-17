@@ -337,20 +337,18 @@ class ApiController {
       customer = customerResponse.body;
     }
 
-    const cartRequest = apiRoot
+    const cartResponse = await apiRoot
       .root()
       .me()
       .carts()
       .get({ queryArgs: { expand: 'discountCodes[*].discountCode' } })
       .execute();
 
-    const discountRequest = apiRoot
+    const discountResponse = await apiRoot
       .root()
       .discountCodes()
       .get({ queryArgs: { expand: 'cartDiscounts[*].cartDiscount' } })
       .execute();
-
-    const [cartResponse, discountResponse] = await Promise.all([cartRequest, discountRequest]);
 
     const cart = cartResponse.body.results[0] || null;
     const discountCodes = discountResponse.body.results;
