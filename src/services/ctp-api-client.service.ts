@@ -62,6 +62,10 @@ class ApiRoot {
   }
 
   public root(): ByProjectKeyRequestBuilder {
+    if (this.tokenCache.get().expirationTime <= Date.now()) {
+      anonymousIdService.resetAnonymousId();
+    }
+
     if (this.tokenCache.getRefreshToken()) {
       return this.withRefreshTokenFlow();
     }
