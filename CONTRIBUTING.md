@@ -19,10 +19,10 @@ We use a GitHub workflow to manage contributions.
 - Make sure your develop branch is up-to-date with the main repository.
 - Create a new branch from **`develop`**.
 - Make your changes.
-- Make sure your code complies with our linting rules
-- Include a clear and concise description of your changes
-- Ensure your changes are tested and covered by tests
-and commit. We use [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/#summary).
+- Make sure your code complies with our linting rules.
+- Include a clear and concise description of your changes.
+- Ensure your changes are tested and covered by tests.
+- Commit your changes. We use [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/#summary).
 - Publish your branch to GitHub.
 - Open a Pull Request (PR) from your branch to the **`develop`** branch of the repository.
 
@@ -30,7 +30,7 @@ and commit. We use [Conventional Commits](https://www.conventionalcommits.org/en
 All pull requests will be reviewed by our maintainers. We'll do our best to provide constructive feedback and guide you through the process.
 
 ### License
-By contributing to **THE TEAM eCommerce**, you agree to license your contributions under the MIT License.
+By contributing to **THE TEAM eCommerce**, you agree to license your contributions under the [MIT License](./LICENSE.md).
 
 ### Contact Us
 If you have any questions or need help with contributing, please don't hesitate to reach out to our [discord server](https://discord.gg/uKcrXUNc).
