@@ -1,10 +1,10 @@
 # eCommerce application
 
-This is a collaborative project by [AlexanderMisyura](https://github.com/AlexanderMisyura), [kelzerock](https://github.com/kelzerock) and [zzzhuchok](https://github.com/zzzhuchok) as a part of the RS School Frontend course. The eCommerce app is an online marketplace for LEGO sets that mirrors the conventional shopping experience. It offers a complete cycle from browsing and selecting products to filling a shopping cart.
+This is a collaborative project by [AlexanderMisyura](https://github.com/AlexanderMisyura), [kelzerock](https://github.com/kelzerock) and [zzzhuchok](https://github.com/zzzhuchok) as a part of the [RS School Frontend course](https://rs.school/courses/javascript-ru). The THE TEAM eCommerce app is an online LEGO set marketplace that uses the Commerce Tools API to mirror the conventional shopping cycle. It offers the full shopping experience, from registration and browsing to adding products to a shopping cart.
 
 ## Disclaimer:
 
-The data used in this application is for educational purposes only and is not intended for commercial gain. All names and trademarks, including LEGO, Batman, Star Wars, Technic, and The Lord of the Rings are the property of their respective owners and are used here solely for illustrative and educational purposes.
+The data used in this application is not intended for commercial gain. All names and trademarks, including LEGO®, Batman™, Star Wars™, Technic™, and The Lord of the Rings™, are the property of their respective owners. They are used here solely for illustrative and educational purposes, as building and contributing to a fun project is more engaging.
 
 ## Tech Stack
 
@@ -28,7 +28,7 @@ The data used in this application is for educational purposes only and is not in
 
 ### Merchant Center Setup:
 
-- Create an **API Client** in your Merchant Center with the scopes listed in `.env.example`.
+- Create an **API Client** in your Merchant Center with the scopes listed in [.env.example](./.env.example).
 - Setup **Product Types**, **Products**, **Categories** and **Discounts** in your Merchant Center. Categories should have a maximum one level subcategory depth.
 - Turn ON the **Product Search** and **Product Projection Search** feature in your Merchant Center.
 
@@ -37,7 +37,7 @@ The data used in this application is for educational purposes only and is not in
 - Make a fork of the [repository](https://github.com/AlexanderMisyura/eCommerce).
 - Clone the forked repository to your local machine.
 - Install dependencies with `npm install`.
-- Create a `.env` file based on the `.env.example` file and fill in the required values.
+- Create a `.env` file based on the [.env.example](./.env.example) file and fill in the required values.
 - Start the dev server with `npm run dev`.
 - Open your browser and navigate to `http://localhost:5173`.
 
