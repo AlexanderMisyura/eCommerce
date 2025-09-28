@@ -7,6 +7,7 @@ import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
+import Stack from '@mui/material/Stack';
 import type { LegoProduct } from '@ts-interfaces';
 import { useEffect, useState } from 'react';
 
@@ -87,24 +88,33 @@ export const CartActionPanel = ({ product }: { product: LegoProduct }) => {
           Add to cart
         </Button>
       ) : (
-        <ButtonGroup variant="contained" color="success" size="small">
+        <Stack gap={4} sx={{ flexDirection: 'row', alignItems: 'center' }}>
           {quantity > 1 && (
             <Button
+              variant="contained"
               loading={isLoading}
               color="warning"
+              size="small"
               onClick={() => void removeProductFromCart()}
+              sx={{ minWidth: 40, minHeight: 41.59 }}
             >
               <DeleteIcon />
             </Button>
           )}
-          <Button loading={isLoading} onClick={() => void changeProductQuantity(quantity - 1)}>
-            {quantity === 1 ? <DeleteIcon /> : <RemoveCircleIcon />}
-          </Button>
-          <Box sx={{ px: 5.5, py: 2, fontWeight: 'bold', userSelect: 'none' }}>{quantity}</Box>
-          <Button loading={isLoading} onClick={() => void changeProductQuantity(quantity + 1)}>
-            <AddCircleIcon />
-          </Button>
-        </ButtonGroup>
+          <ButtonGroup variant="contained" color={'success'} size="small">
+            <Button
+              color={quantity === 1 ? 'warning' : 'success'}
+              loading={isLoading}
+              onClick={() => void changeProductQuantity(quantity - 1)}
+            >
+              {quantity === 1 ? <DeleteIcon /> : <RemoveCircleIcon />}
+            </Button>
+            <Box sx={{ px: 5.5, py: 2, fontWeight: 'bold', userSelect: 'none' }}>{quantity}</Box>
+            <Button loading={isLoading} onClick={() => void changeProductQuantity(quantity + 1)}>
+              <AddCircleIcon />
+            </Button>
+          </ButtonGroup>
+        </Stack>
       )}
     </>
   );
