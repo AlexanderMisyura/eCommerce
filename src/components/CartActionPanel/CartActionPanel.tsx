@@ -1,6 +1,6 @@
 import type { Cart } from '@commercetools/platform-sdk';
 import { cartController } from '@controllers';
-import { useAppDataContext, useToast } from '@hooks';
+import { useAppDataContext } from '@hooks';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
@@ -15,7 +15,6 @@ export const CartActionPanel = ({ product }: { product: LegoProduct }) => {
   const { cart, setCart } = useAppDataContext();
   const [quantity, setQuantity] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  const { showToast } = useToast();
 
   useEffect(() => {
     const lineItem = cart?.lineItems.find((item) => item.productId === product.id);
@@ -35,7 +34,6 @@ export const CartActionPanel = ({ product }: { product: LegoProduct }) => {
   const addProductToCart = async () => {
     setIsLoading(true);
     const updatedCart = await cartController.addProductToCart(product.id, cart);
-    showToast(`You add to cart "${product.name}"`, 'info');
 
     setCart(updatedCart);
     setIsLoading(false);
@@ -50,11 +48,6 @@ export const CartActionPanel = ({ product }: { product: LegoProduct }) => {
 
     setIsLoading(true);
     const updatedCart = await cartController.changeProductQuantity(lineItem.id, newQuantity, cart);
-    if (newQuantity === 0) {
-      showToast(`Item "${product.name}" deleted from cart!`, 'info');
-    } else {
-      showToast(`You add to cart "${product.name}" (quantity - ${newQuantity})`, 'info');
-    }
 
     setCartContext(cart, updatedCart);
     setIsLoading(false);
@@ -69,7 +62,6 @@ export const CartActionPanel = ({ product }: { product: LegoProduct }) => {
 
     setIsLoading(true);
     const updatedCart = await cartController.changeProductQuantity(lineItem.id, 0, cart);
-    showToast(`Item "${product.name}" deleted from cart!`, 'warning');
 
     setCartContext(cart, updatedCart);
     setIsLoading(false);
