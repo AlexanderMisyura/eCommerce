@@ -1,5 +1,5 @@
-import noProductsImage from '@assets/images/lego-no-products.webp';
 import type { LineItem } from '@commercetools/platform-sdk';
+import { withImageLoadState } from '@components';
 import { Box, Typography } from '@mui/material';
 import { formatPrice, transformLineItemToLegoProduct } from '@utils';
 import { CartActionPanel } from 'components/CartActionPanel/CartActionPanel';
@@ -10,6 +10,8 @@ export const CartItem = ({ item }: { item: LineItem }) => {
   const itemDiscountPrice = item.price.discounted?.value.centAmount;
 
   const displayedPrice = cartDiscountPrice ?? itemDiscountPrice ?? price;
+
+  const Image = withImageLoadState(Box);
 
   return (
     <Box
@@ -34,10 +36,10 @@ export const CartItem = ({ item }: { item: LineItem }) => {
         }}
       >
         {item.variant.images?.[0] && (
-          <img
+          <Image
             className="max-h-full w-full object-cover"
-            src={item.variant.images?.[0].url ?? noProductsImage}
-            alt={item.name['en-US'] ?? 'Product image'}
+            src={item.variant.images[0].url}
+            alt={item.name['en-US']}
           />
         )}
       </Box>
