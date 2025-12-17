@@ -4,6 +4,7 @@ import './ProductSlider.styles.css';
 
 import { withImageLoadState } from '@components';
 import { Box } from '@mui/material';
+import { useRef } from 'react';
 import Slider from 'react-slick';
 
 export const ProductSlider = ({
@@ -19,12 +20,20 @@ export const ProductSlider = ({
   name: string;
   hover?: boolean;
 }) => {
+  const isSliding = useRef(false);
+
   const settings = {
     dots: true,
     infinite: true,
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
+    beforeChange: () => {
+      isSliding.current = true;
+    },
+    afterChange: () => {
+      isSliding.current = false;
+    },
   };
 
   const Image = withImageLoadState(Box);
@@ -43,7 +52,9 @@ export const ProductSlider = ({
           }}
           className={`${hover ? 'hover:cursor-pointer' : ''}`}
           onClick={() => {
-            if (onClick) onClick(index);
+            if (onClick && !isSliding.current) {
+              onClick(index);
+            }
           }}
         />
       ))}
