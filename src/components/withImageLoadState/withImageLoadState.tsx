@@ -1,15 +1,15 @@
 import placeholder from '@assets/images/lego-placeholder.svg';
 import loader from '@assets/images/lego-spinner.svg';
+import type { CardMediaProps } from '@mui/material/CardMedia';
 import type CardMedia from '@mui/material/CardMedia';
-import type { ComponentProps } from 'react';
 import { useState } from 'react';
 
-interface ImageProps extends ComponentProps<typeof CardMedia> {
+interface ImageProps extends CardMediaProps {
   alt: string;
 }
 
 export const withImageLoadState = (ImageComponent: typeof CardMedia) => {
-  return function Image({ src, alt, sx }: ImageProps) {
+  return function Image({ src, alt, sx, ...props }: ImageProps) {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
 
@@ -32,6 +32,7 @@ export const withImageLoadState = (ImageComponent: typeof CardMedia) => {
         onError={handleError}
         alt={alt}
         sx={sx}
+        {...props}
       />
     );
   };
