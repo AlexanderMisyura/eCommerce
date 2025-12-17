@@ -36,6 +36,7 @@ export const router = createBrowserRouter([
     loader: appDataLoader,
     id: 'app-root',
     HydrateFallback: Spinner,
+    ErrorBoundary: ErrorPage,
     children: [
       {
         errorElement: <ErrorPage />,
