@@ -1,4 +1,5 @@
 import { RegistrationForm } from '@components';
+import { TITLE } from '@constants';
 import { useAppDataContext } from '@hooks';
 import Container from '@mui/material/Container';
 import { UrlPath } from '@ts-enums';
@@ -13,10 +14,14 @@ export const RegistrationPage = () => {
   }, [currentCustomer, navigate]);
 
   return (
-    <Container
-      sx={{ display: 'flex', flexGrow: 1, flexDirection: 'column', justifyContent: 'center' }}
-    >
-      <RegistrationForm />
-    </Container>
+    <>
+      <title>{`Registration | ${TITLE}`}</title>
+
+      <Container
+        sx={{ display: 'flex', flexGrow: 1, flexDirection: 'column', justifyContent: 'center' }}
+      >
+        <RegistrationForm />
+      </Container>
+    </>
   );
 };

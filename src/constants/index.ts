@@ -31,6 +31,7 @@ export {
   RECOMMENDED_AGE,
   SORT_MAP,
   SORT_OPTIONS,
+  TITLE,
 } from './implementation-specific';
 export { PASSWORD_MIN_LENGTH } from './password-min-length';
 export { TECH_STACK } from './tech-stack';
