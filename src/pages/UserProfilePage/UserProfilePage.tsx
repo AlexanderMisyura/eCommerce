@@ -1,4 +1,5 @@
 import { BreadcrumbsNav, UserProfileInfoPanel, UserProfileNav } from '@components';
+import { TITLE } from '@constants';
 import { useAppDataContext } from '@hooks';
 import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
@@ -15,23 +16,27 @@ export const UserProfilePage = () => {
   }, [currentCustomer, loading, navigate]);
 
   return (
-    <Container>
-      <Stack sx={{ flexDirection: 'column' }}>
-        <BreadcrumbsNav sx={{ marginBottom: 4 }} />
-        <Stack
-          sx={{
-            flexDirection: { xs: 'column', md: 'row' },
-            justifyContent: 'center',
-            flexGrow: 1,
-            gap: 4,
-          }}
-        >
-          <UserProfileNav />
-          <UserProfileInfoPanel>
-            <Outlet />
-          </UserProfileInfoPanel>
+    <>
+      <title>{`Profile | ${TITLE}`}</title>
+
+      <Container>
+        <Stack sx={{ flexDirection: 'column' }}>
+          <BreadcrumbsNav sx={{ marginBottom: 4 }} />
+          <Stack
+            sx={{
+              flexDirection: { xs: 'column', md: 'row' },
+              justifyContent: 'center',
+              flexGrow: 1,
+              gap: 4,
+            }}
+          >
+            <UserProfileNav />
+            <UserProfileInfoPanel>
+              <Outlet />
+            </UserProfileInfoPanel>
+          </Stack>
         </Stack>
-      </Stack>
-    </Container>
+      </Container>
+    </>
   );
 };

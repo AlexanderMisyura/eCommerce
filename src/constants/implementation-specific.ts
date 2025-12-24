@@ -66,3 +66,5 @@ export const SORT_MAP: Record<string, string> = {
 };
 
 export const LOCALIZED_TEXT_STRING = 'text.en-US';
+
+export const TITLE = 'TheTeam Lego Shop';

@@ -1,4 +1,5 @@
 import { SignInForm } from '@components';
+import { TITLE } from '@constants';
 import { useAppDataContext } from '@hooks';
 import { Container } from '@mui/material';
 import { UrlPath } from '@ts-enums';
@@ -13,10 +14,14 @@ export const SignInPage = () => {
   }, [currentCustomer, navigate]);
 
   return (
-    <Container
-      sx={{ display: 'flex', flexGrow: 1, flexDirection: 'column', justifyContent: 'center' }}
-    >
-      <SignInForm />
-    </Container>
+    <>
+      <title>{`Sign In | ${TITLE}`}</title>
+
+      <Container
+        sx={{ display: 'flex', flexGrow: 1, flexDirection: 'column', justifyContent: 'center' }}
+      >
+        <SignInForm />
+      </Container>
+    </>
   );
 };

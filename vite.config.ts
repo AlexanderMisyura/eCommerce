@@ -4,12 +4,9 @@ import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react-swc';
 import { defineConfig } from 'vite';
 import eslint from 'vite-plugin-eslint2';
-import { createHtmlPlugin } from 'vite-plugin-html';
 import stylelint from 'vite-plugin-stylelint';
 import createSvgSpritePlugin from 'vite-plugin-svg-sprite';
 import tsconfigPaths from 'vite-tsconfig-paths';
-
-const title = 'eCommerce';
 
 export default defineConfig({
   base: '/',
@@ -27,12 +24,6 @@ export default defineConfig({
   },
 
   plugins: [
-    createHtmlPlugin({
-      entry: './src/main.tsx',
-      template: './index.html',
-      inject: { data: { title } },
-    }),
-
     createSvgSpritePlugin({
       exportType: 'react',
       include: '**/assets/icons/**/*.svg',

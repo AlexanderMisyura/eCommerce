@@ -1,4 +1,4 @@
-import { CartActionPanel } from '@components';
+import { CartActionPanel, withImageLoadState } from '@components';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardActionArea from '@mui/material/CardActionArea';
@@ -18,6 +18,7 @@ interface ProductCardProps {
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const { images, name, price, description, slug } = product;
+  const Image = withImageLoadState(CardMedia);
 
   return (
     <Card
@@ -44,12 +45,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
       <CardActionArea sx={{ flexGrow: 1 }}>
         <Link to={`/${UrlPath.PRODUCT}/${slug}`} viewTransition>
-          <CardMedia
-            component="img"
-            image={images[0]}
-            alt={name}
-            sx={{ objectFit: 'contain', height: '250px' }}
-          />
+          <Image src={images[0]} alt={name} sx={{ objectFit: 'contain', height: '250px' }} />
           <CardContent sx={{ flexGrow: 1 }}>
             <Typography gutterBottom variant="h5" component="div" noWrap>
               {name}
